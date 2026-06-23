@@ -507,14 +507,10 @@ export async function handleConversationMessage(
     topic: playerMessage.slice(0, 100),
   })
 
-  // Check if any mystery clues triggered
-  const mysteryUpdate = await checkMysteryClue(supabase, session, 'talked_to', citizenId)
-
   return {
     text: response,
     conversation_end: isFarewell ? true : undefined,
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
-    mystery_update: mysteryUpdate ?? undefined,
   }
   void world; void timeSlot  // suppress unused warnings
 }

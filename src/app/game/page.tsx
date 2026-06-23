@@ -293,15 +293,13 @@ function GamePageInner() {
 
         // Reload full state after a move
         if (data.location) {
-          const currentToken = data.guestToken ?? token
-          if (currentToken) loadGameState(currentToken)
+          loadGameState(data.guestToken ?? token)
         }
       }
 
-      // After any trust update, journal event, or time travel, reload sidebar data
+      // After any trust update, journal event, or mystery, reload sidebar data
       if (data.trust_update || data.journal_entry || data.mystery_update) {
-        const currentToken = data.guestToken ?? token
-        if (currentToken) loadGameState(currentToken)
+        loadGameState(data.guestToken ?? token)
       }
 
       // Always reload state after travel/return so time indicator updates
@@ -311,8 +309,7 @@ function GamePageInner() {
         parsedText.includes('Chrono-Logbook closes') ||
         parsedText.includes('now carrying the Chrono-Logbook')
       ) {
-        const currentToken = data.guestToken ?? token
-        if (currentToken) loadGameState(currentToken)
+        loadGameState(data.guestToken ?? token)
       }
 
       // Handle mystery update notification
