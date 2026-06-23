@@ -3,8 +3,9 @@ import { createAdminSupabaseClient } from '@/lib/supabase/server'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const supabase = createAdminSupabaseClient()
   const body = await request.json()
 
@@ -18,7 +19,7 @@ export async function PATCH(
   const { data, error } = await supabase
     .from('citizens')
     .update(update)
-    .eq('id', params.id)
+    .eq('id', id)
     .select()
     .single()
 
@@ -28,14 +29,15 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const supabase = createAdminSupabaseClient()
 
   const { error } = await supabase
     .from('citizens')
     .delete()
-    .eq('id', params.id)
+    .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ ok: true })
