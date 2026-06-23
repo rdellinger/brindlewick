@@ -115,9 +115,10 @@ async function seedLocations() {
     }
   }
   if (exits.length) {
-    const { error } = await supabase
-      .from('location_exits')
-      .upsert(exits, { onConflict: 'from_loc,to_loc' })
+    // Delete all existing exits first so stale rows (e.g. self-references) are removed
+    const { error: delErr } = await supabase.from('location_exits').delete().neq('from_loc', '')
+    if (delErr) console.error('  ✗ location_exits delete:', delErr.message)
+    const { error } = await supabase.from('location_exits').insert(exits)
     if (error) console.error('  ✗ location_exits:', error.message)
     else console.log(`  ✓ location_exits: ${exits.length} rows`)
   }
@@ -515,6 +516,180 @@ async function seedWorldState() {
 
   if (error) console.error('  ✗ world_state:', error.message)
   else console.log('  ✓ world_state: 1 row')
+}
+
+// ── Citizen Routines ──────────────────────────────────────────────────────────
+
+async function seedCitizenRoutines() {
+  console.log('\nSeeding citizen routines…')
+
+  const principalRawFile = readJSON('citizens/principal.json') as Record<string, unknown>
+  const principals = ((principalRawFile.citizens ?? principalRawFile.principal_citizens) as Array<{
+    id: string
+    routine?: Record<string, unknown>
+  }>) ?? []
+
+  // Get valid location IDs
+  const { data: locRows } = await supabase.from('locations').select('id')
+  const validLocs = new Set((locRows ?? []).map((l: { id: string }) => l.id))
+
+  // Map invalid/shorthand location references to real location IDs
+  const LOC_ALIAS: Record<string, string> = {
+    // Market variants → town square
+    farmers_market: 'town_square',
+    farmers_market_brief: 'town_square',
+    farmers_market_occasional: 'town_square',
+    farmers_market_brief_appearance: 'town_square',
+    farmers_market_reporting: 'town_square',
+    farmers_market_book_stall: 'town_square',
+    farmers_market_fabric_stall: 'town_square',
+    farmers_market_flowers: 'town_square',
+    farmers_market_flowers_stall: 'town_square',
+    farmers_market_with_agnes: 'town_square',
+    thornburys_farmers_market_table: 'town_square',
+    sunday_market: 'town_square',
+    // Inn variants
+    inn_common_room: 'lantern_post_inn',
+    lantern_post_inn_or_millpond_row_errands: 'lantern_post_inn',
+    // Bakery variants
+    copper_kettle_bakery_kitchen: 'copper_kettle_bakery',
+    closed_personal_baking: 'copper_kettle_bakery',
+    // Library variants
+    library_archive: 'library',
+    library_reading_or_town_walk: 'library',
+    covered_bridge_research: 'library',
+    // Chapel variants
+    chapel: 'st_agathas_chapel',
+    chapel_office: 'st_agathas_chapel',
+    service: 'st_agathas_chapel',
+    st_agathas_chapel_occasional: 'st_agathas_chapel',
+    community_visits: 'st_agathas_chapel',
+    // Bookshop variants
+    book_nook_browsing: 'book_nook',
+    book_nook_sunday_hours: 'book_nook',
+    // Business variants
+    aldermans_hardware_half_day: 'aldermans_hardware',
+    candle_soap_shop_or_foraging: 'candle_soap_shop',
+    chronicle_building_or_town_reporting: 'chronicle_building',
+    webbs_watch_repair_half_day: 'webbs_watch_repair',
+    practice_paperwork: 'dr_okafor_practice',
+    // Civic variants
+    town_hall_or_event_prep: 'town_hall',
+    town_patrol_or_office: 'sheriffs_office',
+    postal_route_all_of_brindlewick: 'post_office',
+    fire_station_volunteer_work: 'fire_station',
+    current_job_site: 'millpond_row',
+    lakeside_park_statue_measurement_monthly: 'town_square',
+    community_potluck_monthly: 'community_hall',
+    // Wren & Whistle variants
+    wren_and_whistle_with_agnes: 'wren_and_whistle',
+    wren_and_whistle_with_constance: 'wren_and_whistle',
+    // Lakeside variants
+    lake_pier_fishing: 'lake_pier',
+    lake_pier_reading: 'lake_pier',
+    solo_lake_row: 'lake_pier',
+    lakefront_boardwalk_walk: 'lakefront_boardwalk',
+    lakefront_boardwalk_slow_walk: 'lakefront_boardwalk',
+    lakefront_walk: 'lakefront_boardwalk',
+    lakefront_sketch_work: 'lakefront_boardwalk',
+    walk_lake_shore: 'lakefront_boardwalk',
+    lake_sampling: 'lakeside_park',
+    // Orchard/nature variants
+    finch_family_orchard_walk: 'finch_family_orchard',
+    orchard_or_cidery: 'finch_family_orchard',
+    walk_copper_hill: 'brindlewick_trailhead',
+    trail_maintenance: 'brindlewick_trailhead',
+    // Estate variants
+    alderman_estate_garden: 'alderman_estate',
+    reading_in_estate: 'alderman_estate',
+    // Diner
+    millpond_diner_closed: 'millpond_diner',
+    // Keepers cottage
+    keepers_cottage_dinner_sometimes: 'keepers_cottage',
+    // Off duty / home → nearby public spaces
+    off_duty: 'lakefront_boardwalk',
+    off_duty_walk: 'lakefront_boardwalk',
+    home_garden: 'finch_family_orchard',
+    home_or_gardening: 'finch_family_orchard',
+    home_reading: 'book_nook',
+    home_studying: 'library',
+    home: 'lantern_post_inn',
+    // Private residential addresses → nearest street location
+    '12_birch_hollow_road': 'finch_lane',
+    '3_birch_hollow_road': 'finch_lane',
+    '7_finch_lane': 'finch_lane',
+    '9_finch_lane': 'finch_lane',
+    '18_maple_row': 'maple_row',
+    '22_maple_row': 'maple_row',
+    '31_maple_row': 'maple_row',
+  }
+
+  const VALID_DAYS = new Set(['monday','tuesday','wednesday','thursday','friday','saturday','sunday','weekday','weekend'])
+  const VALID_SLOTS = new Set(['early_morning','morning','midday','afternoon','evening','night'])
+
+  const rows: Array<{ citizen_id: string; day_of_week: string; time_slot: string; location_id: string }> = []
+
+  for (const c of principals) {
+    const routine = c.routine ?? {}
+    for (const [dayKey, val] of Object.entries(routine)) {
+      const resolveloc = (raw: string) => {
+        if (validLocs.has(raw)) return raw
+        return LOC_ALIAS[raw] ?? null
+      }
+
+      if (typeof val === 'object' && val !== null) {
+        // Nested format: { monday: { morning: 'loc' } } or { weekdays: { morning: 'loc' } }
+        const day = dayKey === 'weekdays' ? 'weekday' : dayKey
+        if (!VALID_DAYS.has(day)) continue
+        for (const [slot, rawLoc] of Object.entries(val as Record<string, string>)) {
+          if (!VALID_SLOTS.has(slot)) continue
+          const loc = resolveloc(rawLoc)
+          if (!loc) continue
+          rows.push({ citizen_id: c.id, day_of_week: day, time_slot: slot, location_id: loc })
+        }
+      } else if (typeof val === 'string') {
+        // Flat format: { morning: 'loc' } or { wednesday_evening: 'loc' }
+        const parts = dayKey.split('_')
+        let day = 'weekday'
+        let slot: string | null = null
+        if (VALID_SLOTS.has(dayKey)) {
+          slot = dayKey
+        } else if (parts.length === 2 && VALID_DAYS.has(parts[0]) && VALID_SLOTS.has(parts[1])) {
+          day = parts[0]
+          slot = parts[1]
+        }
+        if (!slot) continue
+        const loc = resolveloc(val)
+        if (!loc) continue
+        rows.push({ citizen_id: c.id, day_of_week: day, time_slot: slot, location_id: loc })
+      }
+    }
+  }
+
+  if (rows.length) {
+    // Clear existing and re-insert
+    await supabase.from('citizen_routines').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    const { error } = await supabase
+      .from('citizen_routines')
+      .upsert(rows, { onConflict: 'citizen_id,day_of_week,time_slot' })
+    if (error) console.error('  ✗ citizen_routines:', error.message)
+    else console.log(`  ✓ citizen_routines: ${rows.length} rows`)
+  } else {
+    console.log('  ⚠ citizen_routines: no valid rows found')
+  }
+
+  // Set home_location on citizens from their most common morning location
+  // This is the fallback used when no routine matches the current time slot
+  const homeByC: Record<string, string> = {}
+  for (const row of rows) {
+    if (row.time_slot === 'morning' && !homeByC[row.citizen_id]) {
+      homeByC[row.citizen_id] = row.location_id
+    }
+  }
+  for (const [citizenId, homeLoc] of Object.entries(homeByC)) {
+    await supabase.from('citizens').update({ home_location: homeLoc }).eq('id', citizenId)
+  }
+  console.log(`  ✓ home_location: set for ${Object.keys(homeByC).length} citizens`)
 }
 
 // ── History ───────────────────────────────────────────────────────────────────
@@ -1010,6 +1185,7 @@ async function main() {
     await seedWorldState()
     await seedLocations()
     await seedCitizens()
+    await seedCitizenRoutines()
     await seedMysteries()
     await seedItems()
     await seedCalendar()
