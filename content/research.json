@@ -1,0 +1,193 @@
+{
+  "research_system": {
+    "description": "The library research system allows players to search for subjects, names, dates, and topics. Eleanor and Juni can assist. Results return real content tied to the game's lore.",
+    "interface_note": "Players type 'research [topic]' or 'look up [topic]' at the library. The system matches against subject index and returns available entries.",
+    "catalogue": [
+      {
+        "subject": "Mira Finch",
+        "results": [
+          {
+            "title": "Map annotation, 1832",
+            "source": "Valley Survey Map, 1832 (Meeting House Museum copy)",
+            "content": "In the artist's note: 'Lake named Mirrowell for M. Finch, by her father's account.' The map predates the town's formal establishment. This is the earliest written record of the lake's name."
+          },
+          {
+            "title": "Marriage register entry, 1862",
+            "source": "St. Agatha's Chapel Register (Reverend Prewitt holds the access)",
+            "content": "September 22, 1862: 'Mira Alderman, born Mira Finch, of this parish, married Thomas Alderman of this parish.' Witnesses: P. Alderman, D. Hartwell. The name 'born Mira Finch' appears to have been added in a different ink, possibly a later annotation.",
+            "requires_reverend_trust": 2
+          },
+          {
+            "title": "Unsigned watercolor",
+            "source": "Library Archive, locked document case",
+            "content": "A 19th-century watercolor signed 'M.F.' in the lower corner. Subject: a girl at the lakeside. Style consistent with amateur work from the 1840s-1860s.",
+            "requires_archive_access": true
+          },
+          {
+            "title": "Covered bridge inscription",
+            "source": "Covered bridge, main beam — discovered 2021",
+            "content": "'M.F. was here — 1833. The lake is hers.' Carved directly into the timber, not painted. Estimated date of carving consistent with the stated year based on weathering.",
+            "requires": "visit covered_bridge"
+          }
+        ]
+      },
+      {
+        "subject": "Lake Mirrowell",
+        "results": [
+          {
+            "title": "First recorded description, 1824",
+            "source": "Finch founding letter, Library Archive",
+            "content": "'A lake so clear you can see the bottom at twelve feet. The mountains sit in it perfectly, inverted. I have never seen anything like it.' — Alderman Finch, September 1824, in a letter to his cousin."
+          },
+          {
+            "title": "Depth survey, 1961",
+            "source": "Lake Management Survey, State Archives copy, Library",
+            "content": "Average depth: 32 feet. Maximum recorded depth: 74 feet, at a location approximately 1.2 miles south of the lighthouse. The survey notes the maximum depth may be deeper — the survey equipment malfunctioned at that location and measurements were discontinued."
+          },
+          {
+            "title": "The lake light — first record, 1851",
+            "source": "Alderman Family Diary (partial transcription), Library Archive",
+            "content": "'October 14. After two days of rain, the lake was very still tonight. I observed from the boathouse dock a faint phosphorescent glow over the deep water, due south, no larger than a candle at distance. It trembled with the small movement of the water. J. said she had seen it before. She called it the old light.' The entry continues with weather observations."
+          },
+          {
+            "title": "Bioluminescence in freshwater lakes",
+            "source": "Scientific American, bound copy, 1994",
+            "content": "An article on freshwater bioluminescent organisms, noting that while rare, adapted species of Noctiluca-related dinoflagellates have been recorded in deep freshwater environments with unusual thermocline structures. The conditions described — high organic content, stable deep-water temperature layer, low light penetration — match the known parameters of Lake Mirrowell's southern basin."
+          }
+        ]
+      },
+      {
+        "subject": "The Lake Beacon",
+        "results": [
+          {
+            "title": "Installation record, 1848",
+            "source": "Town Council Minutes, Library Archive",
+            "content": "June 3, 1848: 'Voted to install a navigational beacon at the lake's edge, to guide fishing craft returning after dark. The beacon: a gas-powered iron post-lantern, to be positioned at the south end of the boathouse dock. Cost: $47. Contracted to: Webb Iron Works.' The Webb family built it."
+          },
+          {
+            "title": "Flood loss, 1879",
+            "source": "Chronicle, April 1879 (bound archive)",
+            "content": "'The Great Flood has claimed several structures from the lakefront. Among the losses: the original boathouse, two sheds, and the navigational beacon post, which was overcome by rising water on the evening of April 18th. Recovery was not attempted; the water remains too high and the depth too great at that location.'"
+          },
+          {
+            "title": "Mysterious photograph, c. 1897",
+            "source": "Copper Hill Gallery historical display",
+            "content": "A photograph from the gallery's collection, labeled c. 1897, shows two figures standing at the lakefront in front of what appears to be a tall iron post. If this is the lake beacon, it was not lost in 1879 — or it was recovered and briefly re-installed before being lost again. No record of recovery exists in the town minutes. The photograph may be misdated."
+          }
+        ]
+      },
+      {
+        "subject": "Alderman Finch",
+        "results": [
+          {
+            "title": "Founding account, 1824",
+            "source": "Chronicle special edition, 1901 (Founder's Day centennial)",
+            "content": "Alderman Finch arrived at the lake valley in September 1824 from a failed settlement further east. He was 34 years old. He had been widowed in 1820 and remarried in 1823. He had one child from his first marriage — not named in this account. He co-founded Brindlewick with Thomas Alderman, who had arrived six weeks earlier."
+          },
+          {
+            "title": "Death and estate, 1866",
+            "source": "Chronicle, November 1866 (archive)",
+            "content": "'Alderman Finch, founder and first citizen of this valley, died on the 12th of November aged 76. He is survived by his wife Esther and three sons. His private papers and study have been sealed by his eldest son as a matter of family privacy. No estate auction is planned.'"
+          },
+          {
+            "title": "The sealed study",
+            "source": "Property Records, Town Clerk's Office, 1866",
+            "content": "Entry dated December 1866: 'Alderman Estate, east wing, one room. Interior wall modification. Not to be recorded for purpose.' — This is the entry Eleanor found in 2010 that confirmed the sealed room's existence.",
+            "requires_eleanor_trust": 2
+          }
+        ]
+      },
+      {
+        "subject": "The Clocktower",
+        "results": [
+          {
+            "title": "Installation record, 1896",
+            "source": "Town Council Minutes",
+            "content": "The clocktower mechanism was installed by Arthur Webb (grandson of Cornelius Webb) during the Town Hall's construction in 1896. The original mechanism from the 1850s building was reinstalled. Note: 'The Webb clock runs 3 minutes slow. Mr. Webb confirms this is intentional and requests the setting not be adjusted. The council has agreed, as three previous attempts to adjust it have failed.'"
+          },
+          {
+            "title": "Cornelius Webb",
+            "source": "Chronicle, obituary, 1869",
+            "content": "'Cornelius Webb, clockmaker, died peacefully at age 71. He was the finest clockmaker ever to work in this valley, and the only one, and the Town Hall would not keep the time it does without him. He was a good friend to Thomas Alderman, whose passing he marked in a way known only to himself.' No further detail."
+          }
+        ]
+      },
+      {
+        "subject": "The Moving Statue",
+        "results": [
+          {
+            "title": "Original installation, 1967",
+            "source": "Chronicle, June 1967",
+            "content": "The statue of Alderman Finch was installed in Lakeside Park on June 15, 1967. Sculptor: Helen Mossgrove. The base was constructed by a specialist contractor: Arthur Webb, grandson of Rosalind Webb. The statue faces due south at installation."
+          },
+          {
+            "title": "First recorded movement, 1974",
+            "source": "Chronicle letter to editor, October 1974",
+            "content": "'I note that the founder's statue appears to face slightly more south-southwest than when it was installed. I have a photograph from 1967 for comparison. Is this settlement?' — Response from the editor: 'Mr. Webb was consulted. He says the base is secure. He offered no further explanation.'"
+          },
+          {
+            "title": "Sheriff's measurement log, 2017-present",
+            "source": "Brindlewick Sheriff's Office, public record",
+            "content": "Sheriff Levi Quartermaine has documented the statue's position using surveying equipment since 2017. Total rotation recorded: 14.7 inches over 7 years. The movement is consistent but follows a non-linear curve — an eccentric pattern consistent with a clockwork mechanism on a very long cycle."
+          }
+        ]
+      },
+      {
+        "subject": "The Alderman-Perkins Feud",
+        "results": [
+          {
+            "title": "First reference, 1891",
+            "source": "Chronicle, August 1891",
+            "content": "'A misunderstanding between the Alderman and Perkins families regarding correspondence has led to some friction. We understand the matter involves an apple tree on the boundary of the Alderman orchard and the Perkins property. Both families' honor is equally intact, as we understand it. We hope this resolves quietly.' The apple tree reference is not found in any other record."
+          },
+          {
+            "title": "The letter",
+            "source": "Agnes Perkins's kitchen (framed original)",
+            "content": "'Dearest M., I have thought of nothing but the orchard path since Tuesday. Yours, in hope, W.A.' Addressed to 'M. Alderman,' delivered to 'M. Perkins' (Martha Perkins, née Marsh). The Perkins family apparently interpreted the reference to the orchard path as a territorial claim. The Alderman family (W.A. was William Alderman, who was 22 at the time) was too embarrassed to explain.",
+            "requires": "agnes_trust >= 2"
+          }
+        ]
+      },
+      {
+        "subject": "The Dear Neighbor Column",
+        "results": [
+          {
+            "title": "First column, January 2001",
+            "source": "Chronicle archive, January 4, 2001",
+            "content": "The first Dear Neighbor column appeared on the Chronicle's back page on January 4, 2001. It was presented as an anonymous advice column. The first letter: 'I have a neighbor who has grown quiet and withdrawn. I don't know how to help.' The response: 'Knock on the door. Don't wait to be invited.'"
+          },
+          {
+            "title": "Evolution of the column",
+            "source": "Chronicle archive, various dates",
+            "content": "By 2003, the column had shifted from advice to something else — readers began writing to share small moments of grace rather than asking for help. The column became a record of the town's kindnesses. The columnist has never been publicly identified."
+          }
+        ]
+      },
+      {
+        "subject": "Perkins Cider House",
+        "results": [
+          {
+            "title": "Founding, 1931",
+            "source": "Chronicle, October 1931",
+            "content": "'Mrs. Ruth Perkins has begun selling cider from the Perkins property on Alderman Road. The cider is excellent and she asks only what you can give.' This is the founding of the cider operation — during the Depression, as an act of community support."
+          },
+          {
+            "title": "The alpine honey",
+            "source": "New England Apiary Traditions, 1935 booklet, Library Reference",
+            "content": "'The Perkins property on the Brindlewick valley's north slope maintains an unusual apiary at the 1,200-foot elevation where a specific variety of mountain clover provides nectar of unusual complexity. The resulting honey is herbal-sweet with a floral quality unlike standard clover honey. Limited production; not widely distributed.'"
+          }
+        ]
+      },
+      {
+        "subject": "The 1879 Flood",
+        "results": [
+          {
+            "title": "Chronicle account, April 1879",
+            "source": "Chronicle, April 24, 1879 (bound archive)",
+            "content": "Full front-page account of the flood. Key details: Fletcher Alderman woke the town at 3am on April 18th. Six families displaced. Buildings lost: the boathouse, two sheds, the lake beacon post and lantern. 'The lake rose eleven feet in forty hours. No lives were lost. This was Fletcher Alderman's gift to the town.' The recovery effort is described in detail over several subsequent issues."
+          }
+        ]
+      }
+    ]
+  }
+}

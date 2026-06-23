@@ -1,0 +1,313 @@
+{
+  "mysteries": [
+    {
+      "id": "moving_statue",
+      "title": "The Statue That Moves",
+      "depth": "medium",
+      "discovery_hint": "The founder's statue in Lakeside Park faces slightly north of where old photographs show it facing.",
+      "summary": "The bronze statue of Alderman Finch has been gradually rotating since its installation in 1967 — about 2-3 inches per year on a very slow eccentric cycle. The town has noticed. No one knows why.",
+      "solution": "Rosalind Webb's father, Arthur Webb, installed a hidden clockwork mechanism in the base in 1967 as a tribute to the founder — continuing the Webb family tradition of hiding clockwork in civic installations (see Cornelius Webb and the clocktower). The mechanism runs on a very long eccentric cycle. Rosalind knows. She is the only person alive who knows.",
+      "clues": [
+        {
+          "id": "sv_clue_1",
+          "description": "The sheriff's office bulletin board shows 7 years of position measurements. The movement is consistent but not linear — it's on a cycle.",
+          "source": "sheriffs_office",
+          "requires": null
+        },
+        {
+          "id": "sv_clue_2",
+          "description": "The original installation records in the Chronicle archive mention 'A. Webb, specialist, base installation.' This is Rosalind's father.",
+          "source": "chronicle_archives",
+          "requires": "library_access"
+        },
+        {
+          "id": "sv_clue_3",
+          "description": "Rosalind's shop has a clock on the wall that runs 3 minutes slow, and she speaks about her great-great-grandfather Cornelius with unusual warmth. When pressed, she mentions 'our family has a tradition of putting things in civic mechanisms that aren't on the blueprints.'",
+          "source": "rosalind_webb_trust_1",
+          "requires": "rosalind_trust >= 1"
+        },
+        {
+          "id": "sv_clue_4",
+          "description": "The statue's base has a small brass fitting on the south-facing side, accessible if you crouch and look. It looks like a clock winding port.",
+          "source": "lakeside_park_close_examination",
+          "requires": "examine_statue_base"
+        }
+      ],
+      "resolution": "When you tell Rosalind about the clock port, she laughs — the first big laugh you've heard from her. She tells you the whole story: her father in 1967, the commission to build the base, the hidden mechanism, and how it was meant as a long, slow wave to the founder. 'The statue's job,' she says, 'is to look at the town from every angle. My father thought it should actually do that, over time.' She winds it up once a year on the anniversary of the installation.",
+      "reward_type": "relationship_deepening",
+      "reward": "Rosalind's full trust; the clocktower secret becomes available"
+    },
+    {
+      "id": "lake_light",
+      "title": "The Lake Light",
+      "depth": "deep",
+      "discovery_hint": "Locals mention a faint light visible over the lake on clear nights. It's always in the same spot.",
+      "summary": "A pale blue-green light appears under the surface of Lake Mirrowell on clear nights, always due south of the lighthouse, always in the same location. It has been documented since 1851. It is real, not folklore.",
+      "solution": "The 1879 flood submerged the original gas-powered lake beacon — a large iron lantern on a post that guided fishing boats home at night. Over 145 years, bioluminescent algae (a specific species, Noctiluca-adjacent, native to this lake) have colonized the beacon's iron structure, which is on the lake bottom in 75 feet of water. On calm nights with low ambient light, the algae emit their characteristic blue-green glow. The beacon itself has become a kind of reef, and the algae concentration there is significantly higher than elsewhere. Weather conditions (calm water, no moon, recent rain) affect visibility.",
+      "clues": [
+        {
+          "id": "ll_clue_1",
+          "description": "The first documented sighting is in the 1851 Alderman family diary: 'a faint phosphor over the deep water, due south, no larger than a candle at distance.' The date: October 14, after a rain.",
+          "source": "library_archive",
+          "requires": "library_access"
+        },
+        {
+          "id": "ll_clue_2",
+          "description": "Fletcher Grange's lake light logbook shows 23 years of entries. Weather conditions: most common after rain, near new moon, in spring and autumn. Location: always the same bearing.",
+          "source": "fletcher_grange_trust_3",
+          "requires": "fletcher_trust >= 3"
+        },
+        {
+          "id": "ll_clue_3",
+          "description": "Petra Holloway's water samples show elevated bioluminescent algae in the deepest recorded location — a 75-foot depression in the lake floor directly south of the lighthouse.",
+          "source": "petra_holloway_trust_2",
+          "requires": "petra_trust >= 1"
+        },
+        {
+          "id": "ll_clue_4",
+          "description": "The 1879 flood chronicle account lists the lake beacon as a casualty: 'The beacon post and its iron lantern were overcome by water and are now under the lake. Recovery was not attempted.'",
+          "source": "chronicle_1879",
+          "requires": "library_access"
+        },
+        {
+          "id": "ll_clue_5",
+          "description": "Sadie Mirabel will row you out at dusk to the location directly above the 75-foot depression. Below, on a clear evening, you can see it: pale blue-green, moving slightly in whatever current exists at depth.",
+          "source": "sadie_mirabel_trust_2",
+          "requires": "sadie_trust >= 2"
+        },
+        {
+          "id": "ll_clue_6",
+          "description": "Clem Rourke knows the lake's ecology and can tell you that the specific algae species, while unusual, is not impossible — it adapted to freshwater from a brackish estuary ancestor over geological time. 'The lake's thermocline is unusual. Things persist here that shouldn't.'",
+          "source": "clem_rourke_trust_1",
+          "requires": "clem_trust >= 1"
+        }
+      ],
+      "resolution": "With the full picture — beacon, algae, weather conditions — you can sit on the boardwalk on a calm night after rain near new moon and watch the light yourself, knowing what it is. It is a 145-year-old lantern, colonized by light, still doing its job: guiding eyes to the deep water. You can tell the town at a Founder's Day gathering, or keep it to yourself. Both feel correct.",
+      "reward_type": "lore_revelation",
+      "reward": "The lake light knowledge; Sadie Mirabel's full trust; Fletcher Grange's full trust"
+    },
+    {
+      "id": "founders_hidden_room",
+      "title": "The Sealed Room",
+      "depth": "deep",
+      "discovery_hint": "Eleanor mentions in passing that she found a reference to a sealed room in the Alderman Estate in 2010. She looks like she's been waiting to tell someone.",
+      "summary": "Alderman Finch's private study was walled off in 1866 by his eldest son, after a dispute over the founder's will. No one has been inside since. The room exists. Constance Alderman knows where the wall is.",
+      "solution": "Three clues are needed to locate and access the room: (1) the estate map from Constance's grandfather that shows the original floor plan with the study marked, (2) the hollow wall identified by Dot Flowers, and (3) a note in the boathouse (accessible once Constance gives you the key) indicating the original door was plastered over, not bricked — it can be opened without damage. Once inside, the player finds the founder's diary, his wife's watercolor (which matches the archive watercolor and the unsigned paintings elsewhere), and letters revealing the true story of Mira Finch.",
+      "clues": [
+        {
+          "id": "fhr_clue_1",
+          "description": "Eleanor shows you a reference in the 1866 property records: 'East wing, one room, interior wall modification, not to be recorded for purpose.' Vera Tibbs found this in 2010.",
+          "source": "eleanor_finch_hartwell_trust_2",
+          "requires": "eleanor_trust >= 2"
+        },
+        {
+          "id": "fhr_clue_2",
+          "description": "Constance Alderman, once trusted enough, produces an 1875 estate survey map that shows a room labeled 'A.F. Study' in the east wing — a room that does not appear on any subsequent map.",
+          "source": "constance_alderman_trust_3",
+          "requires": "constance_trust >= 3"
+        },
+        {
+          "id": "fhr_clue_3",
+          "description": "Dot Flowers tells you about the hollow section of the east wing corridor wall. She shows you the location.",
+          "source": "dot_flowers_trust_2",
+          "requires": "dot_trust >= 2"
+        },
+        {
+          "id": "fhr_clue_4",
+          "description": "In the old Alderman boathouse (key from Constance at trust >= 4), behind the old boats, is a wooden box with documents. One is a note in the son's handwriting: 'Father's study door — I had it plastered over, not bricked. For conscience. If you are reading this you have found the key to it: push at the north edge of the plaster.'",
+          "source": "alderman_boathouse",
+          "requires": "constance_trust >= 4"
+        }
+      ],
+      "resolution": "The plaster over the door gives way when you push at the north edge. The room is cold and completely preserved. On the desk: the founder's diary, his personal correspondence, and a letter to 'My dearest Mira' confirming she was not merely a cousin but his first child by his first wife, who died in 1820 — a child he loved and provided for privately but whose existence the second family worked to erase. The diary also contains the true account of the naming of the lake. Eleanor is with you when you find it. She cries, briefly, and then says 'Good. Now we can tell it properly.'",
+      "reward_type": "major_lore_revelation",
+      "reward": "Complete Mira Finch mystery resolution; Eleanor's full trust; Constance's full gratitude"
+    },
+    {
+      "id": "anonymous_letter_writer",
+      "title": "The Dear Neighbor",
+      "depth": "medium",
+      "discovery_hint": "Several residents mention receiving anonymous notes of encouragement over the years. The first was delivered in 2001.",
+      "summary": "For 24 years, anonymous handwritten notes of encouragement have appeared under residents' doors. The Chronicle's 'Dear Neighbor' column has run since the same year. The town suspects these are connected and that someone known is responsible.",
+      "solution": "There are actually TWO anonymous note-writers: Oliver Peregrine (the Chronicle column, and notes he's written since 2001 inspired by the column) AND Artie Pryce (who started independently in 2001 when he noticed Hettie Mossgrove's grief from his route). Neither knows about the other. The handwriting is similar but not identical. This is the resolution: not one generous person but two, neither knowing about the other.",
+      "clues": [
+        {
+          "id": "alw_clue_1",
+          "description": "The handwriting of the anonymous notes (Hettie Mossgrove will show you hers) is precise, careful copperplate.",
+          "source": "hettie_mossgrove_trust_1",
+          "requires": "hettie_trust >= 1"
+        },
+        {
+          "id": "alw_clue_2",
+          "description": "Oliver Peregrine's office desk has cream notepaper identical to the notes. He doesn't notice you noticing.",
+          "source": "chronicle_building_visit",
+          "requires": null
+        },
+        {
+          "id": "alw_clue_3",
+          "description": "Artie Pryce, at high trust, says 'sometimes words help when nothing else does' and pauses in a way that's significant.",
+          "source": "artie_pryce_trust_3",
+          "requires": "artie_trust >= 3"
+        },
+        {
+          "id": "alw_clue_4",
+          "description": "You notice that residents on Artie's route AND residents not on his route have received notes — suggesting at least two different writers with different knowledge of which doors to find.",
+          "source": "deduction_from_recipients",
+          "requires": "talk to 5 note_recipients"
+        }
+      ],
+      "resolution": "You can confront Oliver, who will confirm his role with rueful charm. You can tell Artie, who will go very quiet and then say 'I didn't know there was someone else.' The two can be introduced to each other — by you, in the diner — which is one of the warmest scenes in the game. They agree, over pie, that neither will stop.",
+      "reward_type": "relationship_deepening",
+      "reward": "Oliver and Artie's full trust; a note addressed to you appears under your inn door that evening"
+    },
+    {
+      "id": "missing_recipe",
+      "title": "The Honey Cake Mystery",
+      "depth": "shallow",
+      "discovery_hint": "Mari Osei mentions her famous honey cake isn't quite right — her grandmother's recipe has a smudge over one ingredient.",
+      "summary": "The Brindlewick Honey Cake has a missing ingredient — a specific honey variety that Mari's grandmother used and that Mari has been unable to identify from a smudged recipe card.",
+      "solution": "The missing ingredient is the alpine honey from Perkins Cider House, produced from a hive of bees that Agnes Perkins's grandmother established in 1928 on the high orchard shelf where a particular mountain clover grows. The honey has a distinctive floral-herbal quality. Agnes and Tommy Hall know about it. A library search of traditional New England honey varieties and their regional sources will point toward it.",
+      "clues": [
+        {
+          "id": "mr_clue_1",
+          "description": "The smudged recipe card — Mari will show it to you at trust level 2. The third ingredient reads: 'h___y from [smudge]___perkins?' The smudge covers all but the last part of the source.",
+          "source": "marigold_osei_trust_2",
+          "requires": "mari_trust >= 2"
+        },
+        {
+          "id": "mr_clue_2",
+          "description": "The library's reference section has a 1935 booklet on New England apiary traditions that mentions Perkins Cider House having 'an unusual alpine hive yielding honey of particular herbal quality.'",
+          "source": "library_research",
+          "requires": "library_access"
+        },
+        {
+          "id": "mr_clue_3",
+          "description": "Agnes Perkins will mention the alpine honey if you ask about unusual local products. She'll say it's not widely available — it's mostly for her own use and a few local bakers.",
+          "source": "agnes_perkins_trust_1",
+          "requires": "agnes_trust >= 1"
+        }
+      ],
+      "resolution": "With a jar of Perkins alpine honey in hand, you return to Mari. She adds it to the cake and you watch her taste the result — a long pause, then something crosses her face that you've never seen there before. 'That's it,' she says quietly. 'That's exactly it.' She makes a full cake, serves it to whoever is in the bakery, and for the first time in fifteen years the recipe is complete. She writes 'Perkins alpine' in the blank on the card.",
+      "reward_type": "emotional_resolution",
+      "reward": "Mari's full trust; one of the game's warmest scenes; the honey cake is now permanently available in full form"
+    },
+    {
+      "id": "family_feud",
+      "title": "The Alderman-Perkins Feud",
+      "depth": "shallow",
+      "discovery_hint": "Constance and Agnes are seen having loud disagreements in public about an apple tree. They also have lunch together every Thursday.",
+      "summary": "The Alderman-Perkins feud, dating to 1891, is supposed to involve an apple tree. No one fully remembers why it started. Constance and Agnes don't seem very angry. Something doesn't add up.",
+      "solution": "The feud started with a misdirected love letter. In 1891, a young man named W.A. (William Alderman) wrote a letter to Margaret Alderman (not realizing she had moved). It was delivered instead to Martha Perkins. The Perkins family interpreted it as some kind of strange taunt (the letter mentioned an orchard path in a way they misread as a land claim reference). The Alderman family, when confronted, was too embarrassed to explain, and the 'feud' became a running joke that hardened into tradition. Agnes and Constance are best friends. Agnes has the original letter framed in her kitchen.",
+      "clues": [
+        {
+          "id": "ff_clue_1",
+          "description": "Agnes and Constance have lunch together every Thursday at the Wren & Whistle — always at the same table, always arguing, always leaving together still talking.",
+          "source": "wren_and_whistle_observation",
+          "requires": null
+        },
+        {
+          "id": "ff_clue_2",
+          "description": "The Chronicle archive has a 1891 entry: 'The Alderman-Perkins Dispute. Some misunderstanding regarding correspondence. The two families' honor is equally intact, as we understand it.' That's all.",
+          "source": "chronicle_1891_archive",
+          "requires": "library_access"
+        },
+        {
+          "id": "ff_clue_3",
+          "description": "Agnes at trust >= 2 shows you the framed letter. Reads it aloud. Laughs the whole time.",
+          "source": "agnes_perkins_trust_2",
+          "requires": "agnes_trust >= 2"
+        }
+      ],
+      "resolution": "You can tell Constance you've learned the truth, and she will say 'Oh, we've always known. Agnes and I worked it out about fifty years ago. The feud is ours now. We're not giving it up.' The real resolution is understanding that the feud is an act of friendship, not hostility — two old friends who found a way to perform their affection publicly in a town that appreciates a good story.",
+      "reward_type": "warm_revelation",
+      "reward": "Both Constance and Agnes's full trust simultaneously"
+    },
+    {
+      "id": "mira_finch",
+      "title": "Who Named the Lake?",
+      "depth": "deep",
+      "easter_egg_depth": "very deep",
+      "discovery_hint": "A watercolor in the library archive is signed 'M.F.' A grave in the cemetery is inscribed 'Mira Finch, she named the lake.' An inscription on the covered bridge reads 'M.F. was here — 1833.'",
+      "summary": "The name 'Mira Finch' appears in three unconnected places in Brindlewick: the library watercolor, the cemetery, and the covered bridge inscription. The history books say the lake was named by Alderman Finch's daughter — but the history books are vague about who she was. Eleanor has been gathering evidence for twelve years.",
+      "solution": "Mira Finch (1815-1878) was Alderman Finch's daughter by his first wife, who died in 1820. When Finch remarried, his second wife and her family worked to minimize Mira's existence in the family record — she was written out of the family Bible and out of the early town histories as a founding family member. Mira lived in Brindlewick her whole life, married a man named Thomas Alderman (a cousin of the other Aldermans) in 1862, and died in 1878. She named the lake. She carved her name on the covered bridge at age 18 to leave some mark. Eleanor placed her gravestone in 2018. The founder's diary, once found, contains a letter to Mira confirming all of this.",
+      "clues": [
+        {
+          "id": "mf_clue_1",
+          "description": "The covered bridge inscription: 'M.F. was here — 1833. The lake is hers.' Discovered by Juni in 2021.",
+          "source": "covered_bridge_examination",
+          "requires": "visit covered_bridge"
+        },
+        {
+          "id": "mf_clue_2",
+          "description": "The watercolor in the library archive: a girl by the lake, signed 'M.F.' The style suggests mid-19th century. The girl is maybe 13-15.",
+          "source": "library_archive_access",
+          "requires": "library_access"
+        },
+        {
+          "id": "mf_clue_3",
+          "description": "Mira Finch's gravestone in the main cemetery (placed 2018, unmarked as to who placed it): 'Mira Finch, 1815-1878. She named the lake.'",
+          "source": "brindlewick_cemetery",
+          "requires": "visit cemetery"
+        },
+        {
+          "id": "mf_clue_4",
+          "description": "The chapel register contains an 1862 marriage entry: 'Mira Alderman, born Mira Finch, married Thomas Alderman of this parish.' Reverend Prewitt will show it at trust >= 2.",
+          "source": "reverend_prewitt_trust_2",
+          "requires": "prewitt_trust >= 2"
+        },
+        {
+          "id": "mf_clue_5",
+          "description": "Eleanor, at trust >= 3, tells you about placing the gravestone and what she found in 2010. She says 'I've been waiting for someone who'd want to finish the story.'",
+          "source": "eleanor_finch_hartwell_trust_3",
+          "requires": "eleanor_trust >= 3"
+        },
+        {
+          "id": "mf_clue_6",
+          "description": "The sealed room contains the founder's letter to Mira — the final confirmation. (Requires founders_hidden_room mystery to be at least partially solved.)",
+          "source": "founders_diary",
+          "requires": "founders_hidden_room_accessed"
+        }
+      ],
+      "resolution": "The full picture: Mira Finch named the lake at age 9, lived in this valley her whole life, and was deliberately minimized by her half-siblings after the founder died. Eleanor has been quietly correcting this for twelve years. With the founder's diary in hand, she can write the corrected history properly. She does, and it becomes a permanent library display. Juni writes it up for the Chronicle. Sadie Mirabel finally learns why her boat rental is named 'Mira's.'",
+      "reward_type": "historical_justice",
+      "reward": "Eleanor's full trust; one of the deepest and most satisfying resolutions in the game; town history display updated"
+    },
+    {
+      "id": "clocktower_secret",
+      "title": "Three Minutes to Be Kind",
+      "depth": "easter_egg",
+      "discovery_hint": "The clocktower has run three minutes slow for as long as anyone can remember. That's a long time to be consistently wrong.",
+      "summary": "The Town Hall clocktower has run exactly three minutes slow for over 150 years. Every attempt to correct it has failed. It returns to three minutes slow within a week. Nobody knows why. It's the most consistent thing in Brindlewick.",
+      "solution": "Cornelius Webb set the clock three minutes slow deliberately in 1856 as a tribute to his friend Thomas Alderman, who died that year. The mechanism was built with this offset integrated structurally — not as a setting that can be changed, but as a fundamental aspect of the gear train's design. Any attempt to 'correct' it means overriding the mechanism's actual design; the escapement re-establishes its own timing within days. The inscription in the clocktower chamber explains why: 'C.W. 1856 — for T.A. — 3 minutes to be kind.' This is the deepest and most beautiful easter egg in the game.",
+      "clues": [
+        {
+          "id": "cts_clue_1",
+          "description": "The clock has run 3 minutes slow since the Town Hall was built in 1896, and before that since the previous town hall. Every attempt to fix it has failed.",
+          "source": "town_hall_visit_or_local_knowledge",
+          "requires": null
+        },
+        {
+          "id": "cts_clue_2",
+          "description": "Rosalind Webb mentions, at trust >= 2, that her family 'has a tradition of putting things in civic mechanisms that aren't on the blueprints.' She says it with a slight smile.",
+          "source": "rosalind_webb_trust_2",
+          "requires": "rosalind_trust >= 2"
+        },
+        {
+          "id": "cts_clue_3",
+          "description": "The clocktower staircase is unlocked. At the top: the mechanism, and on the gear housing, in scratched letters almost too small to read: 'C.W. 1856 — for T.A. — 3 minutes to be kind.'",
+          "source": "clocktower_examination",
+          "requires": "visit clocktower"
+        },
+        {
+          "id": "cts_clue_4",
+          "description": "Thomas Alderman's grave at the Founders' Graves reads: 'He helped. When in doubt, he helped.' The connection between the inscription on the grave and the inscription in the clock is clear once you see both.",
+          "source": "founders_graves",
+          "requires": "visit founders_graves"
+        }
+      ],
+      "resolution": "There is no resolution to fix or change. The discovery IS the resolution. The clock will continue to run three minutes slow, and now you know why. If you tell Rosalind you found the inscription, she is quiet for a moment and then says: 'My father showed me that inscription when I was nine years old. He said: when you build something, make sure the most important thing about it can't be adjusted by committee.' You can tell the mayor, who decides to add an informational plaque to the clocktower chamber. Or you can keep it between you and Rosalind.",
+      "reward_type": "pure_discovery",
+      "reward": "Rosalind's full trust; one of the game's most resonant moments"
+    }
+  ]
+}

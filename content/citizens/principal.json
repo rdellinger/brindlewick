@@ -1,0 +1,958 @@
+{
+  "principal_citizens": [
+    {
+      "id": "eleanor_finch_hartwell",
+      "first_name": "Eleanor",
+      "last_name": "Finch-Hartwell",
+      "age": 72,
+      "gender": "female",
+      "occupation": "Head Librarian, Brindlewick Public Library",
+      "address": "Keeper's Cottage, Millpond Row",
+      "household": ["harold_hartwell"],
+      "personality": "warm, meticulous, deeply private about what she knows, genuinely delighted by curious people",
+      "appearance": "Silver-haired, reading glasses on a chain of amber beads, always in practical clothes — cardigans, sensible boots. She has the librarian's quality of appearing to listen with her whole body.",
+      "backstory": "Eleanor was born in the Keeper's Cottage in 1952 and has never lived anywhere else for more than six months. She studied library science in Boston and returned to Brindlewick in 1978, convinced she'd leave again in a year. She married Harold in 1982. She has been head librarian since 2010. She knows more about the town's history than she ever volunteers and has a deep protective instinct about the records in her care — not to hide them, but to make sure whoever reads them is ready for what they find.",
+      "mystery_ties": ["founders_hidden_room", "mira_finch", "family_feud"],
+      "trust_level": 0,
+      "trust_stages": {
+        "0": "Eleanor is welcoming but professionally guarded. She will help you find things in the public collection but won't lead you to the archive.",
+        "1": "She has noticed you're genuinely curious, not just sightseeing. She'll mention the archive room and offer limited access.",
+        "2": "She shows you the locked document case and mentions the sealed room reference she found in 2010.",
+        "3": "She tells you about Mira Finch. She has known for twelve years and has been waiting for someone to care enough to ask."
+      },
+      "routine": {
+        "monday": {"morning": "library", "afternoon": "library", "evening": "keepers_cottage"},
+        "tuesday": {"morning": "library", "afternoon": "library", "evening": "keepers_cottage"},
+        "wednesday": {"morning": "hartwells_general_store", "afternoon": "library", "evening": "wren_and_whistle"},
+        "thursday": {"morning": "library", "afternoon": "library", "evening": "keepers_cottage"},
+        "friday": {"morning": "library", "afternoon": "library", "evening": "keepers_cottage"},
+        "saturday": {"morning": "farmers_market", "afternoon": "finch_family_orchard_walk", "evening": "keepers_cottage"},
+        "sunday": {"morning": "st_agathas_chapel", "afternoon": "keepers_cottage", "evening": "library"}
+      },
+      "dialogue_topics": {
+        "greeting": "Eleanor looks up from whatever she's doing, marks her place with care, and gives you her full attention. 'What can I help you find?'",
+        "town_history": "She'll speak for as long as you're willing to listen. She has a gift for making the past feel present.",
+        "the_sealed_room": "Her expression changes — careful, interested. 'How do you know about that?' (requires trust >= 2)",
+        "mira_finch": "A long pause. 'Mira. Yes. I've been thinking about when the right time was to tell someone properly.' (requires trust >= 3)",
+        "library_research": "Happy to guide you. She knows every item in the collection."
+      },
+      "help_tasks": [
+        {
+          "id": "organize_returned_books",
+          "description": "Eleanor has a cart of books to reshelve and would welcome help identifying the right sections.",
+          "reward_lore": "She'll tell you about the library's oldest book: a 1798 almanac someone left behind.",
+          "trust_gain": 1
+        }
+      ],
+      "gossip": "She'll never gossip about living people. About historical figures she's more generous.",
+      "lore_fact": "The Finch family is distantly related to the founding family, but Eleanor doesn't put much stock in that. 'There are Finches who have done things. That matters more.'",
+      "secret": "She found a reference to Mira Finch in the records in 2010 and has been quietly gathering evidence since. She placed Mira's gravestone in the cemetery herself, in 2018, without telling anyone."
+    },
+    {
+      "id": "harold_hartwell",
+      "first_name": "Harold",
+      "last_name": "Hartwell",
+      "age": 74,
+      "gender": "male",
+      "occupation": "Owner, Hartwell's General Store",
+      "address": "Keeper's Cottage, Millpond Row",
+      "household": ["eleanor_finch_hartwell"],
+      "personality": "gentle, unhurried, a listener first and a talker second, quietly proud of the store's history",
+      "appearance": "Tall, slightly stooped from decades behind a counter, white-bearded, always in a canvas apron. His hands are very large. He moves through the store the way a ship moves through familiar water.",
+      "backstory": "Harold's family has run the store since James Hartwell's trading post in 1826. He took it over from his father at 30, married Eleanor in 1982, and has been both shopkeeper and librarian's husband ever since. He reads everything she brings home. He knows the store's history as well as Eleanor knows the library's. He is the kind of person strangers find themselves telling things to.",
+      "trust_stages": {
+        "0": "Friendly, helpful, asks what you need.",
+        "1": "Starts telling you a bit about the store's history while he finds things for you.",
+        "2": "Invites you to see the back room, where the original trading post ledger from 1826 is kept under glass."
+      },
+      "routine": {
+        "weekdays": {"morning": "hartwells_general_store", "afternoon": "hartwells_general_store", "evening": "keepers_cottage"},
+        "saturday": {"morning": "farmers_market", "afternoon": "hartwells_general_store", "evening": "wren_and_whistle"},
+        "sunday": {"morning": "st_agathas_chapel", "afternoon": "keepers_cottage", "evening": "keepers_cottage"}
+      },
+      "dialogue_topics": {
+        "greeting": "'What do you need?' He means it as a genuine question, not a transaction.",
+        "store_history": "He'll show you the original ledger if you ask. James Hartwell's handwriting in the 1826 entries.",
+        "eleanor": "A very private warmth. 'She's the smart one. I'm just the one who keeps the beans in stock.'"
+      },
+      "help_tasks": [
+        {
+          "id": "stock_delivery",
+          "description": "A large delivery has arrived and Harold's back is acting up. Can you help carry the boxes in from the truck?",
+          "reward_lore": "Harold shows you the 1826 ledger and the entry for the first trade: '3 iron nails, 2 yards muslin. Paid: a dozen trout and a handshake.'",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "The first entry in the original trading post ledger is dated September 14, 1826. Harold has read it thousands of times and still finds it moving."
+    },
+    {
+      "id": "marigold_osei",
+      "first_name": "Marigold",
+      "last_name": "Osei",
+      "age": 45,
+      "gender": "female",
+      "occupation": "Baker and Owner, The Copper Kettle Bakery",
+      "address": "12 Birch Hollow Road",
+      "household": [],
+      "personality": "warm, direct, faintly mysterious about her past, the most genuinely central person in the town's daily life",
+      "appearance": "Medium height, always flour-dusted somewhere, braids pinned up under a cloth cap. She has a laugh that carries down the block. Her hands are small and remarkably strong.",
+      "backstory": "Mari arrived in Brindlewick in 2009 from a city she doesn't name, bought the bakery within a week, and has never explained why she came. The town has stopped asking and started just being grateful. Her grandmother's honey cake recipe is the source of the town's most beloved mystery: the smudge over one ingredient means she's never been able to reproduce the original exactly — hers is wonderful, but she says 'something is missing.' She was born in Accra and grew up in London before 'a long story and a wrong turn' brought her here.",
+      "mystery_ties": ["missing_recipe"],
+      "trust_stages": {
+        "0": "Brisk and friendly. Very good at her job. Not much personal conversation.",
+        "1": "Starts asking about you. Interested in where you're from.",
+        "2": "Tells you about her grandmother's cake. Shows you the smudged recipe card.",
+        "3": "Admits she moved here partly because of something she read about the local alpine honey. She's never quite found the right variety."
+      },
+      "routine": {
+        "weekdays": {"early_morning": "copper_kettle_bakery", "morning": "copper_kettle_bakery", "afternoon": "copper_kettle_bakery_kitchen", "evening": "12_birch_hollow_road"},
+        "saturday": {"morning": "farmers_market", "afternoon": "copper_kettle_bakery", "evening": "wren_and_whistle"},
+        "sunday": {"morning": "closed_personal_baking", "afternoon": "lakefront_boardwalk_walk", "evening": "home"}
+      },
+      "dialogue_topics": {
+        "honey_cake": "Her face becomes slightly rueful. 'It's good. It's very good. But my grandmother's was something else. There's a smudge on her card where she wrote the honey type.'",
+        "why_brindlewick": "She shrugs, but there's warmth in it. 'It felt right. The lake in the morning. The way people say hello. Some places are right.'",
+        "cooking": "She can talk about this for hours and will."
+      },
+      "help_tasks": [
+        {
+          "id": "early_morning_prep",
+          "description": "A key assistant called in sick. Can you help with morning prep — measuring, mixing, nothing that requires skill?",
+          "reward_lore": "Mari tells you about the smudged recipe card and what she thinks the missing ingredient might be.",
+          "trust_gain": 1
+        },
+        {
+          "id": "find_missing_ingredient",
+          "description": "After befriending Mari and doing the research, identify the honey variety (Perkins alpine honey) that completes the recipe.",
+          "reward_lore": "Mari makes the cake with the correct honey and cries a little. She shares the first slice with you.",
+          "trust_gain": 2,
+          "mystery_complete": "missing_recipe"
+        }
+      ],
+      "lore_fact": "The Brindlewick Honey Cake recipe is pinned above the register. The smudge is over the third ingredient in the list."
+    },
+    {
+      "id": "dr_okafor",
+      "first_name": "Ignatius",
+      "last_name": "Okafor",
+      "nickname": "Dr. Okafor",
+      "age": 58,
+      "gender": "male",
+      "occupation": "General Practitioner",
+      "address": "Maple Row Medical Practice (lives upstairs)",
+      "household": [],
+      "personality": "warm, precise, deeply attentive, has a gift for making problems feel manageable without minimizing them",
+      "appearance": "Tall, elegant, always in a well-pressed shirt even on Saturdays. Silver at his temples. Reads people the way good doctors learn to — not invasively, but comprehensively.",
+      "backstory": "Ignatius Okafor was born in Lagos, trained in London, and took a three-month locum in Brindlewick in 1995 fully intending to return. In November, he went to the airport, sat in the departure lounge, looked at his ticket for a long time, and then went home. 'The pie,' he tells people. He has never married. He has, by his own account, read every book in the library at least once. He makes the best jollof rice in the valley, which he brings to the potluck every month.",
+      "trust_stages": {
+        "0": "Professional, warm, helpful about practical matters.",
+        "1": "Invites you for tea at his practice after hours. Excellent conversationalist.",
+        "2": "Tells you about arriving in Brindlewick. Admits the pie story isn't the whole truth."
+      },
+      "routine": {
+        "weekdays": {"morning": "dr_okafor_practice", "afternoon": "dr_okafor_practice", "evening": "keepers_cottage_dinner_sometimes"},
+        "wednesday": {"evening": "wren_and_whistle"},
+        "saturday": {"morning": "farmers_market", "afternoon": "lake_pier_reading", "evening": "community_potluck_monthly"},
+        "sunday": {"morning": "lakefront_boardwalk_walk", "afternoon": "practice_paperwork", "evening": "st_agathas_chapel_occasional"}
+      },
+      "dialogue_topics": {
+        "why_stayed": "He pauses as if considering. 'I sat in the departure lounge for two hours. I thought: what is there that I cannot do here? And I couldn't think of anything.'",
+        "town_health": "He's deeply discreet about patients but talks readily about community health in general.",
+        "jollof_rice": "This topic requires no prompting. He will tell you everything about it."
+      },
+      "lore_fact": "Dr. Okafor delivered 217 babies in Brindlewick. He knows the birthday of every person under 29 in town."
+    },
+    {
+      "id": "constance_alderman",
+      "first_name": "Constance",
+      "last_name": "Alderman",
+      "age": 85,
+      "gender": "female",
+      "occupation": "Retired (last of the Alderman family in Brindlewick)",
+      "address": "The Alderman Estate, Finch Lane",
+      "household": ["dot_flowers"],
+      "personality": "dry, observant, appears formidable from a distance and is warm up close, deeply attached to the estate and its history",
+      "appearance": "Small, white-haired, with the upright carriage of someone who grew up in a house with good posture as a rule. Her eyes are very sharp. She moves carefully but not slowly.",
+      "backstory": "Constance was born in the Alderman Estate in 1939 and has lived there her entire life except for four years at university (she read history, naturally). She is the last of the Aldermans to live in the estate; her niece Dorothy lives in town and her nephew moved to California. She has a complicated relationship with the estate's history — proud of it and burdened by it in equal measure. She knows the east wing has a sealed room. She has not opened it because she is, she says, 'waiting for the right question.'",
+      "mystery_ties": ["founders_hidden_room", "family_feud"],
+      "trust_stages": {
+        "0": "Politely formal. Not unfriendly, but you are a stranger on her property.",
+        "1": "Notices you have real curiosity about the history. Offers tea.",
+        "2": "Takes you to the hidden garden. Mentions the east wing.",
+        "3": "Gives you her grandfather's map of the estate, which shows the sealed room's location.",
+        "4": "Gives you the boathouse key and says 'I think it's time.'"
+      },
+      "routine": {
+        "morning": "alderman_estate_garden",
+        "afternoon": "reading_in_estate",
+        "thursday_afternoon": "wren_and_whistle_with_agnes",
+        "saturday": "farmers_market_brief_appearance",
+        "sunday": "st_agathas_chapel"
+      },
+      "dialogue_topics": {
+        "the_feud": "She straightens almost imperceptibly. Then: 'Agnes Perkins is my oldest friend. The feud is a tradition. There's a difference.'",
+        "the_estate": "Speaks about it with the mixture of love and exhaustion familiar to anyone responsible for a very large old thing.",
+        "sealed_room": "requires trust >= 2. 'My grandfather's father sealed it in 1866. He said a man's papers were his own. I've spent a long time thinking about whether he was right.'"
+      },
+      "help_tasks": [
+        {
+          "id": "garden_winterizing",
+          "description": "The hidden garden needs to be prepared for winter. Constance's knees won't allow her to do it alone.",
+          "reward_lore": "Constance tells you the full history of the walled garden — planted by Alderman Finch's wife in 1841.",
+          "trust_gain": 1,
+          "unlock": "hidden_garden"
+        }
+      ],
+      "lore_fact": "Constance and Agnes Perkins have lunch together every Thursday at the Wren & Whistle, always at the same table, always ordering the same thing, always arguing about the apple tree with identical arguments."
+    },
+    {
+      "id": "teddy_birch",
+      "first_name": "Theodore",
+      "last_name": "Birch",
+      "nickname": "Teddy",
+      "age": 34,
+      "gender": "male",
+      "occupation": "Innkeeper, The Lantern Post Inn",
+      "address": "The Lantern Post Inn",
+      "household": [],
+      "personality": "enthusiastic, good with people, slightly anxious about the inn's future, very bad at saying no",
+      "appearance": "Tallish, a bit disheveled in an endearing way, always in a good mood before 11pm. Hair that never quite lies flat.",
+      "backstory": "Teddy inherited the inn from his grandmother Edna in 2019, at 27, with no plan. He's been figuring it out since. He loves the inn genuinely and has ideas for improving it that he presents to the town in a way that makes some of the older residents nervous (they calmed down when they realized his ideas were mostly 'better lighting on the porch' and 'a second kettle in the common room'). He is the first person a newcomer usually meets.",
+      "routine": {
+        "morning": "lantern_post_inn",
+        "afternoon": "lantern_post_inn_or_millpond_row_errands",
+        "evening": "inn_common_room",
+        "wednesday_evening": "wren_and_whistle"
+      },
+      "dialogue_topics": {
+        "inn_history": "His grandmother's expansion in 1985 produced a fascinating set of photographs he keeps in the common room.",
+        "town_orientation": "Best source of immediate practical info — who's who, where to find things.",
+        "new_ideas": "He has several. The fiber internet upgrade. The new sign. The second kettle."
+      },
+      "help_tasks": [
+        {
+          "id": "leaky_roof_guest_room",
+          "description": "The first help task in the game. Room 4's ceiling has developed a slow drip. Teddy knows someone who can fix it (Barnaby Mossgrove) but doesn't have his number. Can you find Barnaby?",
+          "reward_lore": "Teddy tells you about the inn's founding and his grandmother's role.",
+          "tutorial": true
+        }
+      ],
+      "lore_fact": "The inn has a guest book going back to 1903. It includes a one-line entry from 1967: 'Found what I was looking for. Will return.' No name."
+    },
+    {
+      "id": "rosalind_webb",
+      "first_name": "Rosalind",
+      "last_name": "Webb",
+      "age": 67,
+      "gender": "female",
+      "occupation": "Watchmaker and Repairer, Webb's Watch Repair",
+      "address": "7 Finch Lane",
+      "household": [],
+      "personality": "precise, dry, more sentimental than she appears, keeper of a particular family secret",
+      "appearance": "Small and neat, with a watchmaker's loupe perpetually around her neck. Silver hair cut short. Her workbench is the most orderly surface in Brindlewick.",
+      "backstory": "The Webb family has been fixing things with moving parts in Brindlewick since Cornelius Webb in the 1850s. Rosalind is the current generation. She knows about the clocktower mechanism because her father told her about her great-great-grandfather's inscription. She knows about the statue because her father installed the hidden clockwork. She is not keeping a secret, exactly — she's just waiting for someone to ask the right question.",
+      "mystery_ties": ["moving_statue", "clocktower_secret"],
+      "trust_stages": {
+        "0": "Professional, friendly, focused on her work.",
+        "1": "Notices you've been examining the clock wall with interest. Mentions the slow one.",
+        "2": "Tells you about Cornelius Webb's tribute to Thomas Alderman.",
+        "3": "Tells you about the statue mechanism. 'My father put it there in 1967. He called it a love letter to the founder. I called it engineering.'"
+      },
+      "routine": {
+        "weekdays": {"morning": "webbs_watch_repair", "afternoon": "webbs_watch_repair", "evening": "7_finch_lane"},
+        "saturday": {"morning": "farmers_market", "afternoon": "webbs_watch_repair_half_day"},
+        "sunday": {"morning": "walk_copper_hill", "afternoon": "7_finch_lane"}
+      },
+      "lore_fact": "The oldest clock on her wall is a French bracket clock from 1742. It runs three minutes slow. She winds it every Sunday.",
+      "secret": "She knows the full history of both the clocktower inscription and the statue mechanism. She is the only living person who knows both."
+    },
+    {
+      "id": "oliver_peregrine",
+      "first_name": "Oliver",
+      "last_name": "Peregrine",
+      "age": 52,
+      "gender": "male",
+      "occupation": "Editor, The Brindlewick Chronicle",
+      "address": "18 Maple Row",
+      "household": [],
+      "personality": "observant, warm, slightly performatively gruff, deeply fond of the town and its people",
+      "appearance": "Medium height, reading glasses perpetually on his head (never on his face when needed), ink on his hands most days. His office smells of pipe tobacco he hasn't smoked in years.",
+      "backstory": "Oliver took over the Chronicle from his father in 2001 and runs it with the conviction that a town with a good local newspaper is a town that stays connected to itself. He started the 'Dear Neighbor' column as an anonymous advice feature in 2001, but it evolved — people began asking not for advice but for encouragement, and Oliver found himself writing the anonymous encouragement letters that now occasionally appear under residents' doors, signed 'A Neighbor.' He does not know that many residents suspect it's him. He believes his anonymity is perfectly maintained.",
+      "mystery_ties": ["anonymous_letter_writer"],
+      "trust_stages": {
+        "0": "Friendly, asks if you have any news.",
+        "1": "Gives you a historical archive tour of the Chronicle building.",
+        "2": "Confides that the town is 'in a good moment' and that he's been writing a piece about its history that he can't quite finish.",
+        "3": "Doesn't admit to the letters, but if you say you found one of them particularly meaningful, his expression will give him away."
+      },
+      "routine": {
+        "weekdays": {"morning": "chronicle_building", "afternoon": "chronicle_building_or_town_reporting", "evening": "18_maple_row"},
+        "tuesday_evening": "wren_and_whistle",
+        "saturday": {"morning": "farmers_market_reporting", "afternoon": "chronicle_building"}
+      },
+      "lore_fact": "The Chronicle archive has every issue since January 6, 1901. There are exactly four issues missing — all from the winter of 1918, when the flu hit.",
+      "secret": "He is the author of the Dear Neighbor column AND the anonymous encouragement notes. He has written 1,247 notes in 24 years. He keeps count."
+    },
+    {
+      "id": "juni_salcedo",
+      "first_name": "Juniper",
+      "last_name": "Salcedo",
+      "nickname": "Juni",
+      "age": 28,
+      "gender": "female",
+      "occupation": "Library Assistant, Brindlewick Public Library",
+      "address": "3 Birch Hollow Road",
+      "household": ["roommate_petra_holloway"],
+      "personality": "curious, enthusiastic, slightly impulsive in her research, extremely good at finding things in records",
+      "appearance": "Short, with long dark hair usually in a braid. Always has a notebook. Gets ink on her face when she forgets she's been holding a pen.",
+      "backstory": "Juni moved to Brindlewick three years ago for a temporary position and found Eleanor's archive too interesting to leave. She is the person who discovered the Mira Finch inscription on the covered bridge in 2021 while photographing it for a restoration grant. She has been quietly obsessed with Mira Finch since and has been trying to get Eleanor to tell her what she knows. Eleanor is waiting for Juni to find it herself.",
+      "mystery_ties": ["mira_finch", "founders_hidden_room"],
+      "trust_stages": {
+        "0": "Delighted to have a visitor who's curious about the archives.",
+        "1": "Shows you the watercolor in the locked case and asks if you want to help figure out who 'M.F.' is.",
+        "2": "Shares her notes on Mira Finch and the covered bridge inscription."
+      },
+      "routine": {
+        "weekdays": {"morning": "library", "afternoon": "library", "evening": "3_birch_hollow_road"},
+        "monday_evening": "book_nook_browsing",
+        "saturday": {"morning": "covered_bridge_research", "afternoon": "library_archive"},
+        "sunday": {"morning": "lakefront_walk", "afternoon": "home"}
+      },
+      "help_tasks": [
+        {
+          "id": "archive_photography",
+          "description": "Juni is photographing old documents for digital preservation and needs help holding them flat.",
+          "reward_lore": "She shows you the partial Alderman diary and explains what she's found about the sealed room.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "Juni's notebook is on page 234. It is entirely about Brindlewick. She started it on her second day here."
+    },
+    {
+      "id": "barnaby_mossgrove",
+      "first_name": "Barnaby",
+      "last_name": "Mossgrove",
+      "age": 48,
+      "gender": "male",
+      "occupation": "Carpenter, General Repairman",
+      "address": "22 Maple Row",
+      "household": ["wife_donna_mossgrove", "daughter_lily_mossgrove"],
+      "personality": "practical, kind, self-deprecating, the person you call when something needs fixing",
+      "appearance": "Broad-shouldered, perpetually sawdust-dusted, with a wide grin that appears without warning. His truck is always parked in front of wherever his current project is.",
+      "backstory": "Barnaby has lived in Brindlewick his whole life. His great-aunt Helen Mossgrove sculpted the town statue. He knows more about the structural history of every building in town than anyone except possibly Dale Putnam. He is the first person residents call when something goes wrong with their house. He's also on the volunteer fire department.",
+      "mystery_ties": ["moving_statue"],
+      "routine": {
+        "weekdays": {"morning": "current_job_site", "afternoon": "current_job_site", "evening": "22_maple_row"},
+        "tuesday": {"evening": "wren_and_whistle"},
+        "thursday": {"evening": "wren_and_whistle"},
+        "saturday": {"morning": "farmers_market_brief", "afternoon": "fire_station_volunteer_work"}
+      },
+      "help_tasks": [
+        {
+          "id": "inn_roof_repair",
+          "description": "The tutorial task — Teddy needs Barnaby's help with room 4's ceiling. Find Barnaby (at his current job site), let him know.",
+          "tutorial": true,
+          "reward_lore": "Barnaby tells you about his great-aunt Helen and the statue commission."
+        },
+        {
+          "id": "fence_repair_library",
+          "description": "The library's garden fence has a broken post. Barnaby can fix it in an afternoon if someone helps him hold the post.",
+          "reward_lore": "He tells you about the library building's original use as a private house and the family who built it.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "Barnaby's great-aunt Helen Mossgrove was the sculptor of the Alderman Finch statue. Barnaby keeps one of her clay maquettes on his mantelpiece."
+    },
+    {
+      "id": "fletcher_grange",
+      "first_name": "Fletcher",
+      "last_name": "Grange",
+      "age": 61,
+      "gender": "male",
+      "occupation": "Farmer, Millbrook Farm",
+      "address": "Millbrook Farm, North Road",
+      "household": [],
+      "personality": "slow-moving in the best sense, observant of natural things, talks to his crops without embarrassment, has a deep awareness of the lake",
+      "appearance": "Weathered, tall, deliberate in his movements. Always in work clothes, always slightly muddy.",
+      "backstory": "Fletcher has farmed this land for 35 years. He notices weather, soil, birds, and the lake in a way that is almost scientific in its consistency. He has seen the lake light many times and has logged it in his farm diary: date, time, duration, weather conditions, phase of the moon. He has never told anyone about his logbook because no one has asked.",
+      "mystery_ties": ["lake_light"],
+      "trust_stages": {
+        "0": "Polite, not unfriendly, not very forthcoming.",
+        "1": "Asks if you know anything about farming. Opens up if you show genuine interest.",
+        "2": "Mentions the lake. Is surprised by your interest.",
+        "3": "Shows you the lake light logbook. 'Twenty-three years of entries. Nobody's ever asked to see them.'"
+      },
+      "routine": {
+        "weekdays": {"morning": "millbrook_farm", "afternoon": "millbrook_farm", "evening": "millbrook_farm"},
+        "thursday": {"evening": "grange_hall"},
+        "saturday": {"morning": "farmers_market"},
+        "sunday": {"morning": "lakefront_boardwalk_slow_walk"}
+      },
+      "lore_fact": "Fletcher talks to his crops. His favorite crop to address is the winter squash, which he says 'listens well.'",
+      "secret": "He has a 23-year logbook of the lake light, noting date, time, weather, and moon phase. The pattern is clear — it appears most frequently in the two weeks around the spring equinox and after rain."
+    },
+    {
+      "id": "agnes_perkins",
+      "first_name": "Agnes",
+      "last_name": "Perkins",
+      "age": 71,
+      "gender": "female",
+      "occupation": "Cider Maker, Perkins Cider House",
+      "address": "Perkins Cider House, Alderman Road",
+      "household": ["worker_tommy_hall"],
+      "personality": "sharp-tongued in an affectionate way, extremely proud of her cider, keeps up the Alderman feud as pure performance art",
+      "appearance": "Short, stout, with strong hands stained slightly with apple juice that doesn't wash out in season. Always has an opinion and always shares it.",
+      "backstory": "Agnes's family has made cider here for four generations. She knows the Alderman-Perkins feud started with a misdirected letter in 1891. She and Constance Alderman are, in fact, best friends and have been since age 7. The feud is a game they play in public. They find it very funny. Agnes has the original misdirected love letter, framed, on her kitchen wall.",
+      "mystery_ties": ["family_feud", "missing_recipe"],
+      "trust_stages": {
+        "0": "Robust welcome, offer of a taste of cider.",
+        "1": "Tells you about the feud. Laughs while doing it.",
+        "2": "Shows you the framed letter.",
+        "3": "Tells you about the alpine honey she produces from her hives and that Marigold Osei once asked about it but never followed up."
+      },
+      "routine": {
+        "weekdays": {"morning": "perkins_cider_house", "afternoon": "perkins_cider_house", "evening": "home"},
+        "thursday": {"afternoon": "wren_and_whistle_with_constance"},
+        "saturday": {"morning": "farmers_market"}
+      },
+      "lore_fact": "The original misdirected love letter of 1891 is framed in her kitchen. It reads: 'Dearest M., I have thought of nothing but the orchard path since Tuesday. Yours, in hope, W.A.' It was intended for Margaret Alderman; delivered to Martha Perkins instead."
+    },
+    {
+      "id": "artie_pryce",
+      "first_name": "Arthur",
+      "last_name": "Pryce",
+      "nickname": "Artie",
+      "age": 76,
+      "gender": "male",
+      "occupation": "Postman (semi-retired, still works his route)",
+      "address": "9 Finch Lane",
+      "household": [],
+      "personality": "quietly generous, has seen everyone's door for 51 years, the kind of witness to a town that only comes from that much steady, unremarked presence",
+      "appearance": "Lean, white-haired, moves at a consistent pace regardless of weather. Always the same blue postal uniform. Always a thermos.",
+      "backstory": "Artie started delivering mail in Brindlewick in 1975. He has walked this route in snow, in heat, through weddings and funerals and every ordinary day between. He started writing the anonymous encouragement notes in 2001 after he noticed a resident — Hettie Mossgrove, Barnaby's mother — growing isolated after her husband's death. He slipped a note under her door. She told him later it had helped. He has been doing it ever since, 1,247 notes. He doesn't keep count (that's Oliver; Artie hasn't told him he's also been writing notes). They don't know about each other.",
+      "mystery_ties": ["anonymous_letter_writer"],
+      "trust_stages": {
+        "0": "Friendly, brief — he's on his route.",
+        "1": "Stops to chat. Has an observation about every house on his route.",
+        "2": "Tells you about the residents he worries about and the ones he doesn't have to.",
+        "3": "Mentions, without explaining why, that 'sometimes words help when nothing else does.' A pause. 'I've found that to be true.'"
+      },
+      "routine": {
+        "weekdays": {"morning": "postal_route_all_of_brindlewick", "afternoon": "post_office", "evening": "9_finch_lane"},
+        "saturday": {"morning": "off_duty_walk"},
+        "sunday": {"morning": "st_agathas_chapel"}
+      },
+      "lore_fact": "Artie has delivered mail to every address in Brindlewick for 51 years. He knows which houses have dogs, which ones have leaky letter slots, and which ones have someone who needs to hear a kind word.",
+      "secret": "He has written anonymous encouragement notes to residents since 2001. He doesn't know Oliver Peregrine also does this under the 'Dear Neighbor' banner. There are two anonymous note-writers."
+    },
+    {
+      "id": "nola_finch",
+      "first_name": "Nola",
+      "last_name": "Finch",
+      "age": 44,
+      "gender": "female",
+      "occupation": "Pharmacist, Finch Family Pharmacy",
+      "address": "31 Maple Row",
+      "household": ["husband_pete_finch", "son_oliver_finch_16"],
+      "personality": "competent, slightly dry, has made peace with being a Finch in a town full of Finch history, genuinely kind to patients",
+      "appearance": "Practical, efficient in her movements. Hair in a sensible cut. She has the air of someone who manages things well without making a fuss.",
+      "backstory": "Nola is distantly related to the founding Finches but has lived in Brindlewick only since marrying Pete in 2004. She took over the pharmacy in 2011 when the previous pharmacist retired. She is slightly tired of people's eyebrows going up at the name 'Finch' but has developed a polished way of saying 'Not those Finches' that closes the subject.",
+      "routine": {
+        "weekdays": {"morning": "finch_pharmacy", "afternoon": "finch_pharmacy", "evening": "31_maple_row"},
+        "saturday": {"morning": "farmers_market_brief", "afternoon": "home"}
+      },
+      "help_tasks": [
+        {
+          "id": "inventory_count",
+          "description": "The annual inventory count is overwhelming. Nola needs someone to read off numbers while she writes.",
+          "reward_lore": "She tells you about the original pharmacy's 1922 counter, which is still in the back, and shows you the first prescription register.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "The original soda counter still works. On the second Saturday of July, Nola runs it as a fundraiser for the school."
+    },
+    {
+      "id": "mayor_windermere",
+      "first_name": "Doris",
+      "last_name": "Windermere",
+      "age": 62,
+      "gender": "female",
+      "occupation": "Mayor of Brindlewick",
+      "address": "44 Birch Hollow Road",
+      "household": ["husband_george_windermere"],
+      "personality": "genuinely enthusiastic, slightly officious, the kind of mayor who shows up with a clipboard and stays to help",
+      "appearance": "Energetic for her age, always in a blazer, carries a clipboard. Has a mayoral pin she wears to everything.",
+      "backstory": "Doris was elected mayor in 2014 after 20 years on the town council. She campaigned on 'keeping Brindlewick Brindlewick' and has largely succeeded. She attends every town event, organizes three of them personally, and has a genuine belief that the quality of a town is measured by whether its residents feel at home.",
+      "routine": {
+        "weekdays": {"morning": "town_hall", "afternoon": "town_hall_or_event_prep"},
+        "saturday": {"morning": "farmers_market"},
+        "sunday": {"morning": "st_agathas_chapel"}
+      },
+      "help_tasks": [
+        {
+          "id": "founders_day_prep",
+          "description": "Two weeks before Founder's Day, Doris needs help distributing flyers across town.",
+          "reward_lore": "She tells you about the first Founder's Day in 1901 and the photograph of it in the gallery.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "Doris has attended every Founder's Day since 1970. She was 6 at her first one. Her grandmother took her."
+    },
+    {
+      "id": "sheriff_quartermaine",
+      "first_name": "Levi",
+      "last_name": "Quartermaine",
+      "age": 46,
+      "gender": "male",
+      "occupation": "Town Sheriff",
+      "address": "17 Birch Hollow Road",
+      "household": ["wife_clara_quartermaine", "son_james_quartermaine_11"],
+      "personality": "gentle, patient, methodical in a non-intimidating way, secretly fascinated by the statue mystery",
+      "backstory": "Levi came to Brindlewick from a city job in 2012 and has never looked back. His bulletin board showing the statue's measured movement history is a source of both mild self-mockery and genuine curiosity. He has been carefully measuring the statue's position for 7 years using surveying tools. He has ruled out settlement, frost heave, and vandalism. He does not know about the clockwork mechanism.",
+      "mystery_ties": ["moving_statue"],
+      "routine": {
+        "weekdays": {"morning": "sheriffs_office", "afternoon": "town_patrol_or_office"},
+        "monday": {"afternoon": "lakeside_park_statue_measurement_monthly"},
+        "saturday": {"morning": "farmers_market"}
+      },
+      "help_tasks": [
+        {
+          "id": "lost_bicycle",
+          "description": "A child's bicycle is missing. Levi has it in the office but doesn't know whose it is. Can you ask around?",
+          "reward_lore": "He shows you his statue measurement notebook.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "His measurement notebook goes back to 2017. The statue has moved 14.7 inches total in 7 years — consistently, but not evenly."
+    },
+    {
+      "id": "petra_holloway",
+      "first_name": "Petra",
+      "last_name": "Holloway",
+      "age": 39,
+      "gender": "female",
+      "occupation": "Science Teacher, Brindlewick Elementary",
+      "address": "3 Birch Hollow Road",
+      "household": ["roommate_juni_salcedo"],
+      "personality": "precise, lightly sardonic, deeply interested in how things work, generous with knowledge",
+      "backstory": "Petra grew up in the city and came to Brindlewick to teach for a year while figuring out what to do next. That was eight years ago. She rooms with Juni and they are companionably unlike each other. Petra is interested in the scientific aspects of the lake light and has been attempting to test the bioluminescence theory through water samples.",
+      "mystery_ties": ["lake_light"],
+      "routine": {
+        "weekdays": {"morning": "elementary_school", "afternoon": "elementary_school"},
+        "monday": {"evening": "wren_and_whistle"},
+        "saturday": {"morning": "farmers_market", "afternoon": "lake_sampling"}
+      },
+      "help_tasks": [
+        {
+          "id": "science_fair_judging",
+          "description": "Petra needs two additional judges for the school science fair.",
+          "reward_lore": "She shows you her water sample data and explains the bioluminescence hypothesis.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "Petra has collected 40 water samples from the south section of the lake over two years. The samples show unusually high concentrations of bioluminescent algae in the deepest recorded location."
+    },
+    {
+      "id": "clem_rourke",
+      "first_name": "Clem",
+      "last_name": "Rourke",
+      "age": 55,
+      "gender": "male",
+      "occupation": "Semi-retired Forest Warden",
+      "address": "Warden's Cabin, Mountain Trail",
+      "household": ["dog_biscuit"],
+      "personality": "direct, knowledgeable about the natural world, more philosophical than he appears",
+      "backstory": "Clem is descended from the Patrick Rourke who opened the Wren & Whistle in 1851. He chose the forest over the pub. He has been the valley's warden since 1995 and semi-retired in 2022, staying in the cabin and maintaining the trail system. He is the person who knows that the valley's ecology has a very gentle, specific character — and that the lake is an unusual body of water in terms of its depth and thermocline.",
+      "mystery_ties": ["lake_light"],
+      "routine": {
+        "weekdays": {"morning": "trail_maintenance", "afternoon": "wardens_cabin"},
+        "evenings": {"often": "wren_and_whistle"},
+        "saturday": {"morning": "farmers_market_occasional"}
+      },
+      "lore_fact": "The original Rourke family ledger from the Wren & Whistle is in the Chronicle archive. The first entry is dated March 4, 1851: 'Opened. Sold two ales and a meat pie. Satisfactory.'"
+    },
+    {
+      "id": "sylvie_tran",
+      "first_name": "Sylvie",
+      "last_name": "Tran",
+      "age": 33,
+      "gender": "female",
+      "occupation": "Potter, Brindlewick Pottery Studio",
+      "address": "15 Finch Lane",
+      "household": [],
+      "personality": "observant, precise, sees things about people they haven't said, not psychic just attentive",
+      "backstory": "Sylvie came to Brindlewick three years ago after a residency at a ceramics center nearby. She intended to stay a season, rented the studio space, and never left. She notices things — the way someone holds themselves, what they don't say, how they look at the lake. She doesn't volunteer observations but will if asked.",
+      "routine": {
+        "weekdays": {"morning": "pottery_studio", "afternoon": "pottery_studio"},
+        "saturday": {"morning": "farmers_market"},
+        "sunday": {"morning": "walk_lake_shore"}
+      },
+      "help_tasks": [
+        {
+          "id": "firing_schedule",
+          "description": "The kiln needs to be monitored overnight but Sylvie has an obligation in town. Can you check it at the specified times?",
+          "reward_lore": "She tells you what she's noticed about the lake light and where she thinks it comes from.",
+          "trust_gain": 1
+        }
+      ],
+      "lore_fact": "Sylvie makes a bowl every year and leaves it at the founders' graves on the anniversary of the town's founding (September 14). She started this without knowing if it was a tradition. It isn't, but it is now."
+    },
+    {
+      "id": "wally_chen",
+      "first_name": "Wallace",
+      "last_name": "Chen",
+      "nickname": "Wally",
+      "age": 62,
+      "gender": "male",
+      "occupation": "Cook and Owner, The Millpond Diner",
+      "address": "28 Lake Street",
+      "household": ["daughter_june_chen"],
+      "personality": "efficient, warm, a good listener across a diner counter, the keeper of 31 years of breakfast conversations",
+      "backstory": "Wally bought the diner in 1993 and has been there at 6am every day since. He raised his daughter June in the apartment above it. He knows the regulars' orders and has since the second time they came in. The diner's photographs are partly his collection — he started asking people for photos of old Brindlewick in 2001.",
+      "routine": {
+        "weekdays": {"morning": "millpond_diner", "afternoon": "millpond_diner"},
+        "saturday": {"morning": "millpond_diner"},
+        "sunday": {"morning": "millpond_diner_closed", "afternoon": "lake_pier_fishing"}
+      },
+      "lore_fact": "Wally's diner has an unidentified photograph from the 1890s on the wall showing two people standing by what looks like the lake — but the background isn't quite recognizable. He's been asking about it for 20 years."
+    },
+    {
+      "id": "sadie_mirabel",
+      "first_name": "Sadie",
+      "last_name": "Mirabel",
+      "age": 58,
+      "gender": "female",
+      "occupation": "Boat Rental & Bait, Mira's Boat Rental",
+      "address": "2 Lakefront Path",
+      "household": [],
+      "personality": "self-sufficient, direct, patient with people who ask about the lake but exacting about respect for it",
+      "backstory": "Sadie is the third generation to run Mira's — named for Lake Mirrowell, and, she now suspects after Juni's research, possibly for something more specific. She knows the lake better than anyone. She knows where the bottom drops away to 80 feet. She has seen the light many times from the boat at night.",
+      "mystery_ties": ["lake_light", "mira_finch"],
+      "trust_stages": {
+        "0": "Businesslike.",
+        "1": "Talks about the lake's moods and currents.",
+        "2": "Takes you out in a boat at dusk to the point above the deepest water and explains what she's seen.",
+        "3": "Tells you the family story of 'Mira' and how her grandmother named the business — 'for the lake, and for whoever gave the lake its name.'"
+      },
+      "routine": {
+        "weekdays": {"morning": "miras_boat_rental", "afternoon": "miras_boat_rental"},
+        "saturday": {"morning": "miras_boat_rental"},
+        "sunday": {"early_morning": "solo_lake_row"}
+      },
+      "lore_fact": "Sadie rows the lake alone every Sunday morning at dawn, taking the route that passes directly over the deepest point. She has never seen the light on a Sunday."
+    },
+    {
+      "id": "gus_fairweather",
+      "first_name": "Gus",
+      "last_name": "Fairweather",
+      "age": 67,
+      "gender": "male",
+      "occupation": "Proprietor, The Book Nook",
+      "address": "11 Finch Lane",
+      "household": ["cat_penelope"],
+      "personality": "quiet, bookish, generous with recommendations, will read you a paragraph aloud if he thinks it applies to your situation",
+      "backstory": "Gus has owned the Book Nook since 1993. He reads every book before putting it on the shelf, which means restocking is slow and the selection is excellent. His local history section is superb. He has three copies of every book about Brindlewick ever written (there are four).",
+      "routine": {
+        "weekdays": {"morning": "book_nook", "afternoon": "book_nook"},
+        "saturday": {"morning": "farmers_market_book_stall"},
+        "sunday": {"morning": "home_reading", "afternoon": "book_nook_sunday_hours"}
+      },
+      "lore_fact": "Penelope the cat has claimed the same shelf — third from the top, west wall, Local History section — since 2011. Local History and Mystery share the shelf. Gus thinks this is not a coincidence."
+    },
+    {
+      "id": "miriam_thatcher",
+      "first_name": "Miriam",
+      "last_name": "Thatcher",
+      "age": 63,
+      "gender": "female",
+      "occupation": "Antiques Dealer, The Old Mill Antiques",
+      "address": "6 Millpond Row (above the shop)",
+      "household": [],
+      "personality": "curious, acquisitive in the best sense, has made peace with the stuck drawer, slightly superstitious",
+      "backstory": "Miriam has been in the antiques business since 1985. She came to Brindlewick for a house sale in 1989 and bought the building and contents. The rolltop desk with the stuck drawer has been there since she arrived. She has tried everything to open it. A locksmith said the mechanism was unusual and 'possibly intentional.'",
+      "mystery_ties": ["stuck_drawer_secret"],
+      "trust_stages": {
+        "0": "Welcoming, happy to talk about her stock.",
+        "1": "Shows you the desk. Mentions the locksmith's assessment.",
+        "2": "Shows you what she found on the drawer's underside — a small brass date plate: 'To be opened: 24 September 2026.'"
+      },
+      "lore_fact": "The drawer has a date-locked mechanism. The date is September 24, 2026. Inside: a clockwork music box and a note from its maker."
+    },
+    {
+      "id": "reverend_prewitt",
+      "first_name": "Thomas",
+      "last_name": "Prewitt",
+      "age": 71,
+      "gender": "male",
+      "occupation": "Minister, St. Agatha's Chapel",
+      "address": "Chapel House, Maple Row",
+      "household": [],
+      "personality": "gentle, slow to judgment, possesses a comprehensive knowledge of the chapel records going back to 1831",
+      "backstory": "Reverend Prewitt has served St. Agatha's for 30 years. He has read the parish register in full and can quote births, deaths, and marriages from memory. He is one of three people in town who knows about Mira Finch from the chapel register — an 1862 entry notes her marriage under the name 'Mira Alderman, born Mira Finch.'",
+      "mystery_ties": ["mira_finch"],
+      "trust_stages": {
+        "0": "Welcoming to all.",
+        "1": "Will discuss the chapel history freely.",
+        "2": "Mentions the 1862 marriage register entry: 'There's a name there that doesn't quite fit the family tree as commonly given.'",
+        "3": "Shows you the register entry for Mira Finch's marriage."
+      },
+      "routine": {
+        "weekdays": {"morning": "chapel", "afternoon": "community_visits"},
+        "sunday": {"morning": "service", "afternoon": "chapel_office"}
+      },
+      "lore_fact": "The chapel register from 1831 is the single most complete record of Brindlewick's earliest period. It predates the library."
+    },
+    {
+      "id": "dorothy_alderman",
+      "first_name": "Dorothy",
+      "last_name": "Alderman",
+      "age": 58,
+      "gender": "female",
+      "occupation": "Garden Club Chair, Retired Teacher",
+      "address": "19 Birch Hollow Road",
+      "household": ["husband_reg_alderman"],
+      "personality": "organized, cheerful, proud of the garden club without being insufferable about it",
+      "backstory": "Dorothy is Constance's niece — the only other Alderman in town. She is comfortable with the family name and the history, treats the 'feud' as the family joke it is, and tends the Garden Club greenhouse with the systematic precision of someone who genuinely loves plants.",
+      "routine": {
+        "weekdays": {"morning": "garden_club_greenhouse", "afternoon": "home_or_gardening"},
+        "saturday": {"morning": "farmers_market_flowers_stall"}
+      },
+      "lore_fact": "Dorothy has been growing the same variety of heirloom tomato since 1989, from seed stock that she can trace back to the 1920s Alderman kitchen garden."
+    },
+    {
+      "id": "beatrice_meadow",
+      "first_name": "Beatrice",
+      "last_name": "Meadow",
+      "age": 54,
+      "gender": "female",
+      "occupation": "Florist, Meadow's Florist",
+      "address": "23 Birch Hollow Road",
+      "household": [],
+      "personality": "warmly eccentric, knows the language of flowers and uses it, has been doing every wedding in town for 28 years",
+      "backstory": "Beatrice grew up in Brindlewick and took over the florist from her mother in 1998. She grows a substantial portion of her stock in the field behind her house. She delivered the flowers to Constance Alderman every birthday for 20 years before Constance told her she preferred plants she could keep alive — since when Beatrice has delivered potted herbs instead.",
+      "routine": {
+        "weekdays": {"morning": "meadows_florist", "afternoon": "meadows_florist"},
+        "saturday": {"morning": "farmers_market_flowers"}
+      },
+      "lore_fact": "She has kept a record of every wedding she's done flowers for since 1998. There have been 67."
+    },
+    {
+      "id": "margaret_hollis",
+      "first_name": "Margaret",
+      "last_name": "Hollis",
+      "age": 52,
+      "gender": "female",
+      "occupation": "Yarn Shop Owner, The Woolen Bear",
+      "address": "14 Maple Row",
+      "household": ["husband_carl_hollis"],
+      "personality": "warm, practical, very good at finishing what she starts, generous with her time",
+      "backstory": "Margaret grew up in a neighboring town and moved to Brindlewick with her husband Carl in 1997. She opened the shop in 2001 and it's been busy since. Her knitting classes are perpetually oversubscribed. She knitted one item for every person who moved to Brindlewick permanently in her first year of business (12 items) and still has the list.",
+      "help_tasks": [
+        {
+          "id": "yarn_inventory",
+          "description": "Margaret has a delivery to unpack and tag before the Saturday market.",
+          "reward_lore": "She tells you about the town tradition of knitting a particular hat pattern for new babies.",
+          "trust_gain": 1
+        }
+      ],
+      "routine": {
+        "weekdays": {"morning": "woolen_bear", "afternoon": "woolen_bear"},
+        "saturday": {"morning": "farmers_market"},
+        "sunday": {"morning": "st_agathas_chapel"}
+      }
+    },
+    {
+      "id": "flora_kincaid",
+      "first_name": "Flora",
+      "last_name": "Kincaid",
+      "age": 48,
+      "gender": "female",
+      "occupation": "Candle and Soap Maker, Brindlewick Candle & Soap",
+      "address": "4 Finch Lane",
+      "household": ["son_charlie_kincaid_14"],
+      "personality": "enthusiastic about scent as a form of memory, slightly unusual in her conversational approach",
+      "backstory": "Flora moved to Brindlewick in 2003 and started her business the same year. Her nose is extraordinary — she can identify plants by smell at 20 feet, a fact she does not mention in ordinary conversation but which comes up eventually. She is working on a 'Brindlewick winter' candle that she says isn't quite right yet.",
+      "routine": {
+        "weekdays": {"morning": "candle_soap_shop", "afternoon": "candle_soap_shop_or_foraging"},
+        "saturday": {"morning": "farmers_market"}
+      },
+      "help_tasks": [
+        {
+          "id": "scent_test",
+          "description": "Flora needs a second nose to help test three versions of a new candle blend.",
+          "reward_lore": "She can identify the lake light smell — she's been down to the boardwalk at night and noticed a specific mineral/algae scent on nights when it's visible.",
+          "trust_gain": 1
+        }
+      ]
+    },
+    {
+      "id": "dale_putnam",
+      "first_name": "Dale",
+      "last_name": "Putnam",
+      "age": 57,
+      "gender": "male",
+      "occupation": "Hardware Store Owner, Alderman & Sons",
+      "address": "33 Maple Row",
+      "household": ["wife_ruth_putnam"],
+      "personality": "practical, direct, will tell you how to fix something even if it means you don't buy the parts",
+      "backstory": "Dale bought the store from the last Alderman in 1987. He kept the name because it was the right thing to do. He is the person to call when you have a structural question about a building or a practical question about how anything physical works.",
+      "routine": {
+        "weekdays": {"morning": "aldermans_hardware", "afternoon": "aldermans_hardware"},
+        "saturday": {"morning": "farmers_market_occasional", "afternoon": "aldermans_hardware_half_day"}
+      }
+    },
+    {
+      "id": "minji_choi",
+      "first_name": "Min-Ji",
+      "last_name": "Choi",
+      "age": 48,
+      "gender": "female",
+      "occupation": "Fabric Shop Owner, The Notions Nook",
+      "address": "16 Maple Row",
+      "household": ["husband_jake_choi", "daughter_soo_choi_18"],
+      "personality": "quiet, precise, very good with her hands, runs the most organized shop in town",
+      "backstory": "Min-Ji is the third generation Choi to run the Notions Nook. Her grandmother came to Brindlewick in 1967. The shop has been in the same location since then. Min-Ji does alterations and repairs and has a waiting list.",
+      "routine": {
+        "weekdays": {"morning": "notions_nook", "afternoon": "notions_nook"},
+        "saturday": {"morning": "farmers_market_fabric_stall"}
+      }
+    },
+    {
+      "id": "edna_thornbury",
+      "first_name": "Edna",
+      "last_name": "Thornbury",
+      "age": 62,
+      "gender": "female",
+      "occupation": "Specialty Food Shop Owner, Thornbury's",
+      "address": "36 Birch Hollow Road",
+      "household": [],
+      "personality": "opinionated about cheese in the best way, has turned a specialty food shop into a community hub",
+      "backstory": "Edna opened Thornbury's in 2004 after a career in restaurant supply. She knows the provenance of everything she sells. She is responsible for introducing Perkins cider to the town's broader awareness — she started stocking it in 2005.",
+      "routine": {
+        "weekdays": {"morning": "thornburys_provisions", "afternoon": "thornburys_provisions"},
+        "saturday": {"morning": "thornburys_farmers_market_table"}
+      }
+    },
+    {
+      "id": "parveen_nair",
+      "first_name": "Parveen",
+      "last_name": "Nair",
+      "age": 44,
+      "gender": "female",
+      "occupation": "Cobbler, The Cobbler's Corner",
+      "address": "8 Finch Lane",
+      "household": [],
+      "personality": "calm, skilled, talks about leather with the reverence most people reserve for literature",
+      "backstory": "Parveen moved to Brindlewick in 2012. She says she was looking for a slower pace and a place where her skills were valued. Both conditions are met.",
+      "routine": {
+        "weekdays": {"morning": "cobblers_corner", "afternoon": "cobblers_corner"},
+        "saturday": {"morning": "farmers_market_occasional"}
+      }
+    },
+    {
+      "id": "vera_tibbs",
+      "first_name": "Vera",
+      "last_name": "Tibbs",
+      "age": 51,
+      "gender": "female",
+      "occupation": "Town Clerk",
+      "address": "25 Birch Hollow Road",
+      "household": ["husband_don_tibbs"],
+      "personality": "efficient, cheerfully bureaucratic, knows where every form is",
+      "backstory": "Vera has been town clerk for 18 years. She knows every permit, every boundary dispute, and every variance ever granted in Brindlewick. She is the person who, in 2010, found Eleanor's reference to the sealed room in the historical property records.",
+      "mystery_ties": ["founders_hidden_room"],
+      "routine": {
+        "weekdays": {"morning": "town_hall", "afternoon": "town_hall"},
+        "saturday": {"morning": "off_duty"}
+      },
+      "lore_fact": "The town's records go back to 1832. Vera has read all of them."
+    },
+    {
+      "id": "june_chen",
+      "first_name": "June",
+      "last_name": "Chen",
+      "age": 32,
+      "gender": "female",
+      "occupation": "Waitstaff, The Millpond Diner (also studying landscape architecture remotely)",
+      "address": "28 Lake Street (above diner)",
+      "household": ["father_wally_chen"],
+      "personality": "observant, quietly ambitious, loves the town and is figuring out her own version of staying",
+      "backstory": "June grew up in the diner, literally — she spent her childhood doing homework in the corner booth. She works front of house and is studying landscape architecture remotely, with a project to redesign the town's creek-side walkway.",
+      "routine": {
+        "weekdays": {"morning": "millpond_diner", "afternoon": "home_studying"},
+        "saturday": {"morning": "millpond_diner"},
+        "sunday": {"afternoon": "lakefront_sketch_work"}
+      },
+      "help_tasks": [
+        {
+          "id": "walkway_survey",
+          "description": "June needs someone to help measure the creek-side path for her landscape project.",
+          "reward_lore": "She points out where the millrace used to flow and explains the creek's history.",
+          "trust_gain": 1
+        }
+      ]
+    },
+    {
+      "id": "dot_flowers",
+      "first_name": "Dorothy",
+      "last_name": "Flowers",
+      "nickname": "Dot",
+      "age": 66,
+      "gender": "female",
+      "occupation": "Housekeeper, The Alderman Estate",
+      "address": "Alderman Estate (live-in)",
+      "household": ["constance_alderman"],
+      "personality": "practical, deeply loyal to Constance, has opinions about the east wing that she keeps to herself",
+      "backstory": "Dot has worked for Constance since 1985 and lives in the estate's housekeeper's suite. She knows every room in the house, including the east wing. She has never entered the sealed room (there is no door visible) but she knows where it is — there is a section of wall that does not ring hollow.",
+      "mystery_ties": ["founders_hidden_room"],
+      "lore_fact": "Dot has dusted the east wing corridor every week for 40 years. She noticed the hollow wall in 2003 and told Constance, who said 'Yes, I know.'",
+      "trust_stages": {
+        "0": "Polite, guarded about the estate.",
+        "1": "Relaxes if you seem genuinely interested in the history, not in nosiness.",
+        "2": "Mentions the hollow wall to you if she trusts you."
+      },
+      "routine": {
+        "weekdays": {"morning": "alderman_estate", "afternoon": "alderman_estate"},
+        "sunday": {"morning": "st_agathas_chapel"}
+      }
+    },
+    {
+      "id": "tommy_hall",
+      "first_name": "Tommy",
+      "last_name": "Hall",
+      "age": 29,
+      "gender": "male",
+      "occupation": "Orchard and Cider Worker, Perkins Cider House",
+      "address": "Perkins Cider House cottage",
+      "household": ["employer_agnes_perkins"],
+      "personality": "good-natured, works hard, has been learning cider-making from Agnes for three years",
+      "backstory": "Tommy is from two towns over and came to work for Agnes when his previous job ended. He's been learning the cider operation and Agnes has been teaching him more than she lets on. He manages the beehives, including the alpine honey hives.",
+      "mystery_ties": ["missing_recipe"],
+      "lore_fact": "Tommy manages the alpine honey hive at the back of the orchard — the source of the honey that Mari Osei needs for her grandmother's recipe.",
+      "routine": {
+        "weekdays": {"morning": "perkins_cider_house", "afternoon": "orchard_or_cidery"},
+        "saturday": {"morning": "farmers_market_with_agnes"}
+      }
+    },
+    {
+      "id": "hettie_mossgrove",
+      "first_name": "Harriet",
+      "last_name": "Mossgrove",
+      "nickname": "Hettie",
+      "age": 77,
+      "gender": "female",
+      "occupation": "Retired",
+      "address": "20 Maple Row",
+      "household": [],
+      "personality": "gentle, grateful, has a warmth toward life that comes from having been through difficulty and come out the other side",
+      "backstory": "Hettie is Barnaby's mother. Her husband died in 2001. She received the first anonymous encouragement note from Artie Pryce two weeks later. She still has it, pressed in her Bible. She doesn't know who wrote it but says 'whoever it was saw me at my worst moment and said the right thing.'",
+      "mystery_ties": ["anonymous_letter_writer"],
+      "lore_fact": "The first anonymous note, kept in her Bible: 'Someone notices the light in your window. It is a good light.'",
+      "routine": {
+        "weekdays": {"morning": "home_garden", "afternoon": "library_reading_or_town_walk"},
+        "saturday": {"morning": "farmers_market"},
+        "sunday": {"morning": "st_agathas_chapel"}
+      }
+    }
+  ]
+}

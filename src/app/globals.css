@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #faf6f0;
+  --parchment: #f0e8d8;
+  --warm-brown: #8b6a4a;
+  --deep-brown: #4a3020;
+  --moss-green: #5a7a5a;
+  --lake-blue: #6a8fa8;
+  --amber: #c8903a;
+  --soft-gray: #8a8070;
+  --text-primary: #2c2018;
+  --text-secondary: #5a4a38;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--text-primary);
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--parchment); }
+::-webkit-scrollbar-thumb { background: var(--warm-brown); border-radius: 3px; }
+
+.game-output strong { color: var(--deep-brown); font-weight: bold; }
+.game-output em { color: var(--soft-gray); font-style: italic; }
+.game-output hr { border: none; border-top: 1px solid var(--parchment); margin: 1em 0; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.new-entry { animation: fadeIn 0.3s ease-out; }
+
+.game-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--amber);
+}

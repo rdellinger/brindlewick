@@ -1,0 +1,217 @@
+{
+  "items": [
+    {
+      "id": "town_notice_board",
+      "name": "The Town Notice Board",
+      "type": "readable",
+      "location": "town_square",
+      "description": "A cork board on a post near the square's eastern maple. Layered with notices — upcoming events, lost and found, requests for help, a handwritten recipe someone's been sharing for years.",
+      "can_take": false,
+      "content_dynamic": true,
+      "content_note": "Populated from active events and help tasks"
+    },
+    {
+      "id": "war_memorial_plaque",
+      "name": "The War Memorial",
+      "type": "readable",
+      "location": "town_square",
+      "description": "A granite slab bearing four names in relief: WILLIAM HARTWELL, JOSEPH FINCH, THOMAS GRANGE, LENA ALDERMAN. Below: 'Of Brindlewick. 1939-1945. They are not gone while they are remembered.'",
+      "can_take": false,
+      "lore_unlock": "wwii_history"
+    },
+    {
+      "id": "alderman_finch_statue",
+      "name": "The Statue of Alderman Finch",
+      "type": "examine",
+      "location": "lakeside_park",
+      "description": "A life-sized bronze statue of a man in mid-19th century clothing, one hand raised as if indicating something across the lake. The sculptor's name — Helen Mossgrove — is on the base. There is a small brass fitting on the south side of the base.",
+      "can_take": false,
+      "examine_actions": ["look at base", "look at south side", "look closely"],
+      "mystery_tie": "moving_statue",
+      "lore_detail": "The brass fitting on the south side of the base is a clock winding port. Very small. You'd only notice it if you were looking for it."
+    },
+    {
+      "id": "library_catalogue",
+      "name": "The Library Catalogue",
+      "type": "research_interface",
+      "location": "library",
+      "description": "Both physical card catalogues and digital terminals. The starting point for any research in Brindlewick.",
+      "can_take": false,
+      "enables": "research_system"
+    },
+    {
+      "id": "mira_finch_watercolor",
+      "name": "The Unsigned Watercolor",
+      "type": "clue_item",
+      "location": "library_archive_room",
+      "description": "A small watercolor painting in a plain frame: a girl of about 13 sitting at the shore of a lake, looking south. The painting is 19th century in style and quality. In the lower right corner, in very small letters: 'M.F.'",
+      "can_take": false,
+      "mystery_tie": "mira_finch",
+      "lore_note": "This is one of three places the initials M.F. appear in Brindlewick."
+    },
+    {
+      "id": "alderman_diary_partial",
+      "name": "The Partial Alderman Diary",
+      "type": "readable",
+      "location": "library_archive_room",
+      "description": "A partial transcription (not the original) of pages from an Alderman family diary, covering 1848-1863. Several pages are missing or illegible. It mentions 'the lake' frequently, and twice mentions 'M.' with particular warmth before the name disappears from subsequent entries.",
+      "can_take": false,
+      "mystery_tie": "mira_finch",
+      "readable_content": "...the lake in evening is extraordinary, as M. always says. She has an eye for light that I did not give her, and I am grateful it came from somewhere... [several pages missing] ...1855, October: M.'s painting of the eastern shore is the finest thing in the study. She should show it to someone. She says no one would want it... [gap] ...1863: M. is Mrs. Alderman now, Thomas's wife. She seems happy. I am glad. The record may not remember her as it should but I will..."
+    },
+    {
+      "id": "mira_finch_inscription",
+      "name": "The Covered Bridge Inscription",
+      "type": "clue_item",
+      "location": "covered_bridge",
+      "description": "On the main upper beam of the covered bridge, in small careful letters requiring you to look up and lean close: 'M.F. was here — 1833. The lake is hers.'",
+      "can_take": false,
+      "mystery_tie": "mira_finch",
+      "lore_note": "Second of three M.F. appearances. The year 1833 would make M.F. about 18 — old enough to carve something that meant leaving a mark."
+    },
+    {
+      "id": "mira_finch_gravestone",
+      "name": "Mira Finch's Gravestone",
+      "type": "clue_item",
+      "location": "brindlewick_cemetery",
+      "description": "A small plain stone at the back of the cemetery, set slightly apart. 'Mira Finch, 1815-1878. She named the lake.' The stone is relatively new — the lettering is sharp, not worn. Someone placed it recently.",
+      "can_take": false,
+      "mystery_tie": "mira_finch",
+      "lore_note": "Third M.F. appearance. This stone wasn't here in the 1960s — someone placed it after doing the research. Someone who has been protecting this story."
+    },
+    {
+      "id": "founders_diary",
+      "name": "Alderman Finch's Diary",
+      "type": "readable",
+      "location": "founders_hidden_room",
+      "description": "A leather-bound journal covering 1824-1865. The first entry describes arriving at the lake. The entries are meticulous and warm. Near the end, multiple entries address 'Mira' directly — a letter within the diary that was never sent.",
+      "can_take": false,
+      "mystery_tie": "founders_hidden_room",
+      "mystery_tie_2": "mira_finch",
+      "readable_content_key": "founders_diary_full"
+    },
+    {
+      "id": "old_love_letter_framed",
+      "name": "The Framed Letter",
+      "type": "readable",
+      "location": "perkins_cider_house",
+      "description": "A framed piece of yellowed paper on Agnes Perkins's kitchen wall. The letter reads: 'Dearest M., I have thought of nothing but the orchard path since Tuesday. Yours, in hope, W.A.' Addressed to 'M. Alderman.' Someone has written at the bottom in newer ink: 'Delivered 1891 to M. PERKINS by mistake. Source of 135 years of theater. — A.P.'",
+      "can_take": false,
+      "mystery_tie": "family_feud"
+    },
+    {
+      "id": "recipe_card_partial",
+      "name": "Mari's Recipe Card",
+      "type": "clue_item",
+      "location": "copper_kettle_bakery",
+      "description": "A handwritten recipe card, the paper slightly browned. The handwriting is beautiful. The third ingredient reads: 'h___y from [ink smudge]___perkins?' The rest is legible.",
+      "can_take": false,
+      "mystery_tie": "missing_recipe"
+    },
+    {
+      "id": "perkins_alpine_honey",
+      "name": "Perkins Alpine Honey",
+      "type": "inventory",
+      "location": "perkins_cider_house",
+      "description": "A small jar of amber honey with a handwritten label: 'Perkins Alpine — not for sale, please ask.' It has a distinct floral quality — herbal and sweet, with something underneath that's hard to name.",
+      "can_take": true,
+      "mystery_tie": "missing_recipe",
+      "use_on": "marigold_osei"
+    },
+    {
+      "id": "station_masters_key",
+      "name": "The Station Master's Key",
+      "type": "examine",
+      "location": "station_masters_house",
+      "description": "A brass door key on a faded red ribbon, on a nail beside the door of the old Station Master's House. Slightly greened with age. The ribbon has been here since 1923. The key still turns in the lock — the house has never been properly sealed.",
+      "can_take": false,
+      "lore_note": "Gerald Hobbs left in November 1923. He expected to return. He never did. The key stayed.",
+      "mystery_tie": "station_masters_key"
+    },
+    {
+      "id": "trail_register",
+      "name": "The Trail Register",
+      "type": "readable",
+      "location": "brindlewick_trailhead",
+      "description": "A notebook in a weatherproof box at the trailhead. Handwritten entries from every hiker who's signed in. The earliest entry is 1978. Some entries are brief; some are long. A few are memorable.",
+      "can_take": false,
+      "notable_entries": [
+        {"year": 1978, "text": "First entry. April 12. Snow on the Lookout still. Beautiful."},
+        {"year": 2003, "text": "Found what I was looking for. Will return."},
+        {"year": 2019, "text": "My grandmother brought me here when I was 6. She's gone now. The view is exactly the same."}
+      ]
+    },
+    {
+      "id": "warming_hut_visitor_log",
+      "name": "The Warming Hut Log",
+      "type": "readable",
+      "location": "warming_hut",
+      "description": "A spiral notebook inside the warming hut, starting from 1985. Shorter entries than the main trail register — most people write when they're cold and glad to be warm.",
+      "can_take": false,
+      "notable_entries": [
+        {"year": 1985, "text": "First entry. Hut built last week. Already needed. — Clem Rourke"},
+        {"year": 2003, "text": "Found what I was looking for. Will return. (Same as the other book. The same handwriting.)"},
+        {"year": 2011, "text": "Snowed in here for 3 hours with a stranger. We talked about everything. Never got their name."}
+      ],
+      "mystery_tie": "the_repeating_visitor"
+    },
+    {
+      "id": "webb_inscription",
+      "name": "The Clockwork Inscription",
+      "type": "examine",
+      "location": "clocktower_stairs",
+      "description": "On the main gear housing of the Town Hall clock, scratched in careful letters almost too small to read without leaning close: 'C.W. 1856 — for T.A. — 3 minutes to be kind.'",
+      "can_take": false,
+      "mystery_tie": "clocktower_secret",
+      "lore_unlock": "clocktower_secret_full"
+    },
+    {
+      "id": "antique_almanac_1879",
+      "name": "Almanac, 1879",
+      "type": "readable",
+      "location": "old_mill_antiques",
+      "description": "A general almanac from 1879, water-stained at the edges but readable. The spring flood season is annotated by a previous owner: 'Lake very high. Ice on the creek until May 12. The beacon lost.'",
+      "can_take": true,
+      "mystery_tie": "lake_light",
+      "price": 4
+    },
+    {
+      "id": "historical_photo_display",
+      "name": "Historical Photograph Collection",
+      "type": "examine",
+      "location": "copper_hill_gallery",
+      "description": "A timeline of Brindlewick photographs from the 1890s forward. Most are labeled; some aren't. One 1897 photograph shows two people standing at the lakefront in front of what appears to be a tall iron post — the lake beacon, before the 1879 flood would have... wait.",
+      "can_take": false,
+      "lore_note": "The photo is labeled 1897. The beacon was supposed to have been lost in 1879. Either the date is wrong, or the beacon was temporarily recovered and re-erected.",
+      "mystery_tie": "lake_light"
+    },
+    {
+      "id": "1832_valley_map",
+      "name": "The 1832 Valley Map",
+      "type": "readable",
+      "location": "meeting_house_museum",
+      "description": "A hand-drawn map of the Brindlewick valley from 1832. Detailed for its time. The lake is labeled 'MIRROWELL LAKE' in clear letters. In the corner, a small compass rose — and in the artist's note at the bottom: 'Named for M. Finch, by her father's account.'",
+      "can_take": false,
+      "mystery_tie": "mira_finch"
+    },
+    {
+      "id": "lighthouse_logbook_copy",
+      "name": "The Lighthouse Keeper's Log (Copy)",
+      "type": "readable",
+      "location": "lighthouse",
+      "description": "A photocopy of the original lighthouse log (the original is at the library). The last handwritten entry, November 14, 1957: 'Automating today. 75 years of keeping the light. The lake is peaceful. I hope it stays so.' Signed: E. Webb.",
+      "can_take": false,
+      "lore_note": "E. Webb — a Webb, keeping the lake light. The Webb family has been watching over Brindlewick's mechanisms for a long time."
+    },
+    {
+      "id": "inn_guest_book",
+      "name": "The Inn Guest Book",
+      "type": "readable",
+      "location": "lantern_post_inn",
+      "description": "A leather guest book going back to 1903. Teddy keeps it behind the front desk and lets guests read it. Most entries are brief. A 1967 entry reads: 'Found what I was looking for. Will return.' No name.",
+      "can_take": false,
+      "lore_note": "The same phrase appears in the trail register (1978 copy) and the warming hut log (2003 copy). Three different handwritings, same phrase, across 36 years.",
+      "mystery_tie": "the_repeating_visitor"
+    }
+  ]
+}

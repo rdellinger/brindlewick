@@ -1,0 +1,261 @@
+{
+  "town": {
+    "name": "Brindlewick",
+    "tagline": "A mountain valley town on the shore of Lake Mirrowell",
+    "population": 943,
+    "founded": 1824,
+    "location": {
+      "description": "Brindlewick sits in a narrow mountain valley in the northern reaches of New England, cradled between Copper Hill to the east and the Alderman Ridge to the west. Lake Mirrowell fills the valley's southern end — a deep, clear lake fed by snowmelt and half a dozen creeks. The town itself climbs the gentle northern slope from the lakefront, its oldest streets running parallel to the water, the newer ones reaching up toward the treeline. The valley catches the last light of afternoon, painting everything in long amber shadows before the mountains swallow the sun.",
+      "geography": {
+        "lake": "Lake Mirrowell — roughly 4 miles long, 1.5 miles wide at its widest, with two small wooded islands (Finch Island and the unnamed 'Little Island')",
+        "hills": "Copper Hill (east), Alderman Ridge (west), both reachable by marked trails",
+        "water": "Heron's Creek runs from the mountains through town to the lake. The Millpond is a broadening of the creek near the old mill site.",
+        "forest": "Mixed hardwood-conifer forest covers both slopes; the town occupies a cleared valley floor roughly 2 miles wide",
+        "climate": "Four distinct seasons: long, snowy winters; brief mud season (April); lush warm summers; spectacular foliage in October"
+      }
+    },
+    "tone_notes": "Brindlewick is a cozy, safe, warmly curious town. No danger, no antagonists. Problems are wholesome: a stuck drawer, a lost cat, a cake that won't rise. Mysteries are about history and curiosity, never threat. The light is always warm — even overcast days feel comfortable. Everyone genuinely likes everyone else, even the 'feuds.' Newcomers are welcomed with mild curiosity and immediate helpfulness."
+  },
+
+  "history": {
+    "eras": [
+      {
+        "name": "The Founding Years",
+        "span": "1824–1845",
+        "description": "Two families, the Finches and the Aldermans, arrived at the lake valley in the same year from different directions — the Finches from the coast, the Aldermans from a failed homestead further inland. They agreed to share the valley and set about building. The early years were cooperative and practical: log cabins, a trading post, a chapel. The lake provided fish; the forest provided timber; the soil, though thin, was workable. Population grew slowly, mostly through the arrival of a few other families who heard there was a decent settlement in the valley."
+      },
+      {
+        "name": "The Logging and Railway Era",
+        "span": "1846–1878",
+        "description": "When the railway arrived in 1846, Brindlewick's quiet pace accelerated. The town became a waypoint for timber shipments from the mountains, and the population doubled in a decade. The Station Master's House was built, the inn expanded, and the first real commercial street — now called Millpond Row — took shape. It was a prosperous, optimistic time. The Chronicle's predecessor, a monthly broadsheet, began publication. The first Founder's Day was celebrated in 1849. The library was established, initially in a single room of the Town Hall."
+      },
+      {
+        "name": "The Flood and Rebuilding",
+        "span": "1879–1895",
+        "description": "In the spring of 1879, a combination of heavy snowmelt and three weeks of rain caused Lake Mirrowell to overflow its banks in the most dramatic flood in the valley's recorded history. Several lakefront buildings were lost, including the original boathouse and the lake beacon used by fishing boats. Six families were displaced; no lives were lost, largely because Fletcher Alderman (great-great-grandfather of the current Aldermans) woke the town in the early morning. The rebuilding took until 1885. The current lighthouse was built as part of the restoration. A spirit of mutual aid deepened in the town during these years."
+      },
+      {
+        "name": "The Victorian Golden Age",
+        "span": "1896–1920",
+        "description": "The turn of the century brought a burst of civic ambition. The current Town Hall was built in 1896, complete with its clocktower. The Brindlewick Public Library was given its own building in 1899. The Harvest Fair was established in 1903. The Lake Lantern Festival began in 1912, inspired by a Japanese-American silk merchant named Kenji Takahashi who lived in town for three years. Women organized the Garden Club. The Grange Hall was built for the farming families. By 1920, Brindlewick had the look and feel it largely retains today."
+      },
+      {
+        "name": "The Quiet Century",
+        "span": "1921–1970",
+        "description": "The railway ceased service in 1923, and Brindlewick entered a long, gentle quieter phase. The Depression hit hard; several businesses closed, including the original general store (replaced by Hartwell's in 1937). WWII took 47 residents; four didn't return. Their names are carved on a granite plaque in the town square. The postwar years brought stability and modest growth: the elementary school was built in 1949, the Chronicle became a weekly in 1952, and the first tourist — an accidental one, lost on the way to another destination — spent a week in town in 1958 and told his friends."
+      },
+      {
+        "name": "The Discovery Years",
+        "span": "1971–2000",
+        "description": "Tourism found Brindlewick gradually and kindly — a mention in a hiking guide in 1973, a small feature in a regional magazine in 1981. The Lantern Post Inn expanded in 1985 under Edna Birch (Teddy's grandmother). Dr. Ignatius Okafor arrived in 1995, the first permanent resident from outside New England in decades; the town adopted him immediately. The lakefront boardwalk was first built in 1989. By 2000, Brindlewick had a quiet reputation as a particularly beautiful, unhurried place."
+      },
+      {
+        "name": "The Present Day",
+        "span": "2001–present",
+        "description": "The 21st century brought the internet to Brindlewick (slowly — reliable broadband didn't arrive until 2012), a restoration of the boardwalk in 2015, and a steady trickle of newcomers who came for a weekend and stayed for years. The town's character has remained remarkably consistent: people know each other, look out for each other, and argue only about the mildest things (the color of the new park benches; whether the Harvest Fair should serve more savory options; whose apple tree technically owns which branches). The 'Dear Neighbor' anonymous note-writer has been dropping encouraging letters under doors since 2001. The statue of Alderman Finch has been moving, very slowly, for over fifty years. And the lake light still appears on clear nights, always in the same spot."
+      }
+    ],
+
+    "timeline": [
+      {
+        "year": 1824,
+        "event": "Alderman Finch (age 34) and Thomas Alderman (age 41) arrive at the lake valley with their families, six weeks apart, by coincidence. They meet at the lakeshore on a September morning. Both families settle.",
+        "significance": "founding",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1824,
+        "event": "The name 'Mirrowell' is given to the lake by Alderman Finch's daughter, Mira (age 9), who says the lake 'mirrors the well of the sky.' The name sticks.",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "founders_diary",
+        "mystery_tie": "mira_finch"
+      },
+      {
+        "year": 1826,
+        "event": "Hartwell's Trading Post established by James Hartwell, who arrived from the coast with a wagon of goods and decided to stay. First commercial establishment in the valley.",
+        "significance": "commerce",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1831,
+        "event": "St. Agatha's Chapel built in a single summer by the combined labor of all eighteen families then in the valley. The bell was shipped from Boston and took eleven days to arrive by wagon.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "chapel_register"
+      },
+      {
+        "year": 1836,
+        "event": "The original schoolhouse built. First teacher: Patience Alderman (Thomas's youngest daughter, age 22), who taught all ages in a single room for fourteen years.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1846,
+        "event": "The railway reaches Brindlewick. Population in the valley was then 187; within five years it reached 400. The Station Master's House built. First telegraph line installed.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chronicle_archives"
+      },
+      {
+        "year": 1851,
+        "event": "The Wren & Whistle opens, established by one Patrick Rourke (ancestor of Clem Rourke). First recorded sighting of the Lake Light, noted in the Alderman family diary: 'a faint phosphor over the deep water, due south, no larger than a candle at distance.'",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "alderman_diary",
+        "mystery_tie": "lake_light"
+      },
+      {
+        "year": 1856,
+        "event": "Thomas Alderman dies at age 73. His friend Cornelius Webb (a master clockmaker) installs the clocktower mechanism for the new Town Hall and sets it deliberately 3 minutes slow as a private tribute: 'so the town always has 3 extra minutes to be kind.' He tells no one.",
+        "significance": "easter_egg",
+        "discoverable": true,
+        "source": "webb_workshop_journal",
+        "mystery_tie": "clocktower_secret"
+      },
+      {
+        "year": 1862,
+        "event": "The Old Mill built along Heron's Creek by the Grange collective. It grinds flour for the valley for forty years before the railway makes it cheaper to import.",
+        "significance": "commerce",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1866,
+        "event": "Alderman Finch dies at age 76. A dispute over his will leads his eldest son to wall off the founder's private study in the Alderman Estate. 'No one should root through a man's papers,' the son reportedly said. The room stays sealed.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chronicle_archives",
+        "mystery_tie": "founders_hidden_room"
+      },
+      {
+        "year": 1871,
+        "event": "The Brindlewick Library established in a room of the old Town Hall. First librarian is Constance Finch (no relation to the current family). Collection: 347 books and three filing boxes of town records.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1879,
+        "event": "The Great Flood. Lake Mirrowell overflows in April. Six families displaced; no lives lost. The lake beacon (an early gas-powered light) is submerged and never recovered. Fletcher Alderman wakes the town at 3am.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chronicle_archives",
+        "mystery_tie": "lake_light"
+      },
+      {
+        "year": 1882,
+        "event": "The Brindlewick Lighthouse built at the lake's edge as part of post-flood rebuilding. It has never needed to warn anyone away from anything; the lake is calm and the town is safe. But the light is beautiful.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1891,
+        "event": "The Alderman-Perkins Incident. A misdirected love letter addressed to 'M. Alderman' is delivered instead to 'M. Perkins' (both families had an 'M' member that season). The resulting confusion is interpreted as an insult. A 'feud' begins that is mostly theatrical.",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "chronicle_archives",
+        "mystery_tie": "family_feud"
+      },
+      {
+        "year": 1896,
+        "event": "The current Town Hall built, with its clocktower. The original Webb clock mechanism is reinstalled from the old building. It is still running 3 minutes slow.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "chronicle_archives"
+      },
+      {
+        "year": 1899,
+        "event": "The Brindlewick Public Library given its own building on Millpond Row. The reading room with its fireplace and tall windows is declared 'the finest room in the valley' by the Chronicle.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "library_records"
+      },
+      {
+        "year": 1901,
+        "event": "First Founder's Day celebration, held on the third Saturday of June. A picnic, speeches, and the first official 'town portrait' photograph. The tradition continues every year.",
+        "significance": "tradition",
+        "discoverable": true,
+        "source": "chronicle_archives"
+      },
+      {
+        "year": 1912,
+        "event": "First Lake Lantern Festival, organized by Kenji Takahashi, a Japanese-American silk merchant who lived in Brindlewick from 1909-1915. Paper lanterns are floated on the lake at midsummer. The tradition outlasts his residence by over a century.",
+        "significance": "tradition",
+        "discoverable": true,
+        "source": "chronicle_archives"
+      },
+      {
+        "year": 1918,
+        "event": "The influenza pandemic reaches Brindlewick. The town loses 23 residents. Dr. Alderman (the last of the Alderman medical line) keeps his practice open until he collapses from exhaustion. He recovers; 23 do not.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chapel_register"
+      },
+      {
+        "year": 1923,
+        "event": "Railway service ends. The Station Master, a man named Gerald Hobbs, is the last to leave. He leaves his house key on a nail by the door 'in case I come back.' He never does. The key is still on the nail.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chronicle_archives",
+        "mystery_tie": "station_masters_key"
+      },
+      {
+        "year": 1931,
+        "event": "The Depression. The Perkins family begins making cider to supplement income. Agnes Perkins's grandmother gives away more than she sells, distributing it to families who need warmth and something sweet.",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "oral_history"
+      },
+      {
+        "year": 1939,
+        "event": "World War II. 47 Brindlewick residents serve. Four don't come home: William Hartwell, Joseph Finch, Thomas Grange, and Lena Alderman (the first woman from the valley to serve). Their names are on the granite plaque in the town square.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chapel_register"
+      },
+      {
+        "year": 1949,
+        "event": "Brindlewick Elementary School built on Maple Row. The school uses the original schoolhouse bell, which had been in storage since 1936.",
+        "significance": "civic",
+        "discoverable": true,
+        "source": "chronicle_archives"
+      },
+      {
+        "year": 1967,
+        "event": "The bronze statue of Alderman Finch erected in Lakeside Park, paid for by public subscription. The sculptor was a woman named Helen Mossgrove (Barnaby's great-aunt). Cornelius Webb's grandson, Arthur Webb (Rosalind's father), installs a hidden clockwork mechanism in the base — a tribute to the family tradition of clockmaking. The mechanism causes the statue to rotate 2-3 inches per year on a very long eccentric cycle.",
+        "significance": "major",
+        "discoverable": true,
+        "source": "chronicle_archives",
+        "mystery_tie": "moving_statue"
+      },
+      {
+        "year": 1995,
+        "event": "Dr. Ignatius Okafor arrives in Brindlewick, initially to cover a three-month locum. He cancels his return flight in November and has never explained why. The town asks periodically; he smiles and says 'the pie.'",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "oral_history"
+      },
+      {
+        "year": 2001,
+        "event": "The first 'Dear Neighbor' note appears — a folded piece of cream paper slipped under the door of Hettie Mossgrove (Barnaby's mother), who had been grieving quietly. It reads: 'Someone notices the light in your window. It is a good light.' No signature.",
+        "significance": "mystery",
+        "discoverable": true,
+        "source": "oral_history",
+        "mystery_tie": "anonymous_letter_writer"
+      },
+      {
+        "year": 2010,
+        "event": "Eleanor Finch-Hartwell becomes head librarian, succeeding Dorothy Wren (no relation to the pub). Eleanor immediately begins a project to digitize the town records and discovers, for the first time, a reference to a sealed room in the Alderman Estate.",
+        "significance": "lore",
+        "discoverable": true,
+        "source": "library_records",
+        "mystery_tie": "founders_hidden_room"
+      }
+    ]
+  }
+}

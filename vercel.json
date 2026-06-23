@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/advance-world",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

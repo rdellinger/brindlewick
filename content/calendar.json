@@ -1,0 +1,175 @@
+{
+  "annual_events": [
+    {
+      "id": "founders_day",
+      "name": "Founder's Day",
+      "date": {"month": 6, "week": 3, "day_of_week": "Saturday"},
+      "duration_days": 2,
+      "description": "The town's biggest celebration, held on the third Saturday of June every year since 1901. A picnic in the town square, speeches from the mayor, the reading of the founder's original land agreement, a parade down Millpond Row (three fire trucks, the school band, and anyone who wants to walk), and the traditional Honey Cake on the Copper Kettle's special outdoor counter. The celebration continues Sunday with a more informal lakefront gathering.",
+      "setup_days_before": 14,
+      "ambient_changes": {
+        "14_days_before": "Banners go up on the lampposts. Doris is seen everywhere with a clipboard.",
+        "7_days_before": "The town square gets extra benches. The bakery's window displays a Founder's Day cake.",
+        "1_day_before": "Tables being set up in the square. A festive, slightly anxious energy.",
+        "day_of": "The square is full. Bunting everywhere. Music. The smell of food.",
+        "day_after": "Cleanup, lingering warmth, people still discussing who gave the best speech."
+      },
+      "citizen_dialogue_pre": "Eleanor talks about the 1901 photograph. Harold about his grandfather's memory of the first one. Mayor Windermere is unreachably busy.",
+      "citizen_dialogue_during": "Everyone is here. Best opportunity for relationship-deepening conversations.",
+      "mystery_tie": null,
+      "player_opportunity": "The founder's day speech mentions Alderman Finch but not Mira — depending on mystery progress, this may feel incomplete or resolved."
+    },
+    {
+      "id": "lake_lantern_festival",
+      "name": "The Lake Lantern Festival",
+      "date": {"month": 7, "week": 2, "day_of_week": "Saturday"},
+      "duration_days": 1,
+      "description": "On the second Saturday of July, paper lanterns are floated on Lake Mirrowell at dusk. The tradition was started by Kenji Takahashi in 1912. Each lantern is lit and placed on the water from the boardwalk or the pier or, for the adventurous, from Sadie's boats. The effect — a hundred small lights drifting southward on the lake current — is extraordinary. The town gathers on the boardwalk to watch.",
+      "setup_days_before": 7,
+      "ambient_changes": {
+        "7_days_before": "Lantern-making workshops at the community hall, run by Min-Ji Choi and her daughter.",
+        "1_day_before": "Completed lanterns on display in the library and community hall windows.",
+        "day_of": "Afternoon: last-minute lantern prep, boardwalk filling up by 7pm. The festival begins at dusk.",
+        "day_of_evening": "The lanterns go on the water. Quiet awe. Even the most talkative people get quiet for a few minutes."
+      },
+      "citizen_dialogue_during": "Sadie is on the water with a boat full of extra lanterns for people who didn't make their own. Clem Rourke stands at the end of the pier and watches south.",
+      "mystery_tie": "lake_light",
+      "player_opportunity": "The best night to see the lake light — the floating lanterns draw attention south, and under the right conditions the deeper, stationary light below the surface is visible beneath the drifting ones."
+    },
+    {
+      "id": "harvest_fair",
+      "name": "The Harvest Fair",
+      "date": {"month": 9, "week": 3, "day_of_week": "Saturday"},
+      "duration_days": 2,
+      "description": "The harvest fair, established in 1903, runs in the town square and extends into the community hall and the grange hall. Produce competition (Fletcher Grange's squash wins the heavyweight category most years), baking competition (the honey cake is a perennial contender), craft displays, the farmers' market expanded threefold, cider from Perkins, live music in the community hall, and a pie auction that raises money for the school.",
+      "setup_days_before": 21,
+      "ambient_changes": {
+        "21_days_before": "Grange Hall committee meetings begin. Dorothy Alderman starts planning the flower competition.",
+        "7_days_before": "Competition entry forms available at the post office and general store.",
+        "2_days_before": "Tents going up in the square. Fletcher's truck visible transporting produce.",
+        "day_of": "The fair at its fullest — busiest day of the year for most shops.",
+        "day_2": "Quieter, but warm. Awards announced at noon."
+      },
+      "citizen_dialogue_pre": "Agnes Perkins is making 'competition cider' — more carefully than usual. She denies being competitive.",
+      "mystery_tie": "missing_recipe",
+      "player_opportunity": "The baking competition is an opportunity — once the recipe mystery is solved, Mari's honey cake enters and wins in a category it's never competed in before."
+    },
+    {
+      "id": "first_snow_social",
+      "name": "The First Snow Social",
+      "date": {"month": -1, "note": "Triggered by first measurable snowfall, typically November or December"},
+      "duration_days": 1,
+      "description": "The First Snow Social is not scheduled — it happens the evening of the first real snowfall of the season. Word goes around organically: people text, call, or simply appear. By 7pm, the community hall is full. Hot cider from Perkins (Agnes always has a reserve). Wally Chen brings chowder from the diner. The school kids perform a short piece they've been secretly rehearsing. It feels like the town taking a breath together before winter.",
+      "ambient_changes": {
+        "day_of_snowfall": "By afternoon, the news is spreading. By 5pm, the community hall lights are on.",
+        "evening": "Snow on the windows, warmth inside. One of the coziest nights of the year."
+      },
+      "citizen_dialogue_during": "Everyone has snow stories. Clem Rourke predicts the winter. Eleanor quotes from a weather diary she found in the archive. Harold and Artie argue companionably about the biggest snow they remember.",
+      "player_opportunity": "The perfect time to deepen relationships — a warm, informal setting where everyone is in a good mood."
+    },
+    {
+      "id": "winter_market",
+      "name": "The Winter Market",
+      "date": {"month": 12, "week": 1, "day_of_week": "Saturday"},
+      "duration_days": 2,
+      "description": "On the first weekend of December, the fire station parking lot and the adjacent street become the Winter Market — fifty stalls of handmade goods, holiday food, local crafts, and Perkins cider mulled hot. The fire department organizes it. Barnaby builds the stall frameworks every year. The Copper Kettle has a dedicated stall. Flora Kincaid's winter candles sell out in the first hour.",
+      "setup_days_before": 28,
+      "ambient_changes": {
+        "28_days_before": "Barnaby starts building stall frames. Artie mentions it in every conversation.",
+        "7_days_before": "The fire station is a controlled chaos of setup.",
+        "day_of": "Lights, cold air, the smell of mulled cider and evergreen."
+      }
+    },
+    {
+      "id": "spring_planting_day",
+      "name": "Community Planting Day",
+      "date": {"month": 5, "day": 1},
+      "duration_days": 1,
+      "description": "On May 1st, the Garden Club organizes the annual replanting of the town's common flower beds and window boxes. It's technically a volunteer effort but has the feel of a party — someone brings coffee, Barnaby fixes whatever the winter broke, and by noon Millpond Row and the town square are full of color.",
+      "citizen_dialogue_during": "Dorothy Alderman is in her element. Mari opens early with special pastries. The school kids help plant the square.",
+      "player_opportunity": "Good opportunity to help Dorothy (trust-building) and hear garden folklore from the 1930s, when the flower beds were planted as 'morale maintenance' during the Depression."
+    },
+    {
+      "id": "lake_opening_day",
+      "name": "Lake Opening Day",
+      "date": {"month": 5, "week": 3, "day_of_week": "Sunday"},
+      "duration_days": 1,
+      "description": "The unofficial start of lake season — Sadie opens the boats, the Ice Cream Cottage opens, and anyone who wants to can take a first swim of the year (water temperature: cold; enthusiasm: high). The boardwalk fills up. Someone always swims regardless of the temperature.",
+      "player_opportunity": "Sadie takes first-of-season customers out. Good chance to start the lake light investigation."
+    },
+    {
+      "id": "midsummer_walk",
+      "name": "The Midsummer Walk",
+      "date": {"month": 6, "day": 21},
+      "duration_days": 1,
+      "description": "On the summer solstice, a loose tradition: whoever wants to can join a walk up to the Lookout to watch the sun set from the highest accessible point. Clem Rourke leads it. Usually 20-40 people come. There's no formal organization — just a sign on the community board.",
+      "player_opportunity": "The mountain at sunset — a scene of extraordinary beauty. Clem gives a brief natural history talk at the top."
+    },
+    {
+      "id": "autumn_foliage_walk",
+      "name": "The Peak Color Walk",
+      "date": {"month": 10, "week": 2, "day_of_week": "Sunday"},
+      "duration_days": 1,
+      "description": "When the autumn color peaks — usually the second Sunday of October — the Garden Club organizes a guided walk through the valley's most colorful spots. Beatrice Meadow leads the botanical commentary. Coffee at the Lookout. Photographs everywhere.",
+      "ambient_changes": {
+        "week_before": "The valley is turning. Everyone is watching the maples. Fletcher says 'three more days.'",
+        "day_of": "Peak color. The valley is on fire with orange and red."
+      }
+    },
+    {
+      "id": "library_book_sale",
+      "name": "The Library Book Sale",
+      "date": {"month": 4, "week": 1, "day_of_week": "Saturday"},
+      "duration_days": 1,
+      "description": "The library's annual book sale, held in the library's garden on the first Saturday in April. Donated books, outgoing stock, and a special selection of local history reprints. Eleanor presides. June Salcedo organizes. It raises funds for new acquisitions.",
+      "player_opportunity": "Discounted local history books. Eleanor in a good mood and more talkative than usual about her collection."
+    },
+    {
+      "id": "christmas_tree_lighting",
+      "name": "The Christmas Tree Lighting",
+      "date": {"month": 12, "day": 1, "note": "First Sunday of December"},
+      "duration_days": 1,
+      "description": "The modest Christmas tree in the town square is lit on the first Sunday of December in a brief ceremony — the mayor says a few words, a child from the elementary school pulls the switch, everyone gets hot cider. Then the winter market begins. It is, by universal agreement, the beginning of the most beautiful season in Brindlewick.",
+      "ambient_changes": {
+        "before": "The tree has been up for a week. Lights installed, waiting.",
+        "day_of_evening": "The square fills. The switch pulls. The lights come on. Small cheers."
+      }
+    }
+  ],
+  "weekly_events": [
+    {
+      "id": "saturday_market",
+      "name": "Farmers' Market",
+      "schedule": "Every Saturday, June through October",
+      "location": "town_square",
+      "participants": ["marigold_osei", "agnes_perkins", "fletcher_grange", "beatrice_meadow", "margaret_hollis", "sylvie_tran", "dorothy_alderman", "gus_fairweather", "and_others"]
+    },
+    {
+      "id": "sunday_chapel",
+      "name": "Sunday Service",
+      "schedule": "Every Sunday morning",
+      "location": "st_agathas_chapel",
+      "participants": ["reverend_prewitt", "eleanor_finch_hartwell", "harold_hartwell", "artie_pryce", "mayor_windermere", "many_others"]
+    }
+  ],
+  "monthly_events": [
+    {
+      "id": "community_potluck",
+      "name": "Monthly Potluck",
+      "schedule": "Third Thursday of every month",
+      "location": "community_hall",
+      "description": "The monthly potluck has been running since 1978. Everyone brings something. Dr. Okafor's jollof rice is the event's most anticipated dish."
+    }
+  ],
+  "time_scale": {
+    "real_to_game": "1 real day = 1 game day",
+    "rationale": "A 1:1 time scale keeps the world feeling alive without rushing the player. The in-game calendar advances in real time. Players can miss events and return to see the world having moved on, which rewards regular play without punishing absence.",
+    "seasonal_transitions": {
+      "spring": "March 20 - June 20",
+      "summer": "June 21 - September 21",
+      "autumn": "September 22 - December 20",
+      "winter": "December 21 - March 19"
+    },
+    "first_snow": "Triggered programmatically when the game's real weather API (or simulated weather system) records first snowfall; fallback: November 20 in years with no API"
+  }
+}
