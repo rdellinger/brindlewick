@@ -34,7 +34,7 @@ export async function generateNpcDialogue(
   trustLevel: number,
   topic: string,
   session: GameSession,
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = []
 ): Promise<string> {
   // First check the database for scripted dialogue
   const scripted = await getDialogueForCitizen(supabase, citizen.id, trustLevel, topic)
@@ -49,7 +49,7 @@ export async function generateNpcDialogue(
   // Build the system prompt
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
   const rosterLine = townRoster.length
-    ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}`).join('\n')}`
+    ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}${c.personality ? ` — ${c.personality}` : ''}`).join('\n')}`
     : ''
 
   try {
@@ -92,8 +92,8 @@ export async function continueConversation(
   history: ConversationMessage[],
   playerMessage: string,
   _session: GameSession,
-  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null }> = [],
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
+  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = [],
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = []
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -109,7 +109,7 @@ export async function continueConversation(
     : ''
 
   const rosterLine = townRoster.length
-    ? `BRINDLEWICK RESIDENTS (real people — only refer to those you'd plausibly know; never invent names not on this list):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}`).join('\n')}`
+    ? `BRINDLEWICK RESIDENTS (real people — only refer to those you'd plausibly know; never invent names not on this list):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}${c.personality ? ` — ${c.personality}` : ''}`).join('\n')}`
     : ''
 
   const systemPrompt = `${TOWN_CONTEXT}
