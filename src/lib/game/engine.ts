@@ -13,6 +13,7 @@ import {
   getCitizensAtLocation, findCitizenByName, getCitizen,
   getDialogueForCitizen, getLoreForCitizen,
   findLocationByName, getItemsAtLocation, findItemByName,
+  getTownRoster,
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
@@ -408,12 +409,13 @@ async function handleTalk(
   }
 
   const trustLevel = await getTrustLevel(supabase, session, citizen.id)
+  const roster = await getTownRoster(supabase)
 
   // Check Eleanor's trust-gated quest chain
   const eleanorResponse = await handleEleanorQuestProgress(supabase, session, citizen, trustLevel)
 
   // Generate greeting / conversation using Claude for richer dialogue
-  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, 'greeting', session)
+  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, 'greeting', session, roster)
 
   // Increase trust slightly on each interaction
   const newTrust = await updateTrust(supabase, session, citizen.id, trustLevel, 0.5)
@@ -491,13 +493,14 @@ export async function handleConversationMessage(
 
   // Fetch other citizens at the same location so the NPC knows who's nearby
   const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+  const roster = await getTownRoster(supabase)
 
   // Detect farewell words — end conversation after response
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
   // Generate response using full history
-  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens)
+  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster)
 
   // Small trust gain each conversational exchange
   const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)

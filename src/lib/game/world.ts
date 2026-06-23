@@ -154,6 +154,16 @@ export async function getCitizensAtLocation(
   return (citizens ?? []) as Citizen[]
 }
 
+export async function getTownRoster(
+  supabase: SupabaseClient
+): Promise<Array<{ first_name: string; last_name: string; occupation: string | null }>> {
+  const { data } = await supabase
+    .from('citizens')
+    .select('first_name, last_name, occupation')
+    .order('last_name')
+  return (data ?? []) as Array<{ first_name: string; last_name: string; occupation: string | null }>
+}
+
 export async function getCitizen(
   supabase: SupabaseClient,
   id: string

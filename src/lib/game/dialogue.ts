@@ -33,7 +33,8 @@ export async function generateNpcDialogue(
   citizen: Citizen,
   trustLevel: number,
   topic: string,
-  session: GameSession
+  session: GameSession,
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
 ): Promise<string> {
   // First check the database for scripted dialogue
   const scripted = await getDialogueForCitizen(supabase, citizen.id, trustLevel, topic)
@@ -47,13 +48,16 @@ export async function generateNpcDialogue(
 
   // Build the system prompt
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
+  const rosterLine = townRoster.length
+    ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}`).join('\n')}`
+    : ''
 
   try {
     const client = getAnthropicClient()
     const message = await client.messages.create({
       model: MODEL,
       max_tokens: 300,
-      system: `${TOWN_CONTEXT}\n\n${citizenContext}`,
+      system: `${TOWN_CONTEXT}\n\n${citizenContext}${rosterLine}`,
       messages: [
         {
           role: 'user',
@@ -88,7 +92,8 @@ export async function continueConversation(
   history: ConversationMessage[],
   playerMessage: string,
   _session: GameSession,
-  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
+  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null }> = [],
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -103,12 +108,17 @@ export async function continueConversation(
     ? `OTHERS PRESENT AT THIS LOCATION:\n${othersHere.map(c => `- ${c.first_name} ${c.last_name} (${c.occupation ?? 'resident'})`).join('\n')}\nDo not invent or contradict their roles.`
     : ''
 
+  const rosterLine = townRoster.length
+    ? `BRINDLEWICK RESIDENTS (real people — only refer to those you'd plausibly know; never invent names not on this list):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}`).join('\n')}`
+    : ''
+
   const systemPrompt = `${TOWN_CONTEXT}
 
 ${citizenContext}
 
 ${motiveContext}
 ${nearbyLine}
+${rosterLine}
 
 CONVERSATION RULES:
 - You are mid-conversation with the player. Respond naturally, in first person as ${citizen.first_name}.
