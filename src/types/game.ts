@@ -351,6 +351,6 @@ export interface GameResponse {
   inventory_update?: string[]
   ambient?: string          // quiet background detail
   error?: string
-  conversation_start?: { citizenId: string; citizenName: string }
+  conversation_start?: { citizenId: string; citizenName: string; priorHistory: ConversationMessage[] }
   conversation_end?: boolean
 }

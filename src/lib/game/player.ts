@@ -3,8 +3,10 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { GameSession, PlayerSave, GuestSave } from '../../types/game'
+import type { GameSession, PlayerSave, GuestSave, ConversationMessage } from '../../types/game'
 import { v4 as uuidv4 } from 'uuid'
+
+const MAX_STORED_MESSAGES = 30  // 15 back-and-forth exchanges
 
 // ── Trust System ─────────────────────────────────────────────────────────────
 
@@ -163,6 +165,68 @@ export async function buildGameSession(
 
 export function generateGuestToken(): string {
   return `guest_${uuidv4().replace(/-/g, '')}`
+}
+
+// ── Conversation Memory ───────────────────────────────────────────────────────
+
+/**
+ * Load stored conversation history between the player and a citizen.
+ * Returns an empty array if they've never spoken before.
+ */
+export async function getConversationHistory(
+  supabase: SupabaseClient,
+  session: GameSession,
+  citizenId: string
+): Promise<ConversationMessage[]> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+
+  const { data } = await supabase
+    .from('player_citizen_conversations')
+    .select('history')
+    .eq(key, val)
+    .eq('citizen_id', citizenId)
+    .single()
+
+  return (data?.history as ConversationMessage[]) ?? []
+}
+
+/**
+ * Append new messages to stored history, trimming to MAX_STORED_MESSAGES.
+ * Call after each exchange so the NPC remembers it next session.
+ */
+export async function saveConversationHistory(
+  supabase: SupabaseClient,
+  session: GameSession,
+  citizenId: string,
+  newMessages: ConversationMessage[]
+): Promise<void> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+
+  // Load existing history first
+  const { data: existing } = await supabase
+    .from('player_citizen_conversations')
+    .select('history')
+    .eq(key, val)
+    .eq('citizen_id', citizenId)
+    .single()
+
+  const current: ConversationMessage[] = (existing?.history as ConversationMessage[]) ?? []
+  const combined = [...current, ...newMessages]
+  // Keep only the most recent messages to bound token usage
+  const trimmed = combined.slice(-MAX_STORED_MESSAGES)
+
+  await supabase
+    .from('player_citizen_conversations')
+    .upsert({
+      [key]: val,
+      citizen_id: citizenId,
+      history: trimmed,
+      last_talked_at: new Date().toISOString(),
+    }, {
+      onConflict: key === 'player_id' ? 'player_id,citizen_id' : 'guest_token,citizen_id',
+    })
 }
 
 // ── Journal ───────────────────────────────────────────────────────────────────

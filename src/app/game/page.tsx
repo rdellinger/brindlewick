@@ -256,11 +256,14 @@ function GamePageInner() {
 
       // Manage conversation state
       if (data.conversation_start) {
-        // Start or switch conversation — seed history with this first exchange
+        // Seed history with all prior exchanges + this new greeting
         setActiveConversation({
           citizenId: data.conversation_start.citizenId,
           citizenName: data.conversation_start.citizenName,
-          history: [{ role: 'assistant', content: data.text }],
+          history: [
+            ...(data.conversation_start.priorHistory ?? []),
+            { role: 'assistant' as const, content: data.text },
+          ],
         })
       } else if (activeConversation && !data.conversation_end) {
         // Append to ongoing conversation history

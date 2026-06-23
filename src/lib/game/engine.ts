@@ -17,7 +17,7 @@ import {
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
-import { updateTrust, getTrustLevel } from './player'
+import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory } from './player'
 import { checkMysteryClue } from './mysteries'
 import {
   getTimePeriodForDate, getHistoricalLocationDescription,
@@ -411,11 +411,15 @@ async function handleTalk(
   const trustLevel = await getTrustLevel(supabase, session, citizen.id)
   const roster = await getTownRoster(supabase)
 
+  // Load prior conversation history so the NPC can reference past talks
+  const priorHistory = await getConversationHistory(supabase, session, citizen.id)
+
   // Check Eleanor's trust-gated quest chain
   const eleanorResponse = await handleEleanorQuestProgress(supabase, session, citizen, trustLevel)
 
-  // Generate greeting / conversation using Claude for richer dialogue
-  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, 'greeting', session, roster)
+  // Generate greeting — if there's prior history, acknowledge the relationship
+  const greetingTopic = priorHistory.length > 0 ? 'returning_visitor' : 'greeting'
+  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, greetingTopic, session, roster, priorHistory)
 
   // Increase trust slightly on each interaction
   const newTrust = await updateTrust(supabase, session, citizen.id, trustLevel, 0.5)
@@ -452,7 +456,7 @@ async function handleTalk(
 
   return {
     text: fullText,
-    conversation_start: { citizenId: citizen.id, citizenName: `${citizen.first_name} ${citizen.last_name}` },
+    conversation_start: { citizenId: citizen.id, citizenName: `${citizen.first_name} ${citizen.last_name}`, priorHistory },
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizen.id, new_level: newTrust } : undefined,
     journal_entry: isFirstMeet ? {
       id: '',
@@ -504,6 +508,12 @@ export async function handleConversationMessage(
 
   // Small trust gain each conversational exchange
   const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
+
+  // Persist this exchange to DB so the NPC remembers it next session
+  await saveConversationHistory(supabase, session, citizenId, [
+    { role: 'user', content: playerMessage },
+    { role: 'assistant', content: response },
+  ])
 
   // Log interaction
   await logInteraction(supabase, session, {

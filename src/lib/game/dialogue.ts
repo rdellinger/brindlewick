@@ -43,7 +43,8 @@ export async function generateNpcDialogue(
   trustLevel: number,
   topic: string,
   session: GameSession,
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = []
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
+  priorHistory: ConversationMessage[] = []
 ): Promise<string> {
   // First check the database for scripted dialogue
   const scripted = await getDialogueForCitizen(supabase, citizen.id, trustLevel, topic)
@@ -61,12 +62,17 @@ export async function generateNpcDialogue(
     ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => formatRosterEntry(c)).join('\n')}`
     : ''
 
+  const hasHistory = priorHistory.length > 0
+  const historyNote = hasHistory
+    ? `\n\nPRIOR CONVERSATION HISTORY WITH THIS PLAYER (most recent ${priorHistory.length} messages):\n${priorHistory.map(m => `${m.role === 'user' ? 'Player' : citizen.first_name}: ${m.content}`).join('\n')}\n\nThis player has spoken with you before. Greet them warmly as someone you know. Reference something from your prior conversations naturally if relevant — don't just repeat the same greeting you'd give a stranger.`
+    : ''
+
   try {
     const client = getAnthropicClient()
     const message = await client.messages.create({
       model: MODEL,
       max_tokens: 300,
-      system: `${TOWN_CONTEXT}\n\n${citizenContext}${rosterLine}`,
+      system: `${TOWN_CONTEXT}\n\n${citizenContext}${rosterLine}${historyNote}`,
       messages: [
         {
           role: 'user',
