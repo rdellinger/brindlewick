@@ -87,7 +87,8 @@ export async function continueConversation(
   trustLevel: number,
   history: ConversationMessage[],
   playerMessage: string,
-  _session: GameSession
+  _session: GameSession,
+  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null }> = []
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -97,11 +98,17 @@ export async function continueConversation(
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
+  const othersHere = nearbyCitizens.filter(c => c.first_name !== citizen.first_name)
+  const nearbyLine = othersHere.length
+    ? `OTHERS PRESENT AT THIS LOCATION:\n${othersHere.map(c => `- ${c.first_name} ${c.last_name} (${c.occupation ?? 'resident'})`).join('\n')}\nDo not invent or contradict their roles.`
+    : ''
+
   const systemPrompt = `${TOWN_CONTEXT}
 
 ${citizenContext}
 
 ${motiveContext}
+${nearbyLine}
 
 CONVERSATION RULES:
 - You are mid-conversation with the player. Respond naturally, in first person as ${citizen.first_name}.

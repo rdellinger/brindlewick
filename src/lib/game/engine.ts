@@ -489,12 +489,15 @@ export async function handleConversationMessage(
 
   const trustLevel = await getTrustLevel(supabase, session, citizenId)
 
+  // Fetch other citizens at the same location so the NPC knows who's nearby
+  const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+
   // Detect farewell words — end conversation after response
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
   // Generate response using full history
-  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session)
+  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens)
 
   // Small trust gain each conversational exchange
   const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
