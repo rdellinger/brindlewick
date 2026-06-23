@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
 interface Props {
   onSubmit: (input: string) => void
@@ -15,6 +15,13 @@ export default function CommandInput({ onSubmit, isLoading }: Props) {
   const [history, setHistory] = useState<string[]>([])
   const [historyIdx, setHistoryIdx] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Refocus input whenever loading finishes
+  useEffect(() => {
+    if (!isLoading) {
+      inputRef.current?.focus()
+    }
+  }, [isLoading])
 
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     e?.preventDefault()
