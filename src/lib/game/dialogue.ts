@@ -17,6 +17,15 @@ import type { Citizen, ConversationMessage, GameSession } from '../../types/game
 import { getDialogueForCitizen, getLoreForCitizen } from './world'
 import { getTrustLevel } from './player'
 
+function formatRosterEntry(c: { first_name: string; last_name: string; occupation?: string | null; personality?: string | null; household?: string[] }): string {
+  const parts = [`- ${c.first_name} ${c.last_name}`]
+  if (c.occupation) parts.push(c.occupation)
+  if (c.personality) parts.push(`personality: ${c.personality}`)
+  if (c.household?.length) parts.push(`family: ${c.household.join(', ')}`)
+  // Join with ' | ' after the name
+  return parts[0] + (parts.length > 1 ? ' — ' + parts.slice(1).join(' | ') : '')
+}
+
 const TOWN_CONTEXT = `You are generating dialogue for an NPC in Brindlewick, a cozy, safe, warm mountain town text adventure.
 
 TONE RULES (strictly enforced):
@@ -34,7 +43,7 @@ export async function generateNpcDialogue(
   trustLevel: number,
   topic: string,
   session: GameSession,
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = []
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = []
 ): Promise<string> {
   // First check the database for scripted dialogue
   const scripted = await getDialogueForCitizen(supabase, citizen.id, trustLevel, topic)
@@ -49,7 +58,7 @@ export async function generateNpcDialogue(
   // Build the system prompt
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
   const rosterLine = townRoster.length
-    ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}${c.personality ? ` — ${c.personality}` : ''}`).join('\n')}`
+    ? `\n\nBRINDLEWICK RESIDENTS (only refer to names on this list; never invent people):\n${townRoster.map(c => formatRosterEntry(c)).join('\n')}`
     : ''
 
   try {
@@ -92,8 +101,8 @@ export async function continueConversation(
   history: ConversationMessage[],
   playerMessage: string,
   _session: GameSession,
-  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = [],
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null }> = []
+  nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = []
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -109,7 +118,7 @@ export async function continueConversation(
     : ''
 
   const rosterLine = townRoster.length
-    ? `BRINDLEWICK RESIDENTS (real people — only refer to those you'd plausibly know; never invent names not on this list):\n${townRoster.map(c => `- ${c.first_name} ${c.last_name}${c.occupation ? `, ${c.occupation}` : ''}${c.personality ? ` — ${c.personality}` : ''}`).join('\n')}`
+    ? `BRINDLEWICK RESIDENTS (real people only — never invent names not on this list):\n${townRoster.map(c => formatRosterEntry(c)).join('\n')}`
     : ''
 
   const systemPrompt = `${TOWN_CONTEXT}

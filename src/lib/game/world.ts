@@ -156,12 +156,12 @@ export async function getCitizensAtLocation(
 
 export async function getTownRoster(
   supabase: SupabaseClient
-): Promise<Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null }>> {
+): Promise<Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>> {
   const { data } = await supabase
     .from('citizens')
-    .select('first_name, last_name, occupation, personality')
+    .select('first_name, last_name, occupation, personality, household')
     .order('last_name')
-  return (data ?? []) as Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null }>
+  return (data ?? []) as Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>
 }
 
 export async function getCitizen(
