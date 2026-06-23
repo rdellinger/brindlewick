@@ -14,7 +14,8 @@ import {
   getDialogueForCitizen, getLoreForCitizen,
   findLocationByName, getItemsAtLocation, findItemByName,
 } from './world'
-import { generateNpcDialogue } from './dialogue'
+import { generateNpcDialogue, continueConversation } from './dialogue'
+import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel } from './player'
 import { checkMysteryClue } from './mysteries'
 import {
@@ -449,6 +450,7 @@ async function handleTalk(
 
   return {
     text: fullText,
+    conversation_start: { citizenId: citizen.id, citizenName: `${citizen.first_name} ${citizen.last_name}` },
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizen.id, new_level: newTrust } : undefined,
     journal_entry: isFirstMeet ? {
       id: '',
@@ -460,6 +462,61 @@ async function handleTalk(
       created_at: new Date().toISOString(),
     } : undefined,
   }
+}
+
+// ── CONVERSATION MESSAGE ──────────────────────────────────────────────────────
+
+/**
+ * Handle a free-text message from the player while in an active conversation.
+ * Receives the full conversation history and the new player message, returns
+ * the NPC's next response.
+ */
+export async function handleConversationMessage(
+  supabase: SupabaseClient,
+  citizenId: string,
+  history: ConversationMessage[],
+  playerMessage: string,
+  session: GameSession
+): Promise<GameResponse> {
+  const world = await getWorldState(supabase)
+  const timeSlot = getTimeSlot()
+
+  // Look up the citizen
+  const citizen = await getCitizen(supabase, citizenId)
+  if (!citizen) {
+    return { text: 'The conversation fades. That person seems to have stepped away.', conversation_end: true }
+  }
+
+  const trustLevel = await getTrustLevel(supabase, session, citizenId)
+
+  // Detect farewell words — end conversation after response
+  const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
+  const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
+
+  // Generate response using full history
+  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session)
+
+  // Small trust gain each conversational exchange
+  const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
+
+  // Log interaction
+  await logInteraction(supabase, session, {
+    citizen_id: citizenId,
+    location_id: session.currentLocation,
+    interaction_type: 'talk',
+    topic: playerMessage.slice(0, 100),
+  })
+
+  // Check if any mystery clues triggered
+  const mysteryUpdate = await checkMysteryClue(supabase, session, 'talked_to', citizenId)
+
+  return {
+    text: response,
+    conversation_end: isFarewell ? true : undefined,
+    trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
+    mystery_update: mysteryUpdate ?? undefined,
+  }
+  void world; void timeSlot  // suppress unused warnings
 }
 
 // ── ASK ───────────────────────────────────────────────────────────────────────

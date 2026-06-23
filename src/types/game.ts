@@ -288,6 +288,13 @@ export interface CalendarEvent {
   trigger_condition: string | null
 }
 
+// ── Conversation ─────────────────────────────────────────────────────────────
+
+export interface ConversationMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 // ── NLU / Parser ─────────────────────────────────────────────────────────────
 
 export interface ParsedCommand {
@@ -344,4 +351,6 @@ export interface GameResponse {
   inventory_update?: string[]
   ambient?: string          // quiet background detail
   error?: string
+  conversation_start?: { citizenId: string; citizenName: string }
+  conversation_end?: boolean
 }

@@ -13,7 +13,7 @@
 
 import { getAnthropicClient, MODEL } from '../anthropic/client'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Citizen, GameSession } from '../../types/game'
+import type { Citizen, ConversationMessage, GameSession } from '../../types/game'
 import { getDialogueForCitizen, getLoreForCitizen } from './world'
 import { getTrustLevel } from './player'
 
@@ -72,6 +72,96 @@ Generate ${citizen.first_name}'s response. Speak in first person as ${citizen.fi
     return formatDialogue(citizen, getGenericResponse(citizen, topic, trustLevel))
   }
 }
+
+// ── Ongoing Conversation ──────────────────────────────────────────────────────
+
+/**
+ * Continue an in-progress conversation with an NPC.
+ * Passes full message history to Claude so responses build on prior exchanges.
+ * The system prompt encodes the citizen's motive — what they care about and
+ * want to steer the conversation toward — derived from their existing data.
+ */
+export async function continueConversation(
+  supabase: SupabaseClient,
+  citizen: Citizen,
+  trustLevel: number,
+  history: ConversationMessage[],
+  playerMessage: string,
+  _session: GameSession
+): Promise<string> {
+  const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
+  const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
+  const motiveContext = buildMotiveContext(citizen, trustLevel)
+
+  // Detect farewell — end conversation gracefully
+  const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later']
+  const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
+
+  const systemPrompt = `${TOWN_CONTEXT}
+
+${citizenContext}
+
+${motiveContext}
+
+CONVERSATION RULES:
+- You are mid-conversation with the player. Respond naturally, in first person as ${citizen.first_name}.
+- Build on what has already been said — do not repeat yourself or restart from scratch.
+- Keep responses 2–4 sentences. Ask a follow-up question occasionally to keep things going.
+- Reveal your motive or concerns naturally — don't announce them, just let them surface.
+- At higher trust, share more personal things.
+${isFarewell ? `- The player is saying goodbye. Give a warm, brief send-off in character.` : ''}`
+
+  const messages: Array<{ role: 'user' | 'assistant'; content: string }> = [
+    ...history,
+    { role: 'user', content: playerMessage },
+  ]
+
+  try {
+    const client = getAnthropicClient()
+    const result = await client.messages.create({
+      model: MODEL,
+      max_tokens: 350,
+      system: systemPrompt,
+      messages,
+    })
+    const text = result.content[0].type === 'text' ? result.content[0].text : ''
+    return formatDialogue(citizen, text.trim())
+  } catch {
+    if (lore?.gossip_text) return formatDialogue(citizen, lore.gossip_text)
+    return formatDialogue(citizen, getGenericResponse(citizen, playerMessage, trustLevel))
+  }
+}
+
+/**
+ * Build a "motive" section for the system prompt — what the character cares about
+ * and wants to discuss, derived from their existing data rather than a new DB field.
+ */
+function buildMotiveContext(citizen: Citizen, trustLevel: number): string {
+  const lines: string[] = ['CURRENT AGENDA (steer conversation toward these naturally):']
+
+  // Personality implies topics they'd raise
+  if (citizen.personality) {
+    lines.push(`- You have the following personality: ${citizen.personality}. Let it shape how you speak and what you bring up.`)
+  }
+
+  // Backstory = things on their mind
+  if (citizen.backstory) {
+    lines.push(`- Your backstory: ${citizen.backstory}. Relevant details may surface if the conversation goes there.`)
+  }
+
+  // Trust-gated depth
+  if (trustLevel === 0) {
+    lines.push('- This is your first meeting. Be friendly but a little reserved — you don\'t know this person yet.')
+  } else if (trustLevel >= 2) {
+    lines.push('- You\'ve built real trust with this person. You can mention something personal or a worry you have.')
+  } else if (trustLevel >= 3) {
+    lines.push('- This person is a genuine friend. You speak freely and can share your real feelings.')
+  }
+
+  return lines.join('\n')
+}
+
+// ── Single-shot Dialogue ──────────────────────────────────────────────────────
 
 function buildCitizenContext(citizen: Citizen, trustLevel: number, lore: string | null): string {
   const lines = [

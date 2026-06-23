@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import GameOutput from '../../components/game/GameOutput'
 import CommandInput from '../../components/game/CommandInput'
 import Sidebar from '../../components/game/Sidebar'
-import type { GameResponse } from '../../types/game'
+import { createClient } from '../../lib/supabase/client'
+import type { GameResponse, ConversationMessage } from '../../types/game'
 
 interface OutputEntry {
   id: string
@@ -83,7 +86,18 @@ function makeId() {
   return Math.random().toString(36).slice(2)
 }
 
+// Wrap in Suspense because useSearchParams() requires it in Next.js App Router
 export default function GamePage() {
+  return (
+    <Suspense>
+      <GamePageInner />
+    </Suspense>
+  )
+}
+
+function GamePageInner() {
+  const searchParams = useSearchParams()
+  const isWelcome = searchParams.get('welcome') === '1'
   const [output, setOutput] = useState<OutputEntry[]>([
     { id: makeId(), text: INTRO_TEXT, type: 'narration', isNew: false },
   ])
@@ -104,17 +118,52 @@ export default function GamePage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [sidebarTab, setSidebarTab] = useState<'location' | 'journal' | 'inventory' | 'tasks' | 'chronicle'>('location')
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [activeConversation, setActiveConversation] = useState<{
+    citizenId: string
+    citizenName: string
+    history: ConversationMessage[]
+  } | null>(null)
   const outputEndRef = useRef<HTMLDivElement>(null)
 
-  // Initialize: load guest token and game state
+  // Initialize: check auth, load guest token, run migration if just logged in
   useEffect(() => {
-    let token = localStorage.getItem('brindlewick_guest_token')
-    if (!token) {
-      token = `guest_${Math.random().toString(36).slice(2)}`
-      localStorage.setItem('brindlewick_guest_token', token)
-    }
-    setGameState(prev => ({ ...prev, guestToken: token }))
-    loadGameState(token)
+    const supabase = createClient()
+
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (user) {
+        setUserEmail(user.email ?? null)
+
+        // If coming back from magic-link and there's a guest token, migrate progress
+        if (isWelcome) {
+          const guestToken = localStorage.getItem('brindlewick_guest_token')
+          if (guestToken) {
+            await fetch('/api/auth/migrate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ guestToken }),
+            })
+            localStorage.removeItem('brindlewick_guest_token')
+          }
+          // Clear the ?welcome=1 from URL without reloading
+          window.history.replaceState({}, '', '/game')
+        }
+
+        // Authenticated players don't need a guest token
+        setGameState(prev => ({ ...prev, guestToken: null }))
+        loadGameState(null)
+      } else {
+        // Guest flow
+        let token = localStorage.getItem('brindlewick_guest_token')
+        if (!token) {
+          token = `guest_${Math.random().toString(36).slice(2)}`
+          localStorage.setItem('brindlewick_guest_token', token)
+        }
+        setGameState(prev => ({ ...prev, guestToken: token }))
+        loadGameState(token)
+      }
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Auto-scroll output
@@ -130,9 +179,9 @@ export default function GamePage() {
     return () => clearTimeout(timer)
   }, [output.length])
 
-  const loadGameState = useCallback(async (token: string) => {
+  const loadGameState = useCallback(async (token: string | null) => {
     try {
-      const res = await fetch(`/api/game/state?guestToken=${token}`)
+      const res = await fetch(`/api/game/state${token ? `?guestToken=${token}` : ''}`)
       const data = await res.json()
       if (data.error) return
 
@@ -175,7 +224,12 @@ export default function GamePage() {
       const res = await fetch('/api/game/command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input, guestToken: token }),
+        body: JSON.stringify({
+          input,
+          guestToken: token,
+          activeCitizenId: activeConversation?.citizenId ?? null,
+          conversationHistory: activeConversation?.history ?? null,
+        }),
       })
 
       const data: GameResponse & {
@@ -198,6 +252,28 @@ export default function GamePage() {
           isNew: true,
         }
         setOutput(prev => [...prev, responseEntry])
+      }
+
+      // Manage conversation state
+      if (data.conversation_start) {
+        // Start or switch conversation — seed history with this first exchange
+        setActiveConversation({
+          citizenId: data.conversation_start.citizenId,
+          citizenName: data.conversation_start.citizenName,
+          history: [{ role: 'assistant', content: data.text }],
+        })
+      } else if (activeConversation && !data.conversation_end) {
+        // Append to ongoing conversation history
+        setActiveConversation(prev => prev ? {
+          ...prev,
+          history: [
+            ...prev.history,
+            { role: 'user', content: input },
+            { role: 'assistant', content: data.text },
+          ],
+        } : null)
+      } else if (data.conversation_end) {
+        setActiveConversation(null)
       }
 
       // Update game state
@@ -269,7 +345,7 @@ export default function GamePage() {
     } finally {
       setIsLoading(false)
     }
-  }, [gameState.guestToken, isLoading, loadGameState])
+  }, [gameState.guestToken, isLoading, loadGameState, activeConversation])
 
   return (
     <div
@@ -295,26 +371,60 @@ export default function GamePage() {
               Brindlewick
             </h1>
           </div>
-          {gameState.timePosition ? (
-            <div
-              className="text-xs tracking-wide px-2 py-1 rounded"
-              style={{ color: 'var(--amber)', backgroundColor: 'rgba(212,160,23,0.15)', border: '1px solid rgba(212,160,23,0.3)' }}
-            >
-              ⧗ {new Date(gameState.timePosition).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} — Past
-            </div>
-          ) : gameState.world && (
-            <div
-              className="text-xs tracking-wide"
-              style={{ color: 'var(--soft-gray)' }}
-            >
-              {gameState.world.season.charAt(0).toUpperCase() + gameState.world.season.slice(1)}
-              {' · '}
-              {new Date(gameState.world.date).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-              })}
-            </div>
-          )}
+          <div className="flex items-center gap-4">
+            {gameState.timePosition ? (
+              <div
+                className="text-xs tracking-wide px-2 py-1 rounded"
+                style={{ color: 'var(--amber)', backgroundColor: 'rgba(212,160,23,0.15)', border: '1px solid rgba(212,160,23,0.3)' }}
+              >
+                ⧗ {new Date(gameState.timePosition).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} — Past
+              </div>
+            ) : gameState.world && (
+              <div
+                className="text-xs tracking-wide"
+                style={{ color: 'var(--soft-gray)' }}
+              >
+                {gameState.world.season.charAt(0).toUpperCase() + gameState.world.season.slice(1)}
+                {' · '}
+                {new Date(gameState.world.date).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </div>
+            )}
+
+            {/* Auth status */}
+            {userEmail ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs" style={{ color: 'var(--soft-gray)' }}>
+                  {userEmail.split('@')[0]}
+                </span>
+                <button
+                  onClick={async () => {
+                    const supabase = createClient()
+                    await supabase.auth.signOut()
+                    setUserEmail(null)
+                    // Restore guest token flow
+                    const token = `guest_${Math.random().toString(36).slice(2)}`
+                    localStorage.setItem('brindlewick_guest_token', token)
+                    setGameState(prev => ({ ...prev, guestToken: token }))
+                  }}
+                  className="text-xs underline"
+                  style={{ color: 'var(--soft-gray)' }}
+                >
+                  sign out
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/login"
+                className="text-xs underline"
+                style={{ color: 'var(--amber)' }}
+              >
+                save progress ↗
+              </a>
+            )}
+          </div>
         </header>
 
         {/* Output scroll area */}
@@ -336,10 +446,12 @@ export default function GamePage() {
             className="mt-2 text-xs"
             style={{ color: 'var(--soft-gray)' }}
           >
-            {gameState.timePosition
-            ? <>In the past: <em>look around</em> · <em>talk to [name]</em> · <em>ask [name] about [topic]</em> · <em>return to present</em></>
-            : <>Try: <em>look around</em> · <em>talk to Teddy</em> · <em>go to the bakery</em> · <em>what happened</em> · <em>help</em></>
-          }
+            {activeConversation
+              ? <>Talking with <em>{activeConversation.citizenName}</em> · Type freely · <em>bye</em> to end · <em>go to [place]</em> to leave</>
+              : gameState.timePosition
+              ? <>In the past: <em>look around</em> · <em>talk to [name]</em> · <em>ask [name] about [topic]</em> · <em>return to present</em></>
+              : <>Try: <em>look around</em> · <em>talk to Teddy</em> · <em>go to the bakery</em> · <em>what happened</em> · <em>help</em></>
+            }
           </p>
         </footer>
       </div>
@@ -353,4 +465,4 @@ export default function GamePage() {
       />
     </div>
   )
-}
+} // end GamePageInner
