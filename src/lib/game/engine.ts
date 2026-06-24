@@ -947,25 +947,32 @@ async function handleUse(
     return handleHoneyOnMari(supabase, session, world, timeSlot)
   }
 
-  // If the item is consumable and no specific use applies, consume it now
-  if (item.is_consumable && session.inventory.includes(item.id)) {
-    const newInventory = session.inventory.filter(id => id !== item.id)
-    const table = session.playerId ? 'player_saves' : 'guest_saves'
-    const key   = session.playerId ? 'player_id'   : 'session_token'
-    const val   = session.playerId ?? session.guestToken
-    await supabase.from(table).update({ inventory: newInventory }).eq(key, val)
-
-    // Log consumption
+  // If the item is consumable, consume it now — whether from inventory or at the location
+  if (item.is_consumable) {
     const pciKey = session.playerId ? 'player_id' : 'guest_token'
     const pciVal = session.playerId ?? session.guestToken
-    await supabase.from('player_consumed_items').insert({
-      [pciKey]: pciVal,
-      item_id: item.id,
-    })
+    const consumeText = `You use ${item.name}. ${item.lore_note ?? "It's gone now."}`
 
-    return {
-      text: `You use ${item.name}. ${item.lore_note ?? "It's gone now."}`,
-      inventory_update: newInventory,
+    if (session.inventory.includes(item.id)) {
+      // Remove from inventory
+      const newInventory = session.inventory.filter(id => id !== item.id)
+      const table  = session.playerId ? 'player_saves'  : 'guest_saves'
+      const saveKey = session.playerId ? 'player_id'    : 'session_token'
+      const saveVal = session.playerId ?? session.guestToken
+      await supabase.from(table).update({ inventory: newInventory }).eq(saveKey, saveVal)
+      await supabase.from('player_consumed_items').insert({ [pciKey]: pciVal, item_id: item.id })
+      return { text: consumeText, inventory_update: newInventory }
+    } else {
+      // Item is at the current location — remove it from the world for this player
+      // by logging it to player_item_locations with a '__consumed__' sentinel location
+      const pilKey = session.playerId ? 'player_id' : 'guest_token'
+      const pilVal = session.playerId ?? session.guestToken
+      await supabase.from('player_item_locations').upsert(
+        { [pilKey]: pilVal, item_id: item.id, location_id: '__consumed__', moved_at: new Date().toISOString() },
+        { onConflict: pilKey === 'player_id' ? 'player_id,item_id' : 'guest_token,item_id' }
+      )
+      await supabase.from('player_consumed_items').insert({ [pciKey]: pciVal, item_id: item.id })
+      return { text: consumeText, inventory_update: session.inventory }
     }
   }
 

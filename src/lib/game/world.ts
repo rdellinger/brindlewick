@@ -346,11 +346,11 @@ export async function getItemsAtLocation(
 
   // Exclude items the player is carrying
   if (carriedIds.length > 0) {
-    canonicalQuery = canonicalQuery.not('id', 'in', `(${carriedIds.map(id => `"${id}"`).join(',')})`)
+    canonicalQuery = canonicalQuery.not('id', 'in', `(${carriedIds.join(',')})`)
   }
   // Exclude items this player has moved somewhere (we'll add them back if they're here)
   if (overriddenItemIds.length > 0) {
-    canonicalQuery = canonicalQuery.not('id', 'in', `(${overriddenItemIds.map(id => `"${id}"`).join(',')})`)
+    canonicalQuery = canonicalQuery.not('id', 'in', `(${overriddenItemIds.join(',')})`)
   }
 
   const { data: canonicalItems } = await canonicalQuery

@@ -264,18 +264,22 @@ async function citizenGiveToPlayer(
   const { data: item } = await supabase.from('items').select('*').eq('id', itemId).single()
   if (!item) return null
 
-  // Remove from citizen
-  await supabase.from('citizen_item_holdings')
-    .delete()
-    .eq('citizen_id', citizenId)
-    .eq('item_id', itemId)
+  // If the item is consumable, leave the NPC's holding in place (they can make more).
+  // For non-consumables, remove from citizen so they don't still "have" it.
+  if (!item.is_consumable) {
+    await supabase.from('citizen_item_holdings')
+      .delete()
+      .eq('citizen_id', citizenId)
+      .eq('item_id', itemId)
+  }
 
-  // Add to player inventory
+  // Add to player inventory.
+  // guest_saves uses 'session_token'; all other player-state tables use 'guest_token'.
   const newInventory = [...session.inventory, itemId]
-  const table = session.playerId ? 'player_saves' : 'guest_saves'
-  const key   = session.playerId ? 'player_id'   : 'guest_token'
-  const val   = session.playerId ?? session.guestToken
-  await supabase.from(table).update({ inventory: newInventory }).eq(key, val)
+  const table   = session.playerId ? 'player_saves'   : 'guest_saves'
+  const saveKey = session.playerId ? 'player_id'      : 'session_token'
+  const saveVal = session.playerId ?? session.guestToken
+  await supabase.from(table).update({ inventory: newInventory }).eq(saveKey, saveVal)
 
   // Clear any player_item_locations override for this item (it's now in inventory)
   const pilKey = session.playerId ? 'player_id' : 'guest_token'
