@@ -6,7 +6,7 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
-  Location, Citizen, Item, WorldState, CitizenDialogue,
+  Location, Citizen, Item, ItemStateTransition, WorldState, CitizenDialogue,
   CitizenLore, MysteryClue, HelpTask, CalendarEvent, GameSession,
 } from '../../types/game'
 
@@ -237,6 +237,53 @@ export async function getLoreForCitizen(
 }
 
 // ── Items ────────────────────────────────────────────────────────────────────
+
+/**
+ * Returns the current effective state of an item, accounting for real-time
+ * state transitions (e.g. tea cooling, flowers wilting).
+ *
+ * Returns { state, description, name } — use these instead of item.current_state
+ * and item.description when displaying to the player.
+ */
+export function getItemCurrentState(item: Item): {
+  state: string | null
+  description: string
+  name: string
+} {
+  if (!item.state_transitions?.length || !item.state_changed_at) {
+    return { state: item.current_state, description: item.description, name: item.name }
+  }
+
+  const elapsedMs = Date.now() - new Date(item.state_changed_at).getTime()
+  const elapsedMinutes = elapsedMs / (1000 * 60)
+
+  // Find the latest transition whose time threshold has been crossed
+  const transitions = [...item.state_transitions].sort(
+    (a: ItemStateTransition, b: ItemStateTransition) => b.after_real_minutes - a.after_real_minutes
+  )
+
+  for (const t of transitions) {
+    if (elapsedMinutes >= t.after_real_minutes) {
+      return {
+        state: t.new_state,
+        description: t.description_override ?? item.description,
+        name: t.name_override ?? item.name,
+      }
+    }
+  }
+
+  return { state: item.current_state, description: item.description, name: item.name }
+}
+
+/**
+ * Filter items by the current game season (and weather, if supported).
+ * Items with no season_availability are always visible.
+ */
+export function filterItemsBySeason(items: Item[], season: string): Item[] {
+  return items.filter(item =>
+    !item.season_availability || item.season_availability.includes(season)
+  )
+}
 
 /**
  * Return items visible at a location for a given player.

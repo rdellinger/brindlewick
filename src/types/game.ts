@@ -218,6 +218,13 @@ export interface PlayerInteraction {
 
 // ── Items ────────────────────────────────────────────────────────────────────
 
+export interface ItemStateTransition {
+  after_real_minutes: number
+  new_state: string
+  description_override?: string
+  name_override?: string
+}
+
 export interface Item {
   id: string
   name: string
@@ -230,6 +237,21 @@ export interface Item {
   mystery_tie: string | null
   mystery_tie_2: string | null
   requires_condition: string | null
+  // Extended fields (013)
+  weight_class: 'tiny' | 'small' | 'medium' | 'large' | 'immovable'
+  rarity: 'common' | 'uncommon' | 'rare' | 'precious' | 'legendary'
+  impression_value: number        // -3 to +3
+  impression_category: string | null
+  is_ambient: boolean             // shown inline in look, not as separate list
+  is_consumable: boolean
+  vendor_citizen_id: string | null
+  price: number | null
+  current_state: string | null
+  base_state: string | null
+  state_transitions: ItemStateTransition[] | null
+  state_changed_at: string | null
+  season_availability: string[] | null
+  weather_trigger: string | null
 }
 
 // ── Mysteries ────────────────────────────────────────────────────────────────

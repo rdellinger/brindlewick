@@ -150,7 +150,10 @@ const INTENT_PATTERNS: Array<{ intent: CommandIntent; patterns: RegExp[] }> = [
   {
     intent: 'give',
     patterns: [
-      // "give me the honey" / "can I have the key" / "I'd like the almanac"
+      // Player → NPC: "give the honey to Agnes" / "offer the key to Constance" / "hand Marigold the note"
+      /^(?:give|offer|hand|present)\s+(?:the\s+)?(.+?)\s+to\s+(.+)/i,
+      /^(?:give|hand)\s+(\w+(?:\s+\w+)?)\s+(?:the\s+)?(.+)/i,
+      // Player ← NPC: "give me the honey" / "can I have the key"
       /^(?:give me|can i (?:have|get)|i(?:'d| would) like|hand me|pass me)\s+(?:the\s+)?(.+)/i,
       // "take the honey from Agnes" / "get the key from Constance"
       /^(?:take|get)\s+(?:the\s+)?(.+?)\s+from\s+(.+)/i,

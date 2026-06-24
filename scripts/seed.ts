@@ -322,8 +322,8 @@ async function seedItems() {
       id: string
       name: string
       type: string
-      location?: string       // field name used in content file
-      location_id?: string    // alias (legacy)
+      location?: string
+      location_id?: string
       description: string
       can_take?: boolean
       lore_note?: string
@@ -332,6 +332,20 @@ async function seedItems() {
       mystery_tie_2?: string
       requires_condition?: string
       use_on?: string
+      // New fields (013)
+      weight_class?: string
+      rarity?: string
+      impression_value?: number
+      impression_category?: string
+      is_ambient?: boolean
+      is_consumable?: boolean
+      vendor_citizen_id?: string
+      price?: number
+      current_state?: string
+      base_state?: string
+      state_transitions?: unknown
+      season_availability?: string[]
+      weather_trigger?: string
     }>
   }
 
@@ -354,11 +368,53 @@ async function seedItems() {
       mystery_tie: (mysteryTie && validMysteryIds?.has(mysteryTie)) ? mysteryTie : null,
       mystery_tie_2: item.mystery_tie_2 ?? null,
       requires_condition: item.requires_condition ?? null,
-      use_on: item.use_on ?? null,
+      // New fields (013)
+      weight_class: item.weight_class ?? 'small',
+      rarity: item.rarity ?? 'common',
+      impression_value: item.impression_value ?? 0,
+      impression_category: item.impression_category ?? null,
+      is_ambient: item.is_ambient ?? false,
+      is_consumable: item.is_consumable ?? false,
+      vendor_citizen_id: item.vendor_citizen_id ?? null,
+      price: item.price ?? null,
+      current_state: item.current_state ?? item.base_state ?? null,
+      base_state: item.base_state ?? null,
+      state_transitions: item.state_transitions ?? null,
+      season_availability: item.season_availability ?? null,
+      weather_trigger: item.weather_trigger ?? null,
     }
   })
 
   await upsert('items', items)
+}
+
+// ── Citizen Item Preferences ──────────────────────────────────────────────────
+
+async function seedCitizenItemPreferences() {
+  console.log('\nSeeding citizen item preferences…')
+
+  const raw = readJSON('citizen_item_preferences.json') as {
+    citizen_item_preferences: Array<{
+      citizen_id: string
+      impression_category: string
+      preference_multiplier: number
+      reaction_positive: string | null
+      reaction_negative: string | null
+    }>
+  }
+
+  // Upsert on (citizen_id, impression_category)
+  const rows = raw.citizen_item_preferences
+  for (const row of rows) {
+    const { error } = await supabase
+      .from('citizen_item_preferences')
+      .upsert(row, { onConflict: 'citizen_id,impression_category' })
+    if (error) {
+      console.error('  ✗ citizen_item_preferences:', error.message)
+      throw error
+    }
+  }
+  console.log(`  ✓ citizen_item_preferences: ${rows.length} rows`)
 }
 
 // ── Calendar ──────────────────────────────────────────────────────────────────
@@ -1246,6 +1302,7 @@ async function main() {
     await seedHistoricalLocations()
     await seedHistoricalItems()
     await seedCitizenItemBehaviors()
+    await seedCitizenItemPreferences()
 
     console.log('\n✅ Seed complete.\n')
   } catch (err) {

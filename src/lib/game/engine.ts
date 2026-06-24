@@ -13,7 +13,7 @@ import {
   getCitizensAtLocation, findCitizenByName, getCitizen,
   getDialogueForCitizen, getLoreForCitizen,
   findLocationByName, getItemsAtLocation, findItemByName, getItem,
-  getTownRoster,
+  getTownRoster, getItemCurrentState, filterItemsBySeason,
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
@@ -252,12 +252,30 @@ async function handleLook(
     desc += `\n\nFrom here you can go to: ${exitNames}.`
   }
 
-  // Add visible items (pass session so player-dropped items show up too)
-  const items = await getItemsAtLocation(supabase, location.id, session)
-  const visibleItems = items.filter(i => !i.requires_condition)
-  if (visibleItems.length > 0) {
-    const itemNames = visibleItems.map(i => i.name).join(', ')
-    desc += `\n\nYou notice: ${itemNames}.`
+  // Add visible items (season-filtered, state-aware, pass session for player overrides)
+  const allItems = await getItemsAtLocation(supabase, location.id, session)
+  const seasonItems = filterItemsBySeason(allItems, world.game_season)
+  const visibleItems = seasonItems.filter(i => !i.requires_condition)
+
+  // Ambient items are woven into the location description inline
+  const ambientItems = visibleItems.filter(i => i.is_ambient)
+  if (ambientItems.length > 0) {
+    const ambientDescs = ambientItems.map(i => {
+      const { description } = getItemCurrentState(i)
+      return description
+    })
+    desc += `\n\n${ambientDescs.join(' ')}`
+  }
+
+  // Interactive/takeable items listed separately so the player knows they can interact
+  const interactiveItems = visibleItems.filter(i => !i.is_ambient)
+  if (interactiveItems.length > 0) {
+    const itemEntries = interactiveItems.map(i => {
+      const { name, state } = getItemCurrentState(i)
+      const stateNote = state && state !== i.base_state ? ` *(${state})*` : ''
+      return `${name}${stateNote}`
+    })
+    desc += `\n\nYou notice: ${itemEntries.join(', ')}.`
   }
 
   // Append any notable NPC transfer narratives from arrival behaviors
@@ -873,6 +891,28 @@ async function handleUse(
   // Handle specific use cases
   if (item.id === 'perkins_alpine_honey' && targetName?.includes('mari')) {
     return handleHoneyOnMari(supabase, session, world, timeSlot)
+  }
+
+  // If the item is consumable and no specific use applies, consume it now
+  if (item.is_consumable && session.inventory.includes(item.id)) {
+    const newInventory = session.inventory.filter(id => id !== item.id)
+    const table = session.playerId ? 'player_saves' : 'guest_saves'
+    const key   = session.playerId ? 'player_id'   : 'session_token'
+    const val   = session.playerId ?? session.guestToken
+    await supabase.from(table).update({ inventory: newInventory }).eq(key, val)
+
+    // Log consumption
+    const pciKey = session.playerId ? 'player_id' : 'guest_token'
+    const pciVal = session.playerId ?? session.guestToken
+    await supabase.from('player_consumed_items').insert({
+      [pciKey]: pciVal,
+      item_id: item.id,
+    })
+
+    return {
+      text: `You use ${item.name}. ${item.lore_note ?? "It's gone now."}`,
+      inventory_update: newInventory,
+    }
   }
 
   return {
@@ -1637,16 +1677,15 @@ async function handleEleanorQuestProgress(
   return null
 }
 
-// ── GIVE (request item from NPC) ─────────────────────────────────────────────
+// ── GIVE ─────────────────────────────────────────────────────────────────────
 
 /**
- * Player asks an NPC for an item, or accepts a pending offer.
+ * Unified give handler — routes to gift-to-NPC or request-from-NPC
+ * based on command shape.
  *
- * Handles three cases:
- *   1. "accept" / "yes" with no target — accept the most recent pending offer
- *      (frontend should pass pendingOffer context via command.qualifier)
- *   2. "give me <item>" with no specific citizen — search all nearby NPCs
- *   3. "get <item> from <citizen>" — targeted request
+ * "give X to Y" / "offer X to Y"  → player gifts item to NPC
+ * "give me X" / "get X from Y"    → player requests item from NPC
+ * "accept" / "yes, take it"        → player accepts pending offer
  */
 async function handleGive(
   supabase: SupabaseClient,
@@ -1657,6 +1696,20 @@ async function handleGive(
 ): Promise<GameResponse> {
   const rawTarget = command.target?.toLowerCase() ?? ''
   const rawQualifier = command.qualifier?.toLowerCase() ?? ''
+
+  // ── Detect direction: "give X to Y" means player → NPC ───────────────────
+  // Pattern: "give <item> to <citizen>" — qualifier is the citizen, target is item
+  // We detect this when the raw command starts with "give/offer/hand/present"
+  // and the qualifier doesn't look like an encoded offer (no ':')
+  const rawCmd = command.raw.trim().toLowerCase()
+  const isGiftToNpc = /^(?:give|offer|hand|present)\s+/.test(rawCmd) &&
+    rawQualifier && !rawQualifier.includes(':') &&
+    !/^(?:give me|give .+ to me)/.test(rawCmd)
+
+  if (isGiftToNpc) {
+    // target = item name, qualifier = citizen name
+    return handleGiftToNpc(supabase, session, command, world, timeSlot)
+  }
 
   // ── Case 1: accepting a pending offer (bare "accept" / "yes, take it") ────
   // The qualifier carries "citizenId:itemId" encoded by the frontend
@@ -1758,6 +1811,143 @@ async function handleGive(
     return { text: "There's no one here who might have that." }
   }
   return { text: `Nobody here seems to have ${command.target ?? 'that'}.` }
+}
+
+// ── GIFT TO NPC ───────────────────────────────────────────────────────────────
+
+/**
+ * Player gives an item from their inventory to an NPC.
+ *
+ * Steps:
+ * 1. Find the item in inventory
+ * 2. Find the citizen at this location
+ * 3. Look up citizen's impression_category preference for this item
+ * 4. Calculate effective trust delta (impression_value * preference_multiplier)
+ * 5. Remove from inventory, add to citizen_item_holdings
+ * 6. Generate NPC reaction via Claude (using dialogue_hint from preferences)
+ * 7. Apply trust delta, log the gift
+ */
+async function handleGiftToNpc(
+  supabase: SupabaseClient,
+  session: GameSession,
+  command: ParsedCommand,
+  world: { game_date: string; game_season: string },
+  timeSlot: string
+): Promise<GameResponse> {
+  const itemQuery    = command.target?.toLowerCase() ?? ''
+  const citizenQuery = command.qualifier?.toLowerCase() ?? ''
+
+  if (!itemQuery) return { text: 'Give what?' }
+  if (!citizenQuery) return { text: 'Give it to whom?' }
+
+  // Find item in inventory
+  const carriedId = session.inventory.find(id => {
+    const normalized = id.toLowerCase().replace(/_/g, ' ')
+    return normalized.includes(itemQuery) || itemQuery.includes(normalized)
+  })
+
+  let item = carriedId ? await getItem(supabase, carriedId) : null
+
+  // Try name match if ID match failed
+  if (!item) {
+    const allCarried = await Promise.all(session.inventory.map(id => getItem(supabase, id)))
+    item = allCarried.find(i => i && i.name.toLowerCase().includes(itemQuery)) ?? null
+  }
+
+  if (!item) {
+    return { text: `You're not carrying anything called "${command.target}".` }
+  }
+
+  // Find citizen at current location
+  const citizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+  const citizen = citizens.find(c =>
+    `${c.first_name} ${c.last_name}`.toLowerCase().includes(citizenQuery) ||
+    c.first_name.toLowerCase().includes(citizenQuery) ||
+    (c.nickname?.toLowerCase() ?? '').includes(citizenQuery)
+  )
+
+  if (!citizen) {
+    const anywhere = await findCitizenByName(supabase, citizenQuery)
+    if (anywhere) {
+      return { text: `${anywhere.first_name} isn't here right now.` }
+    }
+    return { text: `There's no one called "${command.qualifier}" here.` }
+  }
+
+  // Look up this citizen's preference for this item's impression category
+  const { data: pref } = await supabase
+    .from('citizen_item_preferences')
+    .select('*')
+    .eq('citizen_id', citizen.id)
+    .eq('impression_category', item.impression_category ?? 'neutral')
+    .maybeSingle()
+
+  const multiplier = (pref?.preference_multiplier as number | null) ?? 1.0
+  const rawDelta = (item.impression_value ?? 0) * multiplier
+  // Clamp to reasonable range and round to one decimal
+  const trustDelta = Math.max(-2, Math.min(2, Math.round(rawDelta * 10) / 10))
+
+  // Pick the right reaction text
+  const liked = rawDelta >= 0
+  const reactionHint = liked
+    ? (pref?.reaction_positive as string | null)
+    : (pref?.reaction_negative as string | null)
+
+  // Generate NPC reaction via Claude if no scripted hint, or use the hint directly
+  let reactionText: string
+  if (reactionHint) {
+    reactionText = reactionHint
+  } else {
+    // Fall back to Claude-generated reaction
+    const roster = await getTownRoster(supabase)
+    const trustLevel = await getTrustLevel(supabase, session, citizen.id)
+    const giftTopic = `The player has just given you the following item as a gift: "${item.name}" (${item.description}). The item makes a ${liked ? 'positive' : 'negative'} impression (value: ${item.impression_value ?? 0}). React naturally in 1-2 sentences. Do not add quotation marks around the whole response — just write what you say or do.`
+    reactionText = await generateNpcDialogue(supabase, citizen, trustLevel, giftTopic, session, roster, [])
+  }
+
+  // Remove item from inventory
+  const newInventory = session.inventory.filter(id => id !== item!.id)
+  const saveTable = session.playerId ? 'player_saves' : 'guest_saves'
+  const saveKey   = session.playerId ? 'player_id'   : 'session_token'
+  const saveVal   = session.playerId ?? session.guestToken
+  await supabase.from(saveTable).update({ inventory: newInventory }).eq(saveKey, saveVal)
+
+  // Add to citizen's holdings
+  await supabase.from('citizen_item_holdings').upsert({
+    citizen_id: citizen.id,
+    item_id: item.id,
+    acquired_from_type: 'citizen',
+    acquired_from_id: 'player',
+    acquired_at: new Date().toISOString(),
+  }, { onConflict: 'citizen_id,item_id' })
+
+  // Apply trust delta
+  const currentTrust = await getTrustLevel(supabase, session, citizen.id)
+  const newTrust = trustDelta !== 0
+    ? await updateTrust(supabase, session, citizen.id, currentTrust, trustDelta)
+    : currentTrust
+
+  // Log the gift
+  const pgiKey = session.playerId ? 'player_id' : 'guest_token'
+  const pgiVal = session.playerId ?? session.guestToken
+  await supabase.from('player_given_items').insert({
+    [pgiKey]: pgiVal,
+    item_id: item.id,
+    citizen_id: citizen.id,
+    trust_delta: trustDelta,
+  })
+
+  const deltaNote = trustDelta > 0
+    ? `\n\n*Your relationship with ${citizen.first_name} has warmed slightly.*`
+    : trustDelta < -0.5
+    ? `\n\n*${citizen.first_name} seems less warmly disposed toward you.*`
+    : ''
+
+  return {
+    text: `You give **${item.name}** to ${citizen.first_name}.\n\n${reactionText}${deltaNote}`,
+    inventory_update: newInventory,
+    trust_update: trustDelta !== 0 ? { citizen_id: citizen.id, new_level: newTrust } : undefined,
+  }
 }
 
 // ── SOLVE ─────────────────────────────────────────────────────────────────────
