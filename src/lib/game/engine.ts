@@ -18,7 +18,7 @@ import {
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory } from './player'
-import { checkMysteryClue, handleSolveAttempt, findMysteryByInput } from './mysteries'
+import { checkMysteryClue, handleSolveAttempt, findMysteryByInput, evaluateCondition } from './mysteries'
 import {
   getTimePeriodForDate, getHistoricalLocationDescription,
   getHistoricalCitizensAt, getHistoricalItemsAt,
@@ -648,6 +648,28 @@ async function handleAsk(
 
 // ── TAKE ─────────────────────────────────────────────────────────────────────
 
+/**
+ * Returns a contextual "why can't I take this?" message based on item type.
+ * Used when can_take is false and there's no gating condition.
+ */
+function getCannotTakeMessage(item: import('../../types/game').Item): string {
+  switch (item.type) {
+    case 'examine':
+      // Statues, inscriptions, architectural features
+      return `${item.name} is fixed in place — far too large or heavy to carry.`
+    case 'research_interface':
+      return `${item.name} is part of the library's permanent collection. You can use it here.`
+    case 'readable':
+      // Plaques, guest books, framed items mounted on walls
+      return `${item.name} is fixed where it is. You can read it, but it's not yours to take.`
+    case 'clue_item':
+      // Items that belong to a location — gravestone, watercolor in archive, inscription
+      return `${item.name} belongs here. Taking it would be wrong.`
+    default:
+      return `${item.name} isn't something you can carry.`
+  }
+}
+
 async function handleTake(
   supabase: SupabaseClient,
   command: ParsedCommand,
@@ -662,7 +684,19 @@ async function handleTake(
   }
 
   if (!item.can_take) {
-    return { text: `${item.name} isn't something you can carry.` }
+    // Item has a condition — it might become takeable later
+    if (item.requires_condition) {
+      const conditionMet = await evaluateCondition(supabase, session, item.requires_condition)
+      if (conditionMet) {
+        // Condition is now met: allow the pickup even though can_take was false at seed time
+        // (This supports items that unlock through game progress)
+      } else {
+        return { text: `You can't take ${item.name} yet — you haven't earned the right to carry it.` }
+      }
+    } else {
+      // Permanently immovable — give a contextual reason based on item type
+      return { text: getCannotTakeMessage(item) }
+    }
   }
 
   if (session.inventory.includes(item.id)) {

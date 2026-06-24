@@ -43,7 +43,7 @@ const MIN_CLUES_TO_SOLVE: Record<string, number> = {
  *   "examine_statue_base"    → player has examined something at lakeside_park
  *   anything else            → default allow (graceful fallback)
  */
-async function evaluateCondition(
+export async function evaluateCondition(
   supabase: SupabaseClient,
   session: GameSession,
   condition: string | null | undefined
