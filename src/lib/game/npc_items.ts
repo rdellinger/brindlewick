@@ -273,7 +273,7 @@ async function citizenGiveToPlayer(
   // Add to player inventory
   const newInventory = [...session.inventory, itemId]
   const table = session.playerId ? 'player_saves' : 'guest_saves'
-  const key   = session.playerId ? 'player_id'   : 'session_token'
+  const key   = session.playerId ? 'player_id'   : 'guest_token'
   const val   = session.playerId ?? session.guestToken
   await supabase.from(table).update({ inventory: newInventory }).eq(key, val)
 

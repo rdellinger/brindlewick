@@ -17,7 +17,7 @@ import {
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
-import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory } from './player'
+import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory, markItemSeen } from './player'
 import { checkMysteryClue, handleSolveAttempt, findMysteryByInput, evaluateCondition } from './mysteries'
 import {
   getCitizenHoldings, getHoldingsAtLocation,
@@ -521,6 +521,7 @@ async function handleTalk(
     conversation_start: { citizenId: citizen.id, citizenName: `${citizen.first_name} ${citizen.last_name}`, priorHistory },
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizen.id, new_level: newTrust } : undefined,
     inventory_update: inventoryAfterGifts,
+    task_update: taskOffer ? true : undefined,
     pending_npc_offer: firstOffer ?? undefined,
     journal_entry: isFirstMeet ? {
       id: '',
@@ -548,6 +549,8 @@ export async function handleConversationMessage(
   playerMessage: string,
   session: GameSession
 ): Promise<GameResponse> {
+  // Local mutable copy so inventory stays accurate if the player receives items mid-conversation
+  let currentInventory = [...session.inventory]
   const world = await getWorldState(supabase)
   const timeSlot = getTimeSlot()
 
@@ -587,10 +590,61 @@ export async function handleConversationMessage(
     topic: playerMessage.slice(0, 100),
   })
 
+  // ── Detect item requests in conversation ────────────────────────────────────
+  // If the player asks to order/buy/receive something, run on_ask behaviors so
+  // the item is actually added to inventory (not just narrated by the AI).
+  let inventoryUpdate: string[] | undefined
+  const msgLower = playerMessage.toLowerCase()
+  const isItemRequest = /\b(order|buy|purchase|get|take|have|i'?d like|can i get|i'?ll have)\b/.test(msgLower)
+  if (isItemRequest) {
+    const holdings = await getCitizenHoldings(supabase, citizenId)
+    for (const item of holdings) {
+      const itemWords = item.name.toLowerCase().split(/\s+/)
+      const playerWords = msgLower.split(/\s+/)
+      const wordOverlap = itemWords.some(w => w.length > 3 && playerWords.some(p => p.includes(w) || w.includes(p)))
+      if (wordOverlap && !currentInventory.includes(item.id)) {
+        const { immediateGifts } = await processInteractionBehaviors(
+          supabase, { ...session, inventory: currentInventory }, citizenId, session.currentLocation, 'on_ask', item.id
+        )
+        if (immediateGifts.length > 0) {
+          currentInventory = [...currentInventory, item.id]
+          inventoryUpdate = currentInventory
+        }
+      }
+    }
+  }
+
+  // ── Detect task acceptance in conversation ──────────────────────────────────
+  // If the player says yes to a task, mark it in_progress so the Helping
+  // sidebar updates without requiring a fresh `talk` command.
+  let taskUpdate: boolean | undefined
+  const isAccepting = /\b(yes|sure|okay|of course|absolutely|i'?ll (help|do it)|happy to|i (can|will)|sounds good|count me in)\b/.test(msgLower)
+  if (isAccepting) {
+    const saveKey = session.playerId ? 'player_id' : 'guest_token'
+    const saveVal = session.playerId ?? session.guestToken
+    // Find available tasks from this citizen
+    const { data: availableTasks } = await supabase
+      .from('player_task_progress')
+      .select('task_id, help_tasks!inner(giver_citizen)')
+      .eq(saveKey, saveVal)
+      .eq('status', 'available')
+      .eq('help_tasks.giver_citizen', citizenId)
+    if (availableTasks?.length) {
+      await supabase
+        .from('player_task_progress')
+        .update({ status: 'in_progress', started_at: new Date().toISOString() })
+        .eq(saveKey, saveVal)
+        .in('task_id', availableTasks.map((t: { task_id: string }) => t.task_id))
+      taskUpdate = true
+    }
+  }
+
   return {
     text: response,
     conversation_end: isFarewell ? true : undefined,
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
+    inventory_update: inventoryUpdate,
+    task_update: taskUpdate,
   }
   void world; void timeSlot  // suppress unused warnings
 }
@@ -989,8 +1043,12 @@ async function handleExamine(
     text += `\n\n*${item.lore_note}*`
   }
 
+  // Persist seen state to DB so it survives across sessions and devices
+  await markItemSeen(supabase, session, item.id)
+
   return {
     text,
+    seen_item_id: item.id,
     mystery_update: item.mystery_tie
       ? await checkMysteryClue(supabase, session, item.id, item.mystery_tie)
       : undefined,

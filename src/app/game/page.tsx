@@ -63,12 +63,14 @@ interface GameState {
   upcomingEvents: Array<{ name: string; daysAway: number }>
   journalEntries: JournalEntry[]
   worldEvents: WorldEvent[]
+  seenItemIds: string[]
   tasks: Array<{
     task_id: string
     title: string
     description: string
     status: 'available' | 'in_progress' | 'completed'
     giverName: string | null
+    giverCitizenId: string | null
   }>
 }
 
@@ -114,6 +116,7 @@ function GamePageInner() {
     upcomingEvents: [],
     journalEntries: [],
     worldEvents: [],
+    seenItemIds: [],
     tasks: [],
   })
   const [isLoading, setIsLoading] = useState(false)
@@ -198,6 +201,7 @@ function GamePageInner() {
         upcomingEvents: data.upcomingEvents,
         journalEntries: data.journalEntries ?? [],
         worldEvents: data.worldEvents ?? [],
+        seenItemIds: data.seenItemIds ?? [],
         tasks: data.tasks ?? [],
       }))
     } catch {
@@ -300,8 +304,8 @@ function GamePageInner() {
         }
       }
 
-      // After any trust update, journal event, or mystery, reload sidebar data
-      if (data.trust_update || data.journal_entry || data.mystery_update) {
+      // Reload sidebar when trust, journal, mystery, inventory, or tasks change
+      if (data.trust_update || data.journal_entry || data.mystery_update || data.inventory_update || data.task_update || data.seen_item_id) {
         loadGameState(data.guestToken ?? token)
       }
 

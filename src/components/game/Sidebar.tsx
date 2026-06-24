@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 interface JournalEntry {
   id: string
   entry_type: string
@@ -46,12 +48,14 @@ interface GameState {
   upcomingEvents: Array<{ name: string; daysAway: number }>
   journalEntries: JournalEntry[]
   worldEvents: WorldEvent[]
+  seenItemIds: string[]
   tasks: Array<{
     task_id: string
     title: string
     description: string
     status: 'available' | 'in_progress' | 'completed'
     giverName: string | null
+    giverCitizenId: string | null
   }>
 }
 
@@ -146,9 +150,15 @@ function clickableRow(styles?: React.CSSProperties) {
 }
 
 export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }: Props) {
-  const { location, world, stats, upcomingEvents, inventoryItems, tasks, journalEntries, worldEvents, timePosition, hasChronoLogbook } = gameState
+  const { location, world, stats, upcomingEvents, inventoryItems, tasks, journalEntries, worldEvents, timePosition, hasChronoLogbook, seenItemIds } = gameState
 
   const activeTasks = tasks.filter(t => t.status !== 'completed')
+
+  // Seen items come from DB via gameState — persist across sessions and devices.
+  // We also keep a local optimistic set so the label updates immediately on click
+  // before the DB round-trip completes.
+  const [optimisticSeen, setOptimisticSeen] = useState<Set<string>>(new Set())
+  const seenItems = new Set([...(seenItemIds ?? []), ...optimisticSeen])
 
   const tabs: Array<{ id: 'location' | 'journal' | 'inventory' | 'tasks' | 'chronicle'; label: string; badge?: number }> = [
     { id: 'location', label: 'Here' },
@@ -325,6 +335,46 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
               </div>
             )}
 
+            {/* Items here — clickable to take or examine */}
+            {location?.items && location.items.length > 0 && (
+              <div>
+                <div
+                  className="text-xs uppercase tracking-widest mb-2"
+                  style={{ color: 'var(--soft-gray)' }}
+                >
+                  Items
+                </div>
+                <ul className="space-y-1">
+                  {location.items.map(item => {
+                    const seen = seenItems.has(item.id)
+                    return (
+                      <li
+                        key={item.id}
+                        className="text-sm flex items-center justify-between"
+                        style={clickableRow()}
+                        onClick={() => {
+                          if (item.canTake) {
+                            onCommand(`take ${item.name}`)
+                          } else {
+                            setOptimisticSeen(prev => new Set(prev).add(item.id))
+                            onCommand(`examine ${item.name}`)
+                          }
+                        }}
+                        title={item.canTake ? `Take ${item.name}` : `Examine ${item.name}`}
+                        onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(200,168,122,0.15)')}
+                        onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
+                      >
+                        <span style={{ color: 'var(--text-primary)' }}>{item.name}</span>
+                        <span style={{ color: 'var(--soft-gray)', fontSize: '0.65rem' }}>
+                          {item.canTake ? 'take ↑' : seen ? 'seen' : 'look ↗'}
+                        </span>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
+
             {/* Exits — clickable to go */}
             {location?.exits && location.exits.length > 0 && (
               <div>
@@ -473,23 +523,34 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                     key={item.id}
                     className="text-sm py-2 border-b flex items-center justify-between"
                     style={{
-                      ...clickableRow({ color: 'var(--text-primary)', borderBottom: '1px solid var(--warm-brown)', borderRadius: 0, margin: '0 -6px' }),
+                      borderBottom: '1px solid var(--warm-brown)',
                       padding: '8px 6px',
+                      margin: '0 -6px',
                     }}
-                    onClick={() => onCommand(`examine ${item.name}`)}
-                    title={`Examine ${item.name}`}
-                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(200,168,122,0.15)')}
-                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
                   >
-                    <span>{item.name}</span>
-                    <span style={{ color: 'var(--soft-gray)', fontSize: '0.7rem' }}>↗</span>
+                    <span
+                      style={{ color: 'var(--text-primary)', cursor: 'pointer' }}
+                      onClick={() => onCommand(`examine ${item.name}`)}
+                      title={`Examine ${item.name}`}
+                    >
+                      {item.name}
+                    </span>
+                    <span
+                      style={{ color: 'var(--soft-gray)', fontSize: '0.65rem', cursor: 'pointer' }}
+                      onClick={() => onCommand(`drop ${item.name}`)}
+                      title={`Drop ${item.name}`}
+                      onMouseEnter={e => ((e.target as HTMLElement).style.color = 'var(--amber)')}
+                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'var(--soft-gray)')}
+                    >
+                      drop ↓
+                    </span>
                   </li>
                 ))}
               </ul>
             )}
             {inventoryItems.length > 0 && (
               <p className="text-xs italic pt-1" style={{ color: 'var(--soft-gray)' }}>
-                Click any item to examine it.
+                Click an item to examine it · drop ↓ to set it down.
               </p>
             )}
           </div>
@@ -508,27 +569,53 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                   <li
                     key={task.task_id}
                     className="p-2 rounded"
-                    style={{ backgroundColor: 'var(--cream)' }}
+                    style={{ backgroundColor: 'var(--cream)', border: '1px solid var(--warm-brown)' }}
                   >
-                    <div
-                      className="text-sm font-medium mb-0.5"
-                      style={{ color: 'var(--deep-brown)' }}
-                    >
-                      {task.title}
-                    </div>
-                    {task.giverName && (
+                    <div className="flex items-start justify-between gap-1 mb-1">
                       <div
-                        className="text-xs mb-1 cursor-pointer"
-                        style={{ color: 'var(--amber)' }}
-                        onClick={() => onCommand(`recall ${task.giverName}`)}
-                        title={`Recall ${task.giverName}`}
+                        className="text-sm font-medium"
+                        style={{ color: 'var(--deep-brown)', lineHeight: 1.3 }}
                       >
-                        for {task.giverName} ↗
+                        {task.title}
                       </div>
-                    )}
-                    <div className="text-xs" style={{ color: 'var(--soft-gray)' }}>
+                      <span
+                        className="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                        style={{
+                          backgroundColor: task.status === 'in_progress' ? 'rgba(90,122,90,0.15)' : 'rgba(200,168,122,0.2)',
+                          color: task.status === 'in_progress' ? 'var(--moss-green)' : 'var(--amber)',
+                          fontSize: '0.6rem',
+                          fontWeight: 600,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        {task.status === 'in_progress' ? 'active' : 'offered'}
+                      </span>
+                    </div>
+                    <div className="text-xs mb-2" style={{ color: 'var(--soft-gray)', lineHeight: 1.5 }}>
                       {task.description}
                     </div>
+                    {task.giverName && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs" style={{ color: 'var(--soft-gray)' }}>for</span>
+                        <span
+                          className="text-xs cursor-pointer"
+                          style={{ color: 'var(--amber)', textDecoration: 'underline', textDecorationStyle: 'dotted' }}
+                          onClick={() => onCommand(`find ${task.giverName}`)}
+                          title={`Find ${task.giverName}`}
+                        >
+                          {task.giverName}
+                        </span>
+                        <span
+                          className="text-xs cursor-pointer ml-auto"
+                          style={{ color: 'var(--moss-green)' }}
+                          onClick={() => onCommand(`recall ${task.giverName}`)}
+                          title="Recall what you know"
+                        >
+                          recall ↗
+                        </span>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -374,6 +374,8 @@ export interface GameResponse {
   mystery_update?: { mystery_id: string; clue_found?: string; resolved?: boolean }
   trust_update?: { citizen_id: string; new_level: number }
   inventory_update?: string[]
+  task_update?: boolean     // a task was offered or completed — reload tasks sidebar
+  seen_item_id?: string     // item was examined — persist seen state to DB
   ambient?: string          // quiet background detail
   error?: string
   conversation_start?: { citizenId: string; citizenName: string; priorHistory: ConversationMessage[] }

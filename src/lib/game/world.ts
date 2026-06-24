@@ -180,11 +180,28 @@ export async function findCitizenByName(
   supabase: SupabaseClient,
   query: string
 ): Promise<Citizen | null> {
-  // Try first name match
+  const q = query.trim()
+
+  // Multi-word query: try matching first + last name separately first
+  // e.g. "Eleanor Finch-Hartwell" → first_name ILIKE %Eleanor% AND last_name ILIKE %Finch-Hartwell%
+  if (q.includes(' ')) {
+    const parts = q.split(/\s+/)
+    const firstName = parts[0]
+    const lastName = parts.slice(1).join(' ')
+    const { data: exact } = await supabase
+      .from('citizens')
+      .select('*')
+      .ilike('first_name', `%${firstName}%`)
+      .ilike('last_name', `%${lastName}%`)
+      .limit(1)
+    if (exact?.[0]) return exact[0] as Citizen
+  }
+
+  // Fall back to any-field ILIKE
   const { data } = await supabase
     .from('citizens')
     .select('*')
-    .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%,nickname.ilike.%${query}%`)
+    .or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%,nickname.ilike.%${q}%`)
     .limit(1)
 
   return (data?.[0] ?? null) as Citizen | null

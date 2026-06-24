@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '../../../../lib/supabase/server'
-import { buildGameSession, generateGuestToken } from '../../../../lib/game/player'
+import { buildGameSession, generateGuestToken, getSeenItemIds } from '../../../../lib/game/player'
 import { getLocationWithExits, getLocationDescription, getCitizensAtLocation,
          getItemsAtLocation, getWorldState, getTimeSlot, getUpcomingEvents } from '../../../../lib/game/world'
-import { getPlayerMysteryProgress } from '../../../../lib/game/mysteries'
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,7 +25,7 @@ export async function GET(request: NextRequest) {
     const citizens = await getCitizensAtLocation(
       supabase, session.currentLocation, world.game_date, timeSlot
     )
-    const items = await getItemsAtLocation(supabase, session.currentLocation)
+    const items = await getItemsAtLocation(supabase, session.currentLocation, session)
 
     const key = playerId ? 'player_id' : 'guest_token'
     const val = playerId ?? guestToken
@@ -37,13 +36,24 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq(key, val)
 
-    // Recent journal entries for sidebar (last 15)
-    const { data: journalRows } = await supabase
+    // Recent journal entries for sidebar (last 30, then deduplicate citizen_met)
+    const { data: journalRowsRaw } = await supabase
       .from('player_journal')
       .select('id, entry_type, title, content, related_id, game_date, created_at')
       .eq(key, val)
       .order('created_at', { ascending: false })
-      .limit(15)
+      .limit(30)
+
+    // Deduplicate: only show the first citizen_met per citizen (related_id), keep all others
+    const seenCitizens = new Set<string>()
+    const journalRows = (journalRowsRaw ?? []).filter(e => {
+      if (e.entry_type === 'citizen_met') {
+        const rid = e.related_id ?? e.title
+        if (seenCitizens.has(rid)) return false
+        seenCitizens.add(rid)
+      }
+      return true
+    }).slice(0, 15)
 
     // Inventory item details (preserve order)
     const inventoryItems: Array<{ id: string; name: string }> = []
@@ -71,15 +81,44 @@ export async function GET(request: NextRequest) {
     // Upcoming events for ambient dialogue
     const upcomingEvents = await getUpcomingEvents(supabase, world.game_date, 7)
 
-    // Mystery progress summary
-    const mysteries = await getPlayerMysteryProgress(supabase, session)
+    // Mystery progress summary — direct query, no join needed for counts
+    const { data: mysteryProgress } = await supabase
+      .from('player_mystery_progress')
+      .select('mystery_id, clues_found, is_resolved')
+      .eq(key, val)
 
-    // Player tasks (available + in_progress)
+    // Player tasks (available + in_progress) — two-step to avoid nested join issues
     const { data: playerTaskRows } = await supabase
       .from('player_task_progress')
-      .select('task_id, status, help_tasks(title, description, giver_citizen, citizens!help_tasks_giver_citizen_fkey(first_name, last_name))')
+      .select('task_id, status')
       .eq(key, val)
       .in('status', ['available', 'in_progress'])
+
+    const taskIds = (playerTaskRows ?? []).map((r: { task_id: string }) => r.task_id)
+    const taskDetails: Record<string, { title: string; description: string; giver_citizen: string | null }> = {}
+    const citizenNames: Record<string, string> = {}
+
+    if (taskIds.length > 0) {
+      const { data: helpTaskRows } = await supabase
+        .from('help_tasks')
+        .select('id, title, description, giver_citizen')
+        .in('id', taskIds)
+
+      for (const t of (helpTaskRows ?? []) as Array<{ id: string; title: string; description: string; giver_citizen: string | null }>) {
+        taskDetails[t.id] = t
+        if (t.giver_citizen) {
+          const { data: cit } = await supabase
+            .from('citizens')
+            .select('first_name, last_name')
+            .eq('id', t.giver_citizen)
+            .single()
+          if (cit) citizenNames[t.giver_citizen] = `${cit.first_name} ${cit.last_name}`
+        }
+      }
+    }
+
+    // Items the player has examined (persisted seen state)
+    const seenItemIds = await getSeenItemIds(supabase, session)
 
     // Citizen trust levels for current location
     const trustData: Record<string, number> = {}
@@ -130,8 +169,8 @@ export async function GET(request: NextRequest) {
       } : null,
       stats: {
         journalEntries: journalCount ?? 0,
-        mysteriesStarted: mysteries.filter(m => m.clues_found?.length > 0).length,
-        mysteriesResolved: mysteries.filter(m => m.is_resolved).length,
+        mysteriesStarted: (mysteryProgress ?? []).filter(m => Array.isArray(m.clues_found) ? m.clues_found.length > 0 : (m.clues_found != null)).length,
+        mysteriesResolved: (mysteryProgress ?? []).filter(m => m.is_resolved).length,
       },
       upcomingEvents: upcomingEvents.slice(0, 3).map(e => ({
         name: e.event.name,
@@ -147,6 +186,7 @@ export async function GET(request: NextRequest) {
         created_at: e.created_at as string,
       })),
       inventoryItems,
+      seenItemIds,
       worldEvents: (worldEventRows ?? []).map((e: Record<string, unknown>) => ({
         id: e.id as string,
         game_date: e.game_date as string,
@@ -155,16 +195,15 @@ export async function GET(request: NextRequest) {
         detail: e.detail as string | null,
         is_major: e.is_major as boolean,
       })),
-      tasks: (playerTaskRows ?? []).map((row: Record<string, unknown>) => {
-        // Supabase returns FK relations as arrays when using select with nested resources
-        const task = Array.isArray(row.help_tasks) ? row.help_tasks[0] : row.help_tasks
-        const citizen = task && Array.isArray(task.citizens) ? task.citizens[0] : task?.citizens
+      tasks: (playerTaskRows ?? []).map((row: { task_id: string; status: string }) => {
+        const detail = taskDetails[row.task_id]
         return {
-          task_id: row.task_id as string,
-          title: (task?.title as string) ?? row.task_id as string,
-          description: (task?.description as string) ?? '',
-          status: row.status as string,
-          giverName: citizen ? `${citizen.first_name} ${citizen.last_name}` : null,
+          task_id: row.task_id,
+          title: detail?.title ?? row.task_id.replace(/_/g, ' '),
+          description: detail?.description ?? '',
+          status: row.status,
+          giverName: detail?.giver_citizen ? (citizenNames[detail.giver_citizen] ?? null) : null,
+          giverCitizenId: detail?.giver_citizen ?? null,
         }
       }),
     })

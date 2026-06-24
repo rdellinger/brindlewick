@@ -255,3 +255,31 @@ export async function addJournalEntry(
     game_date: world?.game_date ?? null,
   })
 }
+
+// ── Seen Items ────────────────────────────────────────────────────────────────
+
+export async function markItemSeen(
+  supabase: SupabaseClient,
+  session: GameSession,
+  itemId: string
+): Promise<void> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+  await supabase.from('player_seen_items').upsert(
+    { [key]: val, item_id: itemId },
+    { onConflict: key === 'player_id' ? 'player_id,item_id' : 'guest_token,item_id', ignoreDuplicates: true }
+  )
+}
+
+export async function getSeenItemIds(
+  supabase: SupabaseClient,
+  session: GameSession
+): Promise<string[]> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+  const { data } = await supabase
+    .from('player_seen_items')
+    .select('item_id')
+    .eq(key, val)
+  return (data ?? []).map((r: { item_id: string }) => r.item_id)
+}
