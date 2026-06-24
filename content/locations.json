@@ -14,7 +14,6 @@
       ],
       "exits": [
         "town_hall",
-        "library",
         "millpond_row",
         "lake_street",
         "maple_row",
@@ -440,7 +439,6 @@
       "mystery_tie": "founders_hidden_room",
       "exits": [
         "finch_lane",
-        "alderman_estate",
         "founders_hidden_room",
         "hidden_garden",
         "maple_row"
@@ -470,7 +468,7 @@
       "type": "civic",
       "area": "maple_row",
       "short_desc": "The oldest standing building in Brindlewick, built by every family in the valley in a single summer in 1831.",
-      "long_desc": "The chapel is small and white, with a pointed steeple and a bell that still rings on Sundays. The interior is simple: oak pews worn smooth, plain windows (one stained-glass addition from 1912, depicting the lake at sunrise), a stone font. The register of baptisms, marriages, and burials going back to 1831 is kept in a locked box behind the altar. Reverend Prewitt, who is 71 and has been the minister here for 30 years, knows the register by heart.",
+      "long_desc": "The chapel is small and white, with a pointed steeple and a bell that still rings on Sundays. The interior is simple: oak pews worn smooth, plain windows (one stained-glass addition from 1912, depicting the lake at sunrise), a stone font. The register of baptisms, marriages, and burials going back to 1831 is kept in a locked box behind the altar. Reverend Prewitt, who is 71 and has been the minister here for 30 years, knows the register by heart. A wooden door at the rear of the chapel leads out to the churchyard.",
       "npcs_frequent": [
         "reverend_prewitt"
       ],
@@ -478,7 +476,8 @@
         "chapel_register_access"
       ],
       "exits": [
-        "maple_row"
+        "maple_row",
+        "brindlewick_cemetery"
       ]
     },
     {
@@ -493,7 +492,8 @@
         "mira_finch_gravestone"
       ],
       "exits": [
-        "st_agathas_chapel"
+        "st_agathas_chapel",
+        "maple_row"
       ]
     },
     {
@@ -502,9 +502,10 @@
       "type": "outdoor",
       "area": "copper_hill",
       "short_desc": "An older cemetery on the lower slope of Copper Hill — a dozen stones, the oldest in town.",
-      "long_desc": "Before the main cemetery was established in 1845, the earliest settlers buried their dead on the lower slope of Copper Hill. There are twelve graves here, in a small enclosure of old stone walls. The two Alderman founders, the first Hartwell, three Finches. The stones are old enough that some are hard to read. Thomas Alderman's stone, the largest, has an inscription: 'He helped. When in doubt, he helped.'",
+      "long_desc": "Before the main cemetery was established in 1845, the earliest settlers buried their dead on the lower slope of Copper Hill. There are twelve graves here, in a small enclosure of old stone walls. The two Alderman founders, the first Hartwell, three Finches. The stones are old enough that some are hard to read. Thomas Alderman's stone, the largest, has an inscription: 'He helped. When in doubt, he helped.' The old water tower is visible a short walk up the slope.",
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "water_tower"
       ]
     },
     {
@@ -597,7 +598,9 @@
       ],
       "exits": [
         "millpond_row",
-        "brindlewick_trailhead"
+        "grange_hall",
+        "brindlewick_trailhead",
+        "old_mill_ruins"
       ]
     },
     {
@@ -606,9 +609,10 @@
       "type": "outdoor",
       "area": "herons_creek",
       "short_desc": "The stone foundations and one standing wall of the mill from 1862, beside Heron's Creek.",
-      "long_desc": "The old grist mill operated until 1902 and was largely dismantled in 1930. What remains is the stone foundation, one gable end wall standing to full height, and the millrace — the channel that directed the creek into the wheel. The millrace is full of watercress and small trout. The standing wall has a faded painted advertisement on it: BRINDLEWICK MILLS — FINEST FLOUR IN THE VALLEY, the letters just legible in the right light.",
+      "long_desc": "The old grist mill operated until 1902 and was largely dismantled in 1930. What remains is the stone foundation, one gable end wall standing to full height, and the millrace — the channel that directed the creek into the wheel. The millrace is full of watercress and small trout. The standing wall has a faded painted advertisement on it: BRINDLEWICK MILLS — FINEST FLOUR IN THE VALLEY, the letters just legible in the right light. A path follows the creek bank north toward the covered bridge.",
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "covered_bridge"
       ]
     },
     {
@@ -617,9 +621,10 @@
       "type": "civic",
       "area": "copper_hill",
       "short_desc": "The old water tower on the lower slope of Copper Hill, painted white with 'BRINDLEWICK' in faded red.",
-      "long_desc": "The water tower dates from 1934, when the town's first pressurized water system was installed. It was decommissioned when a new system was built in 1989 but kept for its historical value and because 'BRINDLEWICK' in 18-inch red letters is visible from the main road and serves as a welcome sign. From its base you have a view of the town's full layout — the streets, the square, the library, the inn — and the lake beyond.",
+      "long_desc": "The water tower dates from 1934, when the town's first pressurized water system was installed. It was decommissioned when a new system was built in 1989 but kept for its historical value and because 'BRINDLEWICK' in 18-inch red letters is visible from the main road and serves as a welcome sign. From its base you have a view of the town's full layout — the streets, the square, the library, the inn — and the lake beyond. The old founders' burial ground is a short walk down the slope.",
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "founders_graves"
       ]
     },
     {
@@ -654,7 +659,8 @@
         "wardens_cabin",
         "warming_hut",
         "founders_graves",
-        "water_tower"
+        "water_tower",
+        "covered_bridge"
       ]
     },
     {
@@ -665,7 +671,8 @@
       "short_desc": "A cleared rocky ledge at 2.1 miles — the best view of Brindlewick and the valley, the lake spread below you.",
       "long_desc": "The trail opens suddenly onto a broad rocky ledge, and the view is worth every step: the full valley below, the town a cluster of white and red rooftops around the green square, the lake a long silver shape extending southward, the farms and orchards of the outskirts, and beyond them, more mountains. On clear days you can see 40 miles. There is a single bench here, installed in 1989 by the Garden Club, with a small bronze plate: 'In memory of Dorothy Webb, who came up here every birthday.'",
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "warming_hut"
       ]
     },
     {
@@ -679,7 +686,8 @@
         "clem_rourke"
       ],
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "warming_hut"
       ]
     },
     {
@@ -687,8 +695,8 @@
       "name": "The Finch Family Orchard",
       "type": "outdoor",
       "area": "outskirts",
-      "short_desc": "Twenty-odd acres of apple trees on the south slope — not officially open to the public, but no one's ever been turned away.",
-      "long_desc": "The Finch orchard has been on the south slope since 1856. Eleanor's family still owns it but leases the working operation to a neighboring farmer. In October it's extraordinary — the air sweet, the light low and golden, every tree loaded. A stone wall marks the eastern boundary. On the interior of the gate post, carved in 1856: 'A.F. planted the first tree here.' Nobody is sure who A.F. was.",
+      "short_desc": "Twenty-odd acres of apple trees on the south-facing slope of the north hill — not officially open to the public, but no one's ever been turned away.",
+      "long_desc": "The Finch orchard occupies the south-facing lower slope of the hill above town — sheltered from the north, angled toward the afternoon sun, which is why the apples have thrived here since 1856. Eleanor's family still owns it but leases the working operation to a neighboring farmer. In October it's extraordinary — the air sweet, the light low and golden, every tree loaded. A stone wall marks the eastern boundary. On the interior of the gate post, carved in 1856: 'A.F. planted the first tree here.' Nobody is sure who A.F. was.",
       "exits": [
         "millpond_row",
         "brindlewick_trailhead"
@@ -728,7 +736,9 @@
         "fletcher_grange"
       ],
       "exits": [
-        "millpond_row"
+        "millpond_row",
+        "millbrook_farm",
+        "covered_bridge"
       ]
     },
     {
@@ -836,15 +846,15 @@
       "id": "station_masters_house",
       "name": "The Station Master's House",
       "type": "historic",
-      "area": "north_edge",
-      "short_desc": "The old station master's house beside the disused railway platform — a rusty key still on a nail by the door.",
-      "long_desc": "The Station Master's House has been vacant since Gerald Hobbs left in 1923. It's owned by the town and has been debated as a restoration project for decades without resolution. The house is structurally sound but unoccupied. The railway platform beside it is an overgrown concrete slab. And on a nail by the door, as Hobbs left it, is a brass door key on a faded red ribbon, slightly greened with age.",
+      "area": "lake_street",
+      "short_desc": "The old station master's house at the south end of Lake Street, beside the disused railway platform where the valley line once terminated.",
+      "long_desc": "The Station Master's House sits at the quiet southern foot of Lake Street, where the old Mirrowell Valley Branch Line once arrived from the south. The line closed in 1923; Gerald Hobbs, the last station master, locked up and left the same week. The house has been vacant since. The railway platform beside it is an overgrown concrete slab — you can still make out the painted letters 'BRINDLEWICK' in faded black on the concrete face. And on a nail by the door, as Hobbs left it, is a brass door key on a faded red ribbon, slightly greened with age.",
       "items_present": [
         "station_masters_key"
       ],
       "mystery_tie": "station_masters_key",
       "exits": [
-        "millpond_row"
+        "lake_street"
       ]
     },
     {
@@ -917,6 +927,7 @@
         "ice_cream_cottage",
         "lakeside_park",
         "lakefront_boardwalk",
+        "station_masters_house",
         "millpond_row",
         "town_square"
       ]
@@ -976,8 +987,7 @@
       "long_desc": "Spruce Point is a twenty-minute walk east along the lake shore path. The trail is pleasant; the destination is a rocky headland where spruce trees grow at the water's edge. Looking back west, you see the town of Brindlewick reflected in the lake, and in the middle distance, the lighthouse. If the lake light is going to be visible, it's visible from here — and the angle suggests it comes from the deepest section of the lake, due south of the lighthouse.",
       "mystery_tie": "lake_light",
       "exits": [
-        "lakefront_boardwalk",
-        "brindlewick_trailhead"
+        "lakefront_boardwalk"
       ]
     },
     {
@@ -1063,7 +1073,8 @@
         "fletcher_grange"
       ],
       "exits": [
-        "millpond_row"
+        "millpond_row",
+        "grange_hall"
       ]
     },
     {
@@ -1103,7 +1114,9 @@
         "warming_hut_visitor_log"
       ],
       "exits": [
-        "brindlewick_trailhead"
+        "brindlewick_trailhead",
+        "the_lookout",
+        "wardens_cabin"
       ]
     },
     {
