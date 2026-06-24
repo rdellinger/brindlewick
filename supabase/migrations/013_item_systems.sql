@@ -36,13 +36,15 @@ alter table items
 -- Seasonal / weather availability
 alter table items
   add column if not exists season_availability  text[],        -- null = year-round; e.g. ['autumn','winter']
-  add column if not exists weather_trigger      text,          -- null = always; 'snow', 'rain'
+  add column if not exists weather_trigger      text;          -- null = always; 'snow', 'rain'
 
 -- Physical weight class (affects carry / look descriptions)
+alter table items
   add column if not exists weight_class         text not null default 'small'
     check (weight_class in ('tiny','small','medium','large','immovable'));
 
 -- Whether this item is ambient world detail (shown inline in look description, not listed separately)
+alter table items
   add column if not exists is_ambient           boolean not null default false;
 
 -- ── citizen_item_preferences ─────────────────────────────────────────────────

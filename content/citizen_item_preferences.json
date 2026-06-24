@@ -1,32 +1,23 @@
 {
   "citizen_item_preferences": [
-
-    // ── Marigold Osei (baker) ─────────────────────────────────────────────────
-    // Loves beautiful things and food; dislikes anything dirty or crude
     { "citizen_id": "marigold_osei",  "impression_category": "food",        "preference_multiplier": 2.5, "reaction_positive": "Marigold's face brightens immediately. 'Oh, this is exactly what I needed. You didn't have to, but I'm so glad you did.'", "reaction_negative": null },
     { "citizen_id": "marigold_osei",  "impression_category": "beautiful",   "preference_multiplier": 2.0, "reaction_positive": "Marigold holds it up to the light. 'It's lovely. Where did you find this?' She sets it carefully on the shelf behind the counter.", "reaction_negative": null },
     { "citizen_id": "marigold_osei",  "impression_category": "nature",      "preference_multiplier": 1.5, "reaction_positive": "Marigold smiles warmly. 'Brought in from outside. I can always tell. Thank you.'", "reaction_negative": null },
     { "citizen_id": "marigold_osei",  "impression_category": "dirty",       "preference_multiplier": -2.0, "reaction_positive": null, "reaction_negative": "Marigold's smile disappears. 'I... appreciate the thought, but I can't have that in the bakery.' She doesn't take it." },
     { "citizen_id": "marigold_osei",  "impression_category": "unpleasant",  "preference_multiplier": -1.5, "reaction_positive": null, "reaction_negative": "Marigold blinks. 'That's... kind of you. I think.' She takes it, but sets it out of sight." },
 
-    // ── Agnes Perkins (orchardist/cider maker) ────────────────────────────────
-    // Deeply practical; loves useful things and food; unmoved by beautiful but useless things
     { "citizen_id": "agnes_perkins",  "impression_category": "practical",   "preference_multiplier": 2.5, "reaction_positive": "'Now that's useful.' Agnes turns it over in her hands approvingly. 'You've got good instincts.'", "reaction_negative": null },
     { "citizen_id": "agnes_perkins",  "impression_category": "food",        "preference_multiplier": 2.0, "reaction_positive": "Agnes inspects it carefully. 'Where did this come from? Not the market — I'd have noticed.' She's pleased.", "reaction_negative": null },
     { "citizen_id": "agnes_perkins",  "impression_category": "nature",      "preference_multiplier": 1.5, "reaction_positive": "Agnes nods. 'I know what this is. Good of you to bring it.' She tucks it away.", "reaction_negative": null },
     { "citizen_id": "agnes_perkins",  "impression_category": "beautiful",   "preference_multiplier": 0.5, "reaction_positive": "'Very pretty.' Agnes says it kindly but without conviction. She's the sort of person who means it when they say they have nowhere to put things.", "reaction_negative": null },
     { "citizen_id": "agnes_perkins",  "impression_category": "dirty",       "preference_multiplier": -0.5, "reaction_positive": null, "reaction_negative": "Agnes looks at it without expression. 'I've seen worse,' she says — which, from Agnes, is almost a compliment. She takes it anyway." },
 
-    // ── Eleanor Finch-Hartwell (librarian/archivist) ──────────────────────────
-    // Loves books, history, beautiful things with meaning; wary of frivolous gifts; dislikes dirty things
     { "citizen_id": "eleanor_finch_hartwell", "impression_category": "practical",  "preference_multiplier": 2.0, "reaction_positive": "Eleanor examines it with professional interest. 'This is genuinely useful. Thank you — I'll put it to use.'", "reaction_negative": null },
     { "citizen_id": "eleanor_finch_hartwell", "impression_category": "beautiful",  "preference_multiplier": 1.8, "reaction_positive": "Eleanor is quiet for a moment. 'It's quite lovely. I don't often receive things like this.' She holds it carefully.", "reaction_negative": null },
     { "citizen_id": "eleanor_finch_hartwell", "impression_category": "pleasant",   "preference_multiplier": 1.2, "reaction_positive": "Eleanor smiles — a smaller, more private smile than most people's. 'That's thoughtful of you.'", "reaction_negative": null },
     { "citizen_id": "eleanor_finch_hartwell", "impression_category": "dirty",      "preference_multiplier": -2.5, "reaction_positive": null, "reaction_negative": "Eleanor's expression doesn't change, but something in her posture does. 'I'm afraid that's not... appropriate for the library.' She does not take it." },
     { "citizen_id": "eleanor_finch_hartwell", "impression_category": "unpleasant", "preference_multiplier": -1.5, "reaction_positive": null, "reaction_negative": "Eleanor accepts it with a measured expression. 'You're very kind,' she says, in a tone that means: I will not display this." },
 
-    // ── Constance Alderman (estate owner, formal) ─────────────────────────────
-    // Responds to quality and appropriateness; unimpressed by common things; insulted by dirt or ugliness
     { "citizen_id": "constance_alderman", "impression_category": "beautiful",  "preference_multiplier": 2.5, "reaction_positive": "Constance takes it with both hands. 'This is quite fine,' she says — and from Constance, that means something.", "reaction_negative": null },
     { "citizen_id": "constance_alderman", "impression_category": "practical",  "preference_multiplier": 1.5, "reaction_positive": "Constance nods once. 'Sensible.' She places it in her coat pocket.", "reaction_negative": null },
     { "citizen_id": "constance_alderman", "impression_category": "pleasant",   "preference_multiplier": 1.2, "reaction_positive": "Constance accepts it with composed grace. 'Thank you. That's considerate.'", "reaction_negative": null },
@@ -34,70 +25,53 @@
     { "citizen_id": "constance_alderman", "impression_category": "dirty",      "preference_multiplier": -3.0, "reaction_positive": null, "reaction_negative": "Constance's face closes. 'I beg your pardon.' She does not take it, and does not elaborate." },
     { "citizen_id": "constance_alderman", "impression_category": "ugly",       "preference_multiplier": -2.0, "reaction_positive": null, "reaction_negative": "Constance considers it for a moment. 'I won't be needing that,' she says with perfect politeness, and that is that." },
 
-    // ── Rosalind Webb (clockmaker) ────────────────────────────────────────────
-    // Loves mechanical and precise things; nature; indifferent to food; dislikes mess
     { "citizen_id": "rosalind_webb",  "impression_category": "practical",   "preference_multiplier": 2.5, "reaction_positive": "Rosalind's eyes sharpen. 'That's actually useful.' She turns it over, checking the construction. 'Good. Thank you.'", "reaction_negative": null },
     { "citizen_id": "rosalind_webb",  "impression_category": "beautiful",   "preference_multiplier": 1.5, "reaction_positive": "Rosalind tilts her head. 'Nice craftsmanship.' Coming from her, that's warm.", "reaction_negative": null },
     { "citizen_id": "rosalind_webb",  "impression_category": "nature",      "preference_multiplier": 1.2, "reaction_positive": "Rosalind holds it for a moment. 'From outside the valley?' She accepts.", "reaction_negative": null },
     { "citizen_id": "rosalind_webb",  "impression_category": "food",        "preference_multiplier": 0.6, "reaction_positive": "'I'll have it later.' Rosalind takes it, then probably forgets about it.", "reaction_negative": null },
     { "citizen_id": "rosalind_webb",  "impression_category": "dirty",       "preference_multiplier": -2.0, "reaction_positive": null, "reaction_negative": "Rosalind glances at it. 'No thank you.' She says it without cruelty but also without any ambiguity." },
 
-    // ── Clem Rourke (trail keeper) ────────────────────────────────────────────
-    // Outdoorsy, direct; loves practical things; very forgiving of dirt and nature items; dislikes fussy or useless gifts
     { "citizen_id": "clem_rourke",    "impression_category": "practical",   "preference_multiplier": 2.5, "reaction_positive": "Clem grins. 'That'll come in handy. Where'd you find it?' He pockets it immediately.", "reaction_negative": null },
     { "citizen_id": "clem_rourke",    "impression_category": "nature",      "preference_multiplier": 2.0, "reaction_positive": "Clem examines it with genuine pleasure. 'Good eye. Not many people notice this sort of thing.'", "reaction_negative": null },
     { "citizen_id": "clem_rourke",    "impression_category": "food",        "preference_multiplier": 1.5, "reaction_positive": "Clem takes it and sniffs it approvingly. 'Trail food. The best kind.' He's sincere.", "reaction_negative": null },
     { "citizen_id": "clem_rourke",    "impression_category": "dirty",       "preference_multiplier": 1.0, "reaction_positive": "Clem looks at it, then at you. 'Seen worse,' he says cheerfully. 'Seen much worse. Thanks.'", "reaction_negative": null },
     { "citizen_id": "clem_rourke",    "impression_category": "beautiful",   "preference_multiplier": 0.4, "reaction_positive": "Clem holds it politely. 'It's... nice. Sure. Thank you.' He's trying.", "reaction_negative": null },
 
-    // ── Fletcher Grange (naturalist/lake watcher) ─────────────────────────────
-    // Obsessive about the lake and natural phenomena; loves anything related to water, history, nature
     { "citizen_id": "fletcher_grange", "impression_category": "nature",     "preference_multiplier": 3.0, "reaction_positive": "Fletcher takes it with both hands. 'Remarkable. Where exactly did you find this? Elevation? Time of day?' He's already making notes.", "reaction_negative": null },
     { "citizen_id": "fletcher_grange", "impression_category": "practical",  "preference_multiplier": 1.5, "reaction_positive": "Fletcher nods seriously. 'This could be useful for the monitoring work.' He accepts.", "reaction_negative": null },
     { "citizen_id": "fletcher_grange", "impression_category": "beautiful",  "preference_multiplier": 0.8, "reaction_positive": "Fletcher blinks. 'Oh. Yes, it's — lovely. Thank you.' He's not unmoved, just more accustomed to functional beauty.", "reaction_negative": null },
     { "citizen_id": "fletcher_grange", "impression_category": "dirty",      "preference_multiplier": 0.5, "reaction_positive": "'Interesting condition,' Fletcher says, examining it with scientific detachment. 'Has it always been like this?'", "reaction_negative": null },
     { "citizen_id": "fletcher_grange", "impression_category": "food",       "preference_multiplier": 0.6, "reaction_positive": "Fletcher looks slightly startled. 'Thank you. I sometimes forget to eat, so this is... actually useful.'", "reaction_negative": null },
 
-    // ── Reverend Prewitt ──────────────────────────────────────────────────────
-    // Warm to everything sincere; dislikes anything that feels like a bribe; loves meaningful things
     { "citizen_id": "reverend_prewitt", "impression_category": "pleasant",  "preference_multiplier": 2.0, "reaction_positive": "Prewitt smiles gently. 'That's very kind of you. I'll think of you when I look at it.'", "reaction_negative": null },
     { "citizen_id": "reverend_prewitt", "impression_category": "beautiful", "preference_multiplier": 1.8, "reaction_positive": "Prewitt turns it over slowly. 'There's something in this. I'm not sure what, yet.' He thanks you genuinely.", "reaction_negative": null },
     { "citizen_id": "reverend_prewitt", "impression_category": "food",      "preference_multiplier": 1.5, "reaction_positive": "Prewitt accepts warmly. 'Generosity is its own kind of grace.' He means it.", "reaction_negative": null },
     { "citizen_id": "reverend_prewitt", "impression_category": "dirty",     "preference_multiplier": -1.0, "reaction_positive": null, "reaction_negative": "Prewitt takes it without flinching. 'I've held worse,' he says, and there's no judgment in it — but you sense it's not something he'll keep." },
     { "citizen_id": "reverend_prewitt", "impression_category": "unpleasant","preference_multiplier": -0.5, "reaction_positive": null, "reaction_negative": "Prewitt accepts it quietly. 'Thank you for thinking of me,' he says. He doesn't expand on his feelings about it." },
 
-    // ── Hettie Mossgrove (elder resident, storyteller) ────────────────────────
-    // Loves anything with history; delighted by nature and beauty; doesn't mind dirt
     { "citizen_id": "hettie_mossgrove", "impression_category": "beautiful", "preference_multiplier": 2.5, "reaction_positive": "Hettie claps her hands. 'Oh, look at that. Look at that! Sit down, I want to tell you something about it.'", "reaction_negative": null },
     { "citizen_id": "hettie_mossgrove", "impression_category": "nature",    "preference_multiplier": 2.0, "reaction_positive": "Hettie examines it with delight. 'You know, I haven't seen one of these in years. Where did you find it?'", "reaction_negative": null },
     { "citizen_id": "hettie_mossgrove", "impression_category": "pleasant",  "preference_multiplier": 1.8, "reaction_positive": "Hettie beams. 'You're very thoughtful, you know. Don't let anyone tell you otherwise.'", "reaction_negative": null },
     { "citizen_id": "hettie_mossgrove", "impression_category": "dirty",     "preference_multiplier": 0.5, "reaction_positive": "Hettie takes it without hesitation. 'A little dirt never hurt anything. Tell me where you found it.'", "reaction_negative": null },
     { "citizen_id": "hettie_mossgrove", "impression_category": "food",      "preference_multiplier": 1.2, "reaction_positive": "Hettie accepts with a pleased smile. 'I'll have a bit later, with my afternoon tea. You're very kind.'", "reaction_negative": null },
 
-    // ── Artie Pryce (antique dealer, historian) ───────────────────────────────
-    // Excited by old/rare things; values history and craftsmanship; annoyed by cheap or damaged items
     { "citizen_id": "artie_pryce",    "impression_category": "practical",  "preference_multiplier": 1.0, "reaction_positive": "Artie nods. 'Functional. Good condition.' He accepts it with the brisk appreciation of a man who values utility.", "reaction_negative": null },
     { "citizen_id": "artie_pryce",    "impression_category": "beautiful",  "preference_multiplier": 2.0, "reaction_positive": "Artie's eyes widen. 'May I?' He examines it closely, turns it over. 'Where did you get this? Do you know what this is?'", "reaction_negative": null },
     { "citizen_id": "artie_pryce",    "impression_category": "nature",     "preference_multiplier": 0.8, "reaction_positive": "'Natural specimen,' Artie notes. 'Not bad. There's actually some interest in these right now.'", "reaction_negative": null },
     { "citizen_id": "artie_pryce",    "impression_category": "dirty",      "preference_multiplier": -1.5, "reaction_positive": null, "reaction_negative": "Artie's mouth tightens slightly. 'I appreciate the thought, but I can't sell something in this condition.' He doesn't take it." },
     { "citizen_id": "artie_pryce",    "impression_category": "unpleasant", "preference_multiplier": -2.0, "reaction_positive": null, "reaction_negative": "Artie looks at it for a long moment. 'I think we'll leave that where it is,' he says with professional regret." },
 
-    // ── Dot Flowers (post office) ─────────────────────────────────────────────
-    // Cheerful, community-minded; loves anything pleasant or practical; wide tolerance
     { "citizen_id": "dot_flowers",    "impression_category": "pleasant",   "preference_multiplier": 2.0, "reaction_positive": "Dot lights up. 'Oh, how sweet! That's the nicest thing that's happened all week.' She means it, and her week is usually pretty good.", "reaction_negative": null },
     { "citizen_id": "dot_flowers",    "impression_category": "food",       "preference_multiplier": 1.8, "reaction_positive": "Dot accepts it with both hands. 'I'll have it on my break. Thank you — you're very thoughtful.'", "reaction_negative": null },
     { "citizen_id": "dot_flowers",    "impression_category": "practical",  "preference_multiplier": 1.5, "reaction_positive": "Dot beams. 'Useful! I love useful things. Thank you.'", "reaction_negative": null },
     { "citizen_id": "dot_flowers",    "impression_category": "dirty",      "preference_multiplier": -1.0, "reaction_positive": null, "reaction_negative": "Dot's smile holds but shifts slightly. 'Oh, that's... you know, I'm not sure I have anywhere to put that right now. Maybe another time?'" },
 
-    // ── Sadie Mirabel (artist, gallery) ──────────────────────────────────────
-    // Cares deeply about beauty and interesting things; forgiving of ugliness if there's art in it; dislikes bland or purely practical items
     { "citizen_id": "sadie_mirabel",  "impression_category": "beautiful",  "preference_multiplier": 3.0, "reaction_positive": "Sadie goes very still. 'Where did you find this.' It's not quite a question. She holds it at arm's length, then close. 'May I keep it?'", "reaction_negative": null },
     { "citizen_id": "sadie_mirabel",  "impression_category": "nature",     "preference_multiplier": 2.0, "reaction_positive": "Sadie examines it with genuine pleasure. 'There's something in this. I might paint it. Thank you.'", "reaction_negative": null },
     { "citizen_id": "sadie_mirabel",  "impression_category": "ugly",       "preference_multiplier": 1.5, "reaction_positive": "Sadie tilts her head. 'Well. That's interesting.' And she means it — there's something in the ugliness she finds compelling.", "reaction_negative": null },
     { "citizen_id": "sadie_mirabel",  "impression_category": "practical",  "preference_multiplier": 0.3, "reaction_positive": "'Practical,' Sadie says, in a tone that's not quite damning but is not enthusiasm either. She accepts.", "reaction_negative": null },
     { "citizen_id": "sadie_mirabel",  "impression_category": "dirty",      "preference_multiplier": 0.8, "reaction_positive": "Sadie takes it without hesitation. 'The texture's interesting. I'm not sure what I'd do with it, but I'd like to think about it.'", "reaction_negative": null },
 
-    // ── Petra Holloway (innkeeper's helper or local character) ────────────────
     { "citizen_id": "petra_holloway", "impression_category": "food",       "preference_multiplier": 2.0, "reaction_positive": "Petra grins. 'Oh, I love this. Where's it from? Never mind, I don't need to know.'", "reaction_negative": null },
     { "citizen_id": "petra_holloway", "impression_category": "pleasant",   "preference_multiplier": 1.5, "reaction_positive": "Petra takes it cheerfully. 'That's sweet of you. Very you, actually — you strike me as a thoughtful person.'", "reaction_negative": null },
     { "citizen_id": "petra_holloway", "impression_category": "dirty",      "preference_multiplier": -0.8, "reaction_positive": null, "reaction_negative": "Petra wrinkles her nose gently. 'I appreciate it, I do. But maybe keep that one for yourself?'" }

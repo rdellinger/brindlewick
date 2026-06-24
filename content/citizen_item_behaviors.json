@@ -1,10 +1,5 @@
 {
   "citizen_item_behaviors": [
-
-    // ── Agnes Perkins ─────────────────────────────────────────────────────────
-    // Agnes keeps honey at her home. She'll offer it to the player once trusted,
-    // and on tick she might bring a jar to Marigold as a peace offering.
-
     {
       "citizen_id": "agnes_perkins",
       "trigger_type": "world_tick",
@@ -46,10 +41,6 @@
       "dialogue_hint": "Agnes quietly leaves a jar of honey on the bakery counter for Marigold. An old kindness, offered without fanfare.",
       "sort_order": 10
     },
-
-    // ── Constance Alderman ────────────────────────────────────────────────────
-    // Constance holds the boathouse key until trust is high enough, then gives it.
-
     {
       "citizen_id": "constance_alderman",
       "trigger_type": "world_tick",
@@ -70,12 +61,6 @@
       "dialogue_hint": "Constance reaches into her coat pocket and produces a large iron key. 'The boathouse. South end of the lake. I think you should see what's in there.'",
       "sort_order": 0
     },
-
-    // ── Clem Rourke ──────────────────────────────────────────────────────────
-    // Clem maintains the trail. On tick, when at the warming hut, he drops
-    // firewood (if we ever add that item). For now, he carries the hut log
-    // for safekeeping on bad weather days and returns it.
-
     {
       "citizen_id": "clem_rourke",
       "trigger_type": "world_tick",
@@ -96,13 +81,6 @@
       "dialogue_hint": "Clem sets the log back where it belongs.",
       "sort_order": 0
     },
-
-    // ── Eleanor Finch-Hartwell ────────────────────────────────────────────────
-    // Eleanor knows about the partial diary. She'll mention it to the player
-    // during high-trust conversation but won't give it (it belongs to the archive).
-    // She does carry a personal copy of notes she made — if we add that item later.
-    // For now, she passes the anonymous note to a trusted citizen to deliver.
-
     {
       "citizen_id": "eleanor_finch_hartwell",
       "trigger_type": "world_tick",
@@ -123,19 +101,6 @@
       "dialogue_hint": "Eleanor leaves the note under a door at the inn, unsigned.",
       "sort_order": 10
     },
-
-    // ── Rosalind Webb ─────────────────────────────────────────────────────────
-    // Rosalind is the clocktower keeper. She carries a small toolkit when working.
-    // When at the clocktower she picks it up; when she leaves she drops it home.
-    // (Placeholder — toolkit item to be added in future content pass.)
-
-    // ── Reverend Prewitt ──────────────────────────────────────────────────────
-    // Prewitt occasionally brings items to the cemetery — flowers, small mementos.
-    // (Placeholder — future content pass.)
-
-    // ── Artie Pryce ───────────────────────────────────────────────────────────
-    // Artie runs the antique shop. He can show you the almanac if you ask.
-
     {
       "citizen_id": "artie_pryce",
       "trigger_type": "on_ask",
