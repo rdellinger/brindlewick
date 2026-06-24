@@ -206,8 +206,8 @@ function tryRegexParse(input: string): ParsedCommand | null {
         let target = extractTarget(match)
         let qualifier: string | null = null
 
-        // For 'ask', pattern may have two groups
-        if (intent === 'ask' && match[2]) {
+        // For intents with two capture groups (ask, give), extract both
+        if (match[2]) {
           qualifier = match[2].trim()
           target = match[1]?.trim() || null
         }
