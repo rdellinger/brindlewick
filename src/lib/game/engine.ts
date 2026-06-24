@@ -12,7 +12,7 @@ import {
   getWorldState, getTimeSlot, getLocationWithExits, getLocationDescription,
   getCitizensAtLocation, findCitizenByName, getCitizen,
   getDialogueForCitizen, getLoreForCitizen,
-  findLocationByName, getItemsAtLocation, findItemByName,
+  findLocationByName, getItemsAtLocation, findItemByName, getItem,
   getTownRoster,
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
@@ -50,6 +50,8 @@ export async function executeCommand(
       return handleAsk(supabase, command, session, world, timeSlot)
     case 'take':
       return handleTake(supabase, command, session)
+    case 'drop':
+      return handleDrop(supabase, command, session)
     case 'use':
       return handleUse(supabase, command, session, world, timeSlot)
     case 'examine':
@@ -177,7 +179,7 @@ async function handleLook(
 
   // Look at specific item
   if (target) {
-    const item = await findItemByName(supabase, target, session.currentLocation)
+    const item = await findItemByName(supabase, target, session.currentLocation, session)
     if (item) {
       let text = `**${item.name}**\n\n${item.description}`
       if (item.lore_note) text += `\n\n*${item.lore_note}*`
@@ -231,8 +233,8 @@ async function handleLook(
     desc += `\n\nFrom here you can go to: ${exitNames}.`
   }
 
-  // Add visible items
-  const items = await getItemsAtLocation(supabase, location.id)
+  // Add visible items (pass session so player-dropped items show up too)
+  const items = await getItemsAtLocation(supabase, location.id, session)
   const visibleItems = items.filter(i => !i.requires_condition)
   if (visibleItems.length > 0) {
     const itemNames = visibleItems.map(i => i.name).join(', ')
@@ -654,7 +656,7 @@ async function handleTake(
   const target = command.target?.toLowerCase()
   if (!target) return { text: 'What would you like to take?' }
 
-  const item = await findItemByName(supabase, target, session.currentLocation)
+  const item = await findItemByName(supabase, target, session.currentLocation, session)
   if (!item) {
     return { text: `You don't see ${command.target} here.` }
   }
@@ -675,13 +677,20 @@ async function handleTake(
 
   await supabase.from(table).update({ inventory: newInventory }).eq(key, val)
 
-  // Check if picking this item up (while at current location) completes a task
+  // If the player had previously dropped this item somewhere, clear that override
+  const pilKey = session.playerId ? 'player_id' : 'guest_token'
+  const pilVal = session.playerId ?? session.guestToken
+  await supabase.from('player_item_locations').delete()
+    .eq(pilKey, pilVal)
+    .eq('item_id', item.id)
+
+  // Check if picking this item up completes a task
   const taskCompletion = await checkTaskCompletion(supabase, session, 'visited_location', session.currentLocation)
 
   return {
     text: taskCompletion
-      ? `You pick up ${item.name}. ${item.description}\n\n${taskCompletion}`
-      : `You pick up ${item.name}. ${item.description}`,
+      ? `You pick up ${item.name}.\n\n${taskCompletion}`
+      : `You pick up **${item.name}**.`,
     inventory_update: newInventory,
     journal_entry: {
       id: '',
@@ -692,6 +701,72 @@ async function handleTake(
       game_date: null,
       created_at: new Date().toISOString(),
     },
+  }
+}
+
+// ── DROP ──────────────────────────────────────────────────────────────────────
+
+async function handleDrop(
+  supabase: SupabaseClient,
+  command: ParsedCommand,
+  session: GameSession
+): Promise<GameResponse> {
+  const target = command.target?.toLowerCase()
+  if (!target) return { text: 'What would you like to put down?' }
+
+  // Find the item in the player's inventory
+  const carriedItem = session.inventory.find(id =>
+    id.toLowerCase().replace(/_/g, ' ').includes(target) ||
+    target.includes(id.toLowerCase().replace(/_/g, ' '))
+  )
+
+  if (!carriedItem) {
+    // Try name match against full item records in inventory
+    const invItems = await Promise.all(
+      session.inventory.map(id => getItem(supabase, id))
+    )
+    const match = invItems.find(i => i && i.name.toLowerCase().includes(target))
+    if (!match) {
+      return { text: `You're not carrying anything called "${command.target}".` }
+    }
+    return dropItem(supabase, session, match)
+  }
+
+  const item = await getItem(supabase, carriedItem)
+  if (!item) return { text: `You don't seem to have that.` }
+
+  return dropItem(supabase, session, item)
+}
+
+async function dropItem(
+  supabase: SupabaseClient,
+  session: GameSession,
+  item: import('../../types/game').Item
+): Promise<GameResponse> {
+  const saveTable = session.playerId ? 'player_saves' : 'guest_saves'
+  const saveKey  = session.playerId ? 'player_id'   : 'session_token'
+  const saveVal  = session.playerId ?? session.guestToken
+
+  const pilKey = session.playerId ? 'player_id' : 'guest_token'
+  const pilVal = session.playerId ?? session.guestToken
+
+  // Remove from inventory
+  const newInventory = session.inventory.filter(id => id !== item.id)
+  await supabase.from(saveTable).update({ inventory: newInventory }).eq(saveKey, saveVal)
+
+  // Record the new location in player_item_locations
+  await supabase.from('player_item_locations').upsert({
+    [pilKey]: pilVal,
+    item_id: item.id,
+    location_id: session.currentLocation,
+    moved_at: new Date().toISOString(),
+  }, {
+    onConflict: pilKey === 'player_id' ? 'player_id,item_id' : 'guest_token,item_id',
+  })
+
+  return {
+    text: `You set down **${item.name}**.${item.lore_note ? `\n\n*${item.lore_note}*` : ''}`,
+    inventory_update: newInventory,
   }
 }
 
@@ -713,7 +788,7 @@ async function handleUse(
   const inventoryItem = session.inventory.find(id => id.includes(itemName.replace(/\s+/g, '_')))
   const item = inventoryItem
     ? await supabase.from('items').select('*').eq('id', inventoryItem).single().then(r => r.data)
-    : await findItemByName(supabase, itemName, session.currentLocation)
+    : await findItemByName(supabase, itemName, session.currentLocation, session)
 
   if (!item) {
     return { text: `You don't have ${command.target}.` }

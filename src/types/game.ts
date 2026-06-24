@@ -311,6 +311,7 @@ export type CommandIntent =
   | 'talk'           // initiate conversation with citizen
   | 'ask'            // ask citizen about a topic
   | 'take'           // pick up item
+  | 'drop'           // put down / leave an item
   | 'use'            // use item on something
   | 'examine'        // look closely at specific thing
   | 'research'       // use library research system

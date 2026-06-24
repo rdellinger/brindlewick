@@ -7,7 +7,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   Location, Citizen, Item, WorldState, CitizenDialogue,
-  CitizenLore, MysteryClue, HelpTask, CalendarEvent,
+  CitizenLore, MysteryClue, HelpTask, CalendarEvent, GameSession,
 } from '../../types/game'
 
 // ── World State ──────────────────────────────────────────────────────────────
@@ -238,16 +238,70 @@ export async function getLoreForCitizen(
 
 // ── Items ────────────────────────────────────────────────────────────────────
 
+/**
+ * Return items visible at a location for a given player.
+ *
+ * Merges two sources:
+ *   1. Items whose canonical location_id = locationId, MINUS any the player
+ *      has picked up (inventory) or moved elsewhere (player_item_locations).
+ *   2. Items the player has explicitly dropped here (player_item_locations
+ *      rows where location_id = locationId), MINUS any now back in inventory.
+ *
+ * When called without a session (e.g. admin / seed tooling) falls back to
+ * the simple canonical-location query.
+ */
 export async function getItemsAtLocation(
   supabase: SupabaseClient,
-  locationId: string
+  locationId: string,
+  session?: GameSession
 ): Promise<Item[]> {
-  const { data } = await supabase
-    .from('items')
-    .select('*')
-    .eq('location_id', locationId)
+  if (!session) {
+    // No session — return canonical items only (backward compat)
+    const { data } = await supabase.from('items').select('*').eq('location_id', locationId)
+    return (data ?? []) as Item[]
+  }
 
-  return (data ?? []) as Item[]
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+  const carriedIds = session.inventory  // items the player is currently holding
+
+  // Fetch all player-specific overrides for this player
+  const { data: overrides } = await supabase
+    .from('player_item_locations')
+    .select('item_id, location_id')
+    .eq(key, val)
+
+  const overriddenItemIds = (overrides ?? []).map((r: { item_id: string }) => r.item_id)
+  const droppedHereIds = (overrides ?? [])
+    .filter((r: { location_id: string }) => r.location_id === locationId)
+    .map((r: { item_id: string }) => r.item_id)
+    .filter(id => !carriedIds.includes(id))
+
+  // Build the canonical-location query
+  let canonicalQuery = supabase.from('items').select('*').eq('location_id', locationId)
+
+  // Exclude items the player is carrying
+  if (carriedIds.length > 0) {
+    canonicalQuery = canonicalQuery.not('id', 'in', `(${carriedIds.map(id => `"${id}"`).join(',')})`)
+  }
+  // Exclude items this player has moved somewhere (we'll add them back if they're here)
+  if (overriddenItemIds.length > 0) {
+    canonicalQuery = canonicalQuery.not('id', 'in', `(${overriddenItemIds.map(id => `"${id}"`).join(',')})`)
+  }
+
+  const { data: canonicalItems } = await canonicalQuery
+
+  // Fetch items the player dropped here (if any)
+  let droppedItems: Item[] = []
+  if (droppedHereIds.length > 0) {
+    const { data } = await supabase
+      .from('items')
+      .select('*')
+      .in('id', droppedHereIds)
+    droppedItems = (data ?? []) as Item[]
+  }
+
+  return [...((canonicalItems ?? []) as Item[]), ...droppedItems]
 }
 
 export async function getItem(
@@ -262,17 +316,33 @@ export async function getItem(
   return (data ?? null) as Item | null
 }
 
+/**
+ * Find an item by name. When a session is supplied, also considers items the
+ * player has dropped at the given location (player_item_locations).
+ */
 export async function findItemByName(
   supabase: SupabaseClient,
   query: string,
-  locationId?: string
+  locationId?: string,
+  session?: GameSession
 ): Promise<Item | null> {
+  // If we have a session + locationId, build the full visible item list and search by name
+  if (session && locationId) {
+    const visible = await getItemsAtLocation(supabase, locationId, session)
+    const lq = query.toLowerCase()
+    const match = visible.find(i => i.name.toLowerCase().includes(lq))
+    if (match) return match
+    // If not found in visible set, fall through to broader search below
+    // (handles examine/look at items not necessarily at this location)
+  }
+
+  // Broader search — useful for examine/look without location context
   let queryBuilder = supabase
     .from('items')
     .select('*')
     .ilike('name', `%${query}%`)
 
-  if (locationId) {
+  if (locationId && !session) {
     queryBuilder = queryBuilder.eq('location_id', locationId)
   }
 
