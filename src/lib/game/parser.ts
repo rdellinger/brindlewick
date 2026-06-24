@@ -113,6 +113,12 @@ const INTENT_PATTERNS: Array<{ intent: CommandIntent; patterns: RegExp[] }> = [
     ],
   },
   {
+    intent: 'restart_game',
+    patterns: [
+      /^(?:restart(?: game)?|reset(?: game)?|start over|new game|wipe(?: progress)?|delete(?: my)? progress|clear(?: my)? save)$/i,
+    ],
+  },
+  {
     intent: 'help',
     patterns: [
       /^(?:help|commands|how do i|what can i do|huh\?|what now|hint[s]?)$/i,
@@ -230,7 +236,7 @@ function tryRegexParse(input: string): ParsedCommand | null {
 const SYSTEM_PROMPT = `You are the command parser for a cozy text adventure game set in the small mountain town of Brindlewick.
 Your job is to identify the player's intent from natural language input.
 
-Valid intents: go, look, talk, ask, take, drop, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, solve, give, accept_task, stop_helping, unknown
+Valid intents: go, look, talk, ask, take, drop, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, solve, give, accept_task, stop_helping, restart_game, unknown
 
 Respond with ONLY valid JSON in this exact shape:
 {"intent":"<intent>","target":"<target or null>","qualifier":"<qualifier or null>","confidence":<0.0-1.0>}

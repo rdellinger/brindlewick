@@ -127,6 +127,7 @@ function GamePageInner() {
     citizenName: string
     history: ConversationMessage[]
   } | null>(null)
+  const [pendingRestart, setPendingRestart] = useState(false)
   const outputEndRef = useRef<HTMLDivElement>(null)
 
   // Initialize: check auth, load guest token, run migration if just logged in
@@ -222,6 +223,35 @@ function GamePageInner() {
       isNew: true,
     }
     setOutput(prev => [...prev, commandEntry])
+
+    // ── Restart confirmation intercept ──────────────────────────────────────
+    if (pendingRestart) {
+      setPendingRestart(false)
+      if (input.trim().toLowerCase() === 'i understand') {
+        setIsLoading(true)
+        try {
+          const res = await fetch('/api/game/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ guestToken: token }),
+          })
+          if (res.ok) {
+            localStorage.removeItem('brindlewick_guest_token')
+            window.location.href = '/'
+          } else {
+            setOutput(prev => [...prev, { id: makeId(), text: 'Something went wrong. Your save was not deleted.', type: 'system', isNew: true }])
+          }
+        } finally {
+          setIsLoading(false)
+        }
+        return
+      } else {
+        setOutput(prev => [...prev, { id: makeId(), text: '*Restart cancelled. Your progress is safe.*', type: 'system', isNew: true }])
+        setIsLoading(false)
+        return
+      }
+    }
+
     setIsLoading(true)
 
     try {
@@ -281,6 +311,11 @@ function GamePageInner() {
         } : null)
       } else if (data.conversation_end) {
         setActiveConversation(null)
+      }
+
+      // Set pending restart flag if engine asked for confirmation
+      if (data.restart_pending) {
+        setPendingRestart(true)
       }
 
       // Update game state

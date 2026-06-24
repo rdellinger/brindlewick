@@ -88,6 +88,8 @@ export async function executeCommand(
       return handleAcceptTask(supabase, command, session)
     case 'stop_helping':
       return handleStopHelping(supabase, command, session)
+    case 'restart_game':
+      return handleRestartGame()
     default:
       return handleUnknown(command)
   }
@@ -2488,6 +2490,15 @@ async function handleStopHelping(
   return {
     text: `You set aside the task${who ? ` for ${who}` : ''}. You can always pick it up again later by talking to them.`,
     task_update: true,
+  }
+}
+
+// ── RESTART GAME ─────────────────────────────────────────────────────────────
+
+function handleRestartGame(): GameResponse {
+  return {
+    text: `⚠️ **Are you sure you want to restart?**\n\nThis will permanently erase all your progress — your inventory, relationships, journal entries, discoveries, and tasks. There is no undo.\n\nType **I understand** to confirm and wipe your save, or anything else to cancel.`,
+    restart_pending: true,
   }
 }
 

@@ -350,6 +350,7 @@ export type CommandIntent =
   | 'give'           // ask an NPC to give you an item / accept an offer
   | 'accept_task'    // player accepts a help task offered by an NPC
   | 'stop_helping'   // player abandons an in-progress help task
+  | 'restart_game'   // player wants to wipe progress and start over
   | 'unknown'        // couldn't parse
 
 // ── World Events ─────────────────────────────────────────────────────────────
@@ -389,4 +390,5 @@ export interface GameResponse {
     itemName: string
     dialogueHint: string
   }
+  restart_pending?: boolean  // player asked to restart — waiting for "I understand" confirmation
 }
