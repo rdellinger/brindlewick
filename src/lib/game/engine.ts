@@ -20,6 +20,10 @@ import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory } from './player'
 import { checkMysteryClue, handleSolveAttempt, findMysteryByInput, evaluateCondition } from './mysteries'
 import {
+  getCitizenHoldings, getHoldingsAtLocation,
+  processArrivalBehaviors, processInteractionBehaviors, acceptNpcOffer,
+} from './npc_items'
+import {
   getTimePeriodForDate, getHistoricalLocationDescription,
   getHistoricalCitizensAt, getHistoricalItemsAt,
   findHistoricalCitizenByName, findHistoricalItemByName,
@@ -78,6 +82,8 @@ export async function executeCommand(
       return handleReturnPresent(supabase, session, world, timeSlot)
     case 'solve':
       return handleSolve(supabase, command, session)
+    case 'give':
+      return handleGive(supabase, command, session, world, timeSlot)
     default:
       return handleUnknown(command)
   }
@@ -220,11 +226,24 @@ async function handleLook(
   const { location, exits } = result
   let desc = getLocationDescription(location, world.game_season, timeSlot)
 
-  // Add citizens present
+  // Run on_arrival NPC item behaviors (silent world state updates)
+  const arrivalNarratives = await processArrivalBehaviors(
+    supabase, session, location.id, world.game_date, timeSlot
+  )
+
+  // Add citizens present, with any items they're visibly carrying
   const citizens = await getCitizensAtLocation(supabase, location.id, world.game_date, timeSlot)
+  const npcHoldings = await getHoldingsAtLocation(supabase, location.id, world.game_date, timeSlot)
+
   if (citizens.length > 0) {
-    const names = citizens.map(c => c.nickname ?? c.first_name).join(', ')
-    desc += `\n\nPresent: ${names}.`
+    const citizenDescs = citizens.map(c => {
+      const held = npcHoldings.get(c.id) ?? []
+      const name = c.nickname ?? c.first_name
+      return held.length > 0
+        ? `${name} (carrying: ${held.map(i => i.name).join(', ')})`
+        : name
+    })
+    desc += `\n\nPresent: ${citizenDescs.join(', ')}.`
   }
 
   // Add visible exits
@@ -239,6 +258,11 @@ async function handleLook(
   if (visibleItems.length > 0) {
     const itemNames = visibleItems.map(i => i.name).join(', ')
     desc += `\n\nYou notice: ${itemNames}.`
+  }
+
+  // Append any notable NPC transfer narratives from arrival behaviors
+  if (arrivalNarratives.length > 0) {
+    desc += `\n\n*${arrivalNarratives.join(' ')}*`
   }
 
   return {
@@ -450,6 +474,16 @@ async function handleTalk(
     fullText += `\n\n${taskOffer}`
   }
 
+  // Process on_talk NPC item behaviors (offers and immediate gifts)
+  const { offers, immediateGifts } = await processInteractionBehaviors(
+    supabase, session, citizen.id, session.currentLocation, 'on_talk'
+  )
+
+  // Append immediate gift narrative
+  for (const gift of immediateGifts) {
+    if (gift.narrativeHint) fullText += `\n\n${gift.narrativeHint}`
+  }
+
   // Log interaction for memory
   await logInteraction(supabase, session, {
     citizen_id: citizen.id,
@@ -458,10 +492,18 @@ async function handleTalk(
     topic: 'greeting',
   })
 
+  // First offer takes precedence (rare for multiple to fire at once)
+  const firstOffer = offers[0]
+  const inventoryAfterGifts = immediateGifts.length > 0
+    ? [...session.inventory, ...immediateGifts.map(g => g.item!.id)]
+    : undefined
+
   return {
     text: fullText,
     conversation_start: { citizenId: citizen.id, citizenName: `${citizen.first_name} ${citizen.last_name}`, priorHistory },
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizen.id, new_level: newTrust } : undefined,
+    inventory_update: inventoryAfterGifts,
+    pending_npc_offer: firstOffer ?? undefined,
     journal_entry: isFirstMeet ? {
       id: '',
       entry_type: 'citizen_met',
@@ -1593,6 +1635,129 @@ async function handleEleanorQuestProgress(
   }
 
   return null
+}
+
+// ── GIVE (request item from NPC) ─────────────────────────────────────────────
+
+/**
+ * Player asks an NPC for an item, or accepts a pending offer.
+ *
+ * Handles three cases:
+ *   1. "accept" / "yes" with no target — accept the most recent pending offer
+ *      (frontend should pass pendingOffer context via command.qualifier)
+ *   2. "give me <item>" with no specific citizen — search all nearby NPCs
+ *   3. "get <item> from <citizen>" — targeted request
+ */
+async function handleGive(
+  supabase: SupabaseClient,
+  command: ParsedCommand,
+  session: GameSession,
+  world: { game_date: string; game_season: string },
+  timeSlot: string
+): Promise<GameResponse> {
+  const rawTarget = command.target?.toLowerCase() ?? ''
+  const rawQualifier = command.qualifier?.toLowerCase() ?? ''
+
+  // ── Case 1: accepting a pending offer (bare "accept" / "yes, take it") ────
+  // The qualifier carries "citizenId:itemId" encoded by the frontend
+  if (!rawTarget || /^(?:accept|yes|take it)/.test(command.raw.trim().toLowerCase())) {
+    if (rawQualifier && rawQualifier.includes(':')) {
+      const [citizenId, itemId] = rawQualifier.split(':')
+      const result = await acceptNpcOffer(supabase, session, citizenId, itemId)
+      if (result.transferred && result.item) {
+        const newInventory = [...session.inventory, result.item.id]
+        return {
+          text: `You take **${result.item.name}**.`,
+          inventory_update: newInventory,
+        }
+      }
+      return { text: "The offer seems to have passed — they're no longer holding that." }
+    }
+    return { text: "Accept what? Talk to someone first to see what they might offer you." }
+  }
+
+  // ── Case 2 & 3: find the item + citizen ──────────────────────────────────
+  // Determine which citizen is being addressed
+  let targetCitizenId: string | null = null
+  let itemQuery = rawTarget
+
+  if (rawQualifier) {
+    // "get <item> from <citizen>" → qualifier is the citizen name
+    const citizen = await findCitizenByName(supabase, rawQualifier)
+    if (citizen) targetCitizenId = citizen.id
+    // item query stays as rawTarget
+  }
+
+  // Get citizens at current location
+  const citizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+
+  // If citizen specified, verify they're here
+  if (targetCitizenId) {
+    const isHere = citizens.some(c => c.id === targetCitizenId)
+    if (!isHere) {
+      const citizen = await getCitizen(supabase, targetCitizenId)
+      return {
+        text: `${citizen?.first_name ?? 'That person'} isn't here right now.`,
+      }
+    }
+  }
+
+  // Search for the item among NPCs at this location
+  const candidateCitizenIds = targetCitizenId
+    ? [targetCitizenId]
+    : citizens.map(c => c.id)
+
+  for (const citizenId of candidateCitizenIds) {
+    const holdings = await getCitizenHoldings(supabase, citizenId)
+    const match = holdings.find(i =>
+      i.name.toLowerCase().includes(itemQuery) ||
+      i.id.toLowerCase().includes(itemQuery.replace(/\s+/g, '_'))
+    )
+
+    if (match) {
+      // Found the item — try on_ask behaviors
+      const { offers, immediateGifts } = await processInteractionBehaviors(
+        supabase, session, citizenId, session.currentLocation, 'on_ask', match.id
+      )
+
+      if (immediateGifts.length > 0) {
+        const gift = immediateGifts[0]
+        const newInventory = [...session.inventory, match.id]
+        return {
+          text: gift.narrativeHint ?? `You receive **${match.name}**.`,
+          inventory_update: newInventory,
+          journal_entry: {
+            id: '',
+            entry_type: 'item_found',
+            title: `Received: ${match.name}`,
+            content: match.description,
+            related_id: match.id,
+            game_date: world.game_date,
+            created_at: new Date().toISOString(),
+          },
+        }
+      }
+
+      if (offers.length > 0) {
+        return {
+          text: offers[0].dialogueHint,
+          pending_npc_offer: offers[0],
+        }
+      }
+
+      // NPC has the item but no behavior allows giving it
+      const citizen = await getCitizen(supabase, citizenId)
+      return {
+        text: `${citizen?.first_name ?? 'They'} doesn't seem willing to part with ${match.name} right now.`,
+      }
+    }
+  }
+
+  // Item not found on any NPC here
+  if (citizens.length === 0) {
+    return { text: "There's no one here who might have that." }
+  }
+  return { text: `Nobody here seems to have ${command.target ?? 'that'}.` }
 }
 
 // ── SOLVE ─────────────────────────────────────────────────────────────────────

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminSupabaseClient } from '@/lib/supabase/server'
+import { processWorldTickBehaviors } from '@/lib/game/npc_items'
 
 /**
  * Called by Vercel Cron at midnight UTC every day.
@@ -37,7 +38,15 @@ export async function POST(request: NextRequest) {
 
   console.log('[cron/advance-world] Advanced to:', world?.game_date, world?.game_season)
 
-  // 2. Generate a world event for today
+  // 2. Process NPC item behaviors (world tick)
+  try {
+    await processWorldTickBehaviors(supabase)
+  } catch (npcErr) {
+    // Non-fatal
+    console.error('[cron/advance-world] NPC item tick failed:', npcErr)
+  }
+
+  // 3. Generate a world event for today
   if (world?.game_date) {
     try {
       await generateDailyWorldEvent(supabase, world.game_date, world.game_season, world.day_of_week)

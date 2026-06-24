@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     let response
     if (activeCitizenId && conversationHistory) {
       // Quick check: if the player is trying to navigate or leave, fall through to normal parsing
-      const looksLikeNavigation = /^(go|walk|move|head|travel|look|examine|bye|goodbye|farewell|see you|leave|solve|deduce|figure out|i think i|i've figured|i've solved)\b/i.test(input.trim())
+      const looksLikeNavigation = /^(go|walk|move|head|travel|look|examine|bye|goodbye|farewell|see you|leave|solve|deduce|figure out|i think i|i've figured|i've solved|give me|can i have|accept|take it)\b/i.test(input.trim())
       if (!looksLikeNavigation) {
         response = await handleConversationMessage(
           supabase,

@@ -1182,6 +1182,48 @@ async function seedHistoricalItems() {
   await upsert('historical_items', items)
 }
 
+// ── Citizen Item Behaviors ────────────────────────────────────────────────────
+
+async function seedCitizenItemBehaviors() {
+  console.log('\nSeeding citizen item behaviors…')
+
+  const raw = readJSON('citizen_item_behaviors.json') as {
+    citizen_item_behaviors: Array<{
+      citizen_id: string
+      trigger_type: string
+      trigger_condition: string | null
+      action_type: string
+      item_id: string
+      target_citizen_id?: string | null
+      once_only: boolean
+      dialogue_hint: string | null
+      sort_order?: number
+    }>
+  }
+
+  // Clear and re-seed so edits to the JSON are always reflected
+  await supabase.from('citizen_item_behaviors').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+
+  const rows = raw.citizen_item_behaviors.map(b => ({
+    citizen_id:       b.citizen_id,
+    trigger_type:     b.trigger_type,
+    trigger_condition: b.trigger_condition ?? null,
+    action_type:      b.action_type,
+    item_id:          b.item_id,
+    target_citizen_id: b.target_citizen_id ?? null,
+    once_only:        b.once_only,
+    dialogue_hint:    b.dialogue_hint ?? null,
+    sort_order:       b.sort_order ?? 0,
+  }))
+
+  const { error } = await supabase.from('citizen_item_behaviors').insert(rows)
+  if (error) {
+    console.error('  ✗ citizen_item_behaviors:', error.message)
+    throw error
+  }
+  console.log(`  ✓ citizen_item_behaviors: ${rows.length} rows`)
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -1203,6 +1245,7 @@ async function main() {
     await seedHistoricalCitizens()
     await seedHistoricalLocations()
     await seedHistoricalItems()
+    await seedCitizenItemBehaviors()
 
     console.log('\n✅ Seed complete.\n')
   } catch (err) {

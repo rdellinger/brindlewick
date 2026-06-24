@@ -1,0 +1,150 @@
+{
+  "citizen_item_behaviors": [
+
+    // ── Agnes Perkins ─────────────────────────────────────────────────────────
+    // Agnes keeps honey at her home. She'll offer it to the player once trusted,
+    // and on tick she might bring a jar to Marigold as a peace offering.
+
+    {
+      "citizen_id": "agnes_perkins",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:perkins_cider_house",
+      "action_type": "pick_up",
+      "item_id": "perkins_alpine_honey",
+      "once_only": false,
+      "dialogue_hint": "Agnes takes a jar of her alpine honey from the shelf.",
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "agnes_perkins",
+      "trigger_type": "on_talk",
+      "trigger_condition": "trust >= 3",
+      "action_type": "offer_to_player",
+      "item_id": "perkins_alpine_honey",
+      "once_only": true,
+      "dialogue_hint": "Agnes holds out the small honey jar. 'Marigold's been asking after this. Would you mind taking it over?'",
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "agnes_perkins",
+      "trigger_type": "on_ask",
+      "trigger_condition": "holding:perkins_alpine_honey",
+      "action_type": "give_to_player",
+      "item_id": "perkins_alpine_honey",
+      "once_only": true,
+      "dialogue_hint": "Agnes nods and presses the honey into your hands. 'Tell her it's from the high meadow. She'll know.'",
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "agnes_perkins",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:copper_kettle_bakery",
+      "action_type": "give_to_citizen",
+      "item_id": "perkins_alpine_honey",
+      "target_citizen_id": "marigold_osei",
+      "once_only": true,
+      "dialogue_hint": "Agnes quietly leaves a jar of honey on the bakery counter for Marigold. An old kindness, offered without fanfare.",
+      "sort_order": 10
+    },
+
+    // ── Constance Alderman ────────────────────────────────────────────────────
+    // Constance holds the boathouse key until trust is high enough, then gives it.
+
+    {
+      "citizen_id": "constance_alderman",
+      "trigger_type": "world_tick",
+      "trigger_condition": null,
+      "action_type": "pick_up",
+      "item_id": "boathouse_key",
+      "once_only": false,
+      "dialogue_hint": null,
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "constance_alderman",
+      "trigger_type": "on_talk",
+      "trigger_condition": "trust >= 4",
+      "action_type": "give_to_player",
+      "item_id": "boathouse_key",
+      "once_only": true,
+      "dialogue_hint": "Constance reaches into her coat pocket and produces a large iron key. 'The boathouse. South end of the lake. I think you should see what's in there.'",
+      "sort_order": 0
+    },
+
+    // ── Clem Rourke ──────────────────────────────────────────────────────────
+    // Clem maintains the trail. On tick, when at the warming hut, he drops
+    // firewood (if we ever add that item). For now, he carries the hut log
+    // for safekeeping on bad weather days and returns it.
+
+    {
+      "citizen_id": "clem_rourke",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:warming_hut",
+      "action_type": "pick_up",
+      "item_id": "warming_hut_visitor_log",
+      "once_only": false,
+      "dialogue_hint": "Clem tucks the warming hut log under his arm to keep it dry.",
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "clem_rourke",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:brindlewick_trailhead",
+      "action_type": "drop",
+      "item_id": "warming_hut_visitor_log",
+      "once_only": false,
+      "dialogue_hint": "Clem sets the log back where it belongs.",
+      "sort_order": 0
+    },
+
+    // ── Eleanor Finch-Hartwell ────────────────────────────────────────────────
+    // Eleanor knows about the partial diary. She'll mention it to the player
+    // during high-trust conversation but won't give it (it belongs to the archive).
+    // She does carry a personal copy of notes she made — if we add that item later.
+    // For now, she passes the anonymous note to a trusted citizen to deliver.
+
+    {
+      "citizen_id": "eleanor_finch_hartwell",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:library",
+      "action_type": "pick_up",
+      "item_id": "anonymous_note",
+      "once_only": true,
+      "dialogue_hint": "Eleanor slips a small folded note into her pocket.",
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "eleanor_finch_hartwell",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:lantern_post_inn",
+      "action_type": "drop",
+      "item_id": "anonymous_note",
+      "once_only": true,
+      "dialogue_hint": "Eleanor leaves the note under a door at the inn, unsigned.",
+      "sort_order": 10
+    },
+
+    // ── Rosalind Webb ─────────────────────────────────────────────────────────
+    // Rosalind is the clocktower keeper. She carries a small toolkit when working.
+    // When at the clocktower she picks it up; when she leaves she drops it home.
+    // (Placeholder — toolkit item to be added in future content pass.)
+
+    // ── Reverend Prewitt ──────────────────────────────────────────────────────
+    // Prewitt occasionally brings items to the cemetery — flowers, small mementos.
+    // (Placeholder — future content pass.)
+
+    // ── Artie Pryce ───────────────────────────────────────────────────────────
+    // Artie runs the antique shop. He can show you the almanac if you ask.
+
+    {
+      "citizen_id": "artie_pryce",
+      "trigger_type": "on_ask",
+      "trigger_condition": null,
+      "action_type": "offer_to_player",
+      "item_id": "antique_almanac_1879",
+      "once_only": false,
+      "dialogue_hint": "Artie retrieves the almanac from behind the counter. 'Four dollars. Annotated by someone who really watched the lake.'",
+      "sort_order": 0
+    }
+  ]
+}

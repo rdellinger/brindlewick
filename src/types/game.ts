@@ -325,6 +325,7 @@ export type CommandIntent =
   | 'travel'         // travel to a historical date
   | 'return_present' // return to the present from historical travel
   | 'solve'          // attempt to solve / deduce a mystery
+  | 'give'           // ask an NPC to give you an item / accept an offer
   | 'unknown'        // couldn't parse
 
 // ── World Events ─────────────────────────────────────────────────────────────
@@ -355,4 +356,11 @@ export interface GameResponse {
   error?: string
   conversation_start?: { citizenId: string; citizenName: string; priorHistory: ConversationMessage[] }
   conversation_end?: boolean
+  pending_npc_offer?: {     // NPC is offering an item — player must accept or decline
+    citizenId: string
+    citizenName: string
+    itemId: string
+    itemName: string
+    dialogueHint: string
+  }
 }
