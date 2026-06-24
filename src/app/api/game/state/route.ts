@@ -87,12 +87,12 @@ export async function GET(request: NextRequest) {
       .select('mystery_id, clues_found, is_resolved')
       .eq(key, val)
 
-    // Player tasks (available + in_progress) — two-step to avoid nested join issues
+    // Player tasks (in_progress only — 'offered' tasks are not shown in the tab)
     const { data: playerTaskRows } = await supabase
       .from('player_task_progress')
       .select('task_id, status')
       .eq(key, val)
-      .in('status', ['available', 'in_progress'])
+      .eq('status', 'in_progress')
 
     const taskIds = (playerTaskRows ?? []).map((r: { task_id: string }) => r.task_id)
     const taskDetails: Record<string, { title: string; description: string; giver_citizen: string | null }> = {}

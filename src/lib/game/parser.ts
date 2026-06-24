@@ -70,7 +70,7 @@ const INTENT_PATTERNS: Array<{ intent: CommandIntent; patterns: RegExp[] }> = [
   {
     intent: 'use',
     patterns: [
-      /^(?:use|apply|give|hand|show|offer)\s+(?:the\s+)?(.+?)(?:\s+(?:on|to|with|at)\s+(.+))?$/i,
+      /^(?:use|apply|show)\s+(?:the\s+)?(.+?)(?:\s+(?:on|to|with|at)\s+(.+))?$/i,
     ],
   },
   {
@@ -98,9 +98,24 @@ const INTENT_PATTERNS: Array<{ intent: CommandIntent; patterns: RegExp[] }> = [
     ],
   },
   {
+    // Must come BEFORE 'help' — "help [name]" means accept a task, not show commands
+    intent: 'accept_task',
+    patterns: [
+      /^(?:help|i(?:'ll)? help|sure[,.]?\s*i(?:'ll)? help|yes[,.]?\s*i(?:'ll)? help)\s+(.+)/i,
+      /^(?:accept|take on|i(?:'ll)? do it)\s+(.+)/i,
+    ],
+  },
+  {
+    intent: 'stop_helping',
+    patterns: [
+      /^(?:stop helping|stop\s+(?:the\s+)?task|abandon\s+(?:task|helping)|cancel\s+(?:task|helping))(?:\s+(.+))?$/i,
+      /^(?:i\s+(?:can't|cannot|won't|don't want to)\s+help)(?:\s+(.+))?$/i,
+    ],
+  },
+  {
     intent: 'help',
     patterns: [
-      /^(?:help|commands|how do i|what can i do|huh\?|what now|hint[s]?)(?:\s+(.+))?$/i,
+      /^(?:help|commands|how do i|what can i do|huh\?|what now|hint[s]?)$/i,
       /^\?$/,
     ],
   },
@@ -215,7 +230,7 @@ function tryRegexParse(input: string): ParsedCommand | null {
 const SYSTEM_PROMPT = `You are the command parser for a cozy text adventure game set in the small mountain town of Brindlewick.
 Your job is to identify the player's intent from natural language input.
 
-Valid intents: go, look, talk, ask, take, drop, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, solve, give, unknown
+Valid intents: go, look, talk, ask, take, drop, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, solve, give, accept_task, stop_helping, unknown
 
 Respond with ONLY valid JSON in this exact shape:
 {"intent":"<intent>","target":"<target or null>","qualifier":"<qualifier or null>","confidence":<0.0-1.0>}

@@ -152,7 +152,7 @@ function clickableRow(styles?: React.CSSProperties) {
 export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }: Props) {
   const { location, world, stats, upcomingEvents, inventoryItems, tasks, journalEntries, worldEvents, timePosition, hasChronoLogbook, seenItemIds } = gameState
 
-  const activeTasks = tasks.filter(t => t.status !== 'completed')
+  const activeTasks = tasks.filter(t => t.status === 'in_progress')
 
   // Seen items come from DB via gameState — persist across sessions and devices.
   // We also keep a local optimistic set so the label updates immediately on click
@@ -561,7 +561,7 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
           <div className="space-y-3">
             {activeTasks.length === 0 ? (
               <p className="text-sm italic" style={{ color: 'var(--soft-gray)' }}>
-                No open tasks yet. Talk to the people of Brindlewick — they often need a hand.
+                You aren&apos;t actively helping anyone. When an NPC offers a task, type <em>help [their name]</em> to take it on.
               </p>
             ) : (
               <ul className="space-y-3">
@@ -571,26 +571,8 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                     className="p-2 rounded"
                     style={{ backgroundColor: 'var(--cream)', border: '1px solid var(--warm-brown)' }}
                   >
-                    <div className="flex items-start justify-between gap-1 mb-1">
-                      <div
-                        className="text-sm font-medium"
-                        style={{ color: 'var(--deep-brown)', lineHeight: 1.3 }}
-                      >
-                        {task.title}
-                      </div>
-                      <span
-                        className="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                        style={{
-                          backgroundColor: task.status === 'in_progress' ? 'rgba(90,122,90,0.15)' : 'rgba(200,168,122,0.2)',
-                          color: task.status === 'in_progress' ? 'var(--moss-green)' : 'var(--amber)',
-                          fontSize: '0.6rem',
-                          fontWeight: 600,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                        }}
-                      >
-                        {task.status === 'in_progress' ? 'active' : 'offered'}
-                      </span>
+                    <div className="text-sm font-medium mb-1" style={{ color: 'var(--deep-brown)', lineHeight: 1.3 }}>
+                      {task.title}
                     </div>
                     <div className="text-xs mb-2" style={{ color: 'var(--soft-gray)', lineHeight: 1.5 }}>
                       {task.description}
@@ -607,12 +589,20 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                           {task.giverName}
                         </span>
                         <span
-                          className="text-xs cursor-pointer ml-auto"
+                          className="text-xs cursor-pointer"
                           style={{ color: 'var(--moss-green)' }}
                           onClick={() => onCommand(`recall ${task.giverName}`)}
                           title="Recall what you know"
                         >
                           recall ↗
+                        </span>
+                        <span
+                          className="text-xs cursor-pointer ml-auto"
+                          style={{ color: 'var(--soft-gray)', opacity: 0.7 }}
+                          onClick={() => onCommand(`stop helping ${task.giverName}`)}
+                          title="Stop helping with this task"
+                        >
+                          stop ✕
                         </span>
                       </div>
                     )}

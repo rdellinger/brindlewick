@@ -142,7 +142,7 @@ export type JournalEntryType =
 
 export interface TaskProgress {
   task_id: string
-  status: 'available' | 'in_progress' | 'completed'
+  status: 'offered' | 'in_progress' | 'completed' | 'declined'
   started_at: string | null
   completed_at: string | null
 }
@@ -348,6 +348,8 @@ export type CommandIntent =
   | 'return_present' // return to the present from historical travel
   | 'solve'          // attempt to solve / deduce a mystery
   | 'give'           // ask an NPC to give you an item / accept an offer
+  | 'accept_task'    // player accepts a help task offered by an NPC
+  | 'stop_helping'   // player abandons an in-progress help task
   | 'unknown'        // couldn't parse
 
 // ── World Events ─────────────────────────────────────────────────────────────

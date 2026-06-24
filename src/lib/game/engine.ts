@@ -84,6 +84,10 @@ export async function executeCommand(
       return handleSolve(supabase, command, session)
     case 'give':
       return handleGive(supabase, command, session, world, timeSlot)
+    case 'accept_task':
+      return handleAcceptTask(supabase, command, session)
+    case 'stop_helping':
+      return handleStopHelping(supabase, command, session)
     default:
       return handleUnknown(command)
   }
@@ -2218,12 +2222,12 @@ async function checkTaskCompletion(
   const key = session.playerId ? 'player_id' : 'guest_token'
   const val = session.playerId ?? session.guestToken
 
-  // Get all in-progress / available tasks for this player
+  // Only complete tasks the player has explicitly accepted (in_progress)
   const { data: playerTasks } = await supabase
     .from('player_task_progress')
     .select('task_id, status')
     .eq(key, val)
-    .in('status', ['available', 'in_progress'])
+    .eq('status', 'in_progress')
 
   if (!playerTasks?.length) return null
 
@@ -2299,19 +2303,192 @@ async function getAvailableTaskOffer(
 
   const progressMap = new Map((progress ?? []).map((p: { task_id: string; status: string }) => [p.task_id, p.status]))
 
-  // Find first untouched task
+  // Find first untouched task (not yet offered, in_progress, or completed)
   const available = tasks.find((t: { id: string }) => !progressMap.has(t.id))
   if (!available) return null
 
-  // Offer the task warmly — mark it as available in the progress table
-  await supabase.from('player_task_progress').upsert({
-    [key]: val,
-    task_id: available.id,
-    status: 'available',
-    started_at: null,
-  }, { onConflict: `${key},task_id` })
+  // Mark as 'offered' — player must explicitly accept for it to appear in the Helping tab
+  // Use insert-or-update pattern (no upsert) to avoid partial-index conflict issues
+  const { data: existingOffer } = await supabase
+    .from('player_task_progress')
+    .select('task_id')
+    .eq(key, val)
+    .eq('task_id', (available as { id: string }).id)
+    .maybeSingle()
 
-  return `*${citizen.first_name} mentions something:* "${available.description}"`
+  if (!existingOffer) {
+    await supabase.from('player_task_progress').insert({
+      [key]: val,
+      task_id: (available as { id: string }).id,
+      status: 'offered',
+    })
+  }
+
+  return `*${citizen.first_name} mentions something:* "${(available as { description: string }).description}"\n\n*Type **help ${citizen.first_name}** to take on this task.*`
+}
+
+// ── ACCEPT TASK ──────────────────────────────────────────────────────────────
+
+async function handleAcceptTask(
+  supabase: SupabaseClient,
+  command: ParsedCommand,
+  session: GameSession
+): Promise<GameResponse> {
+  const targetName = command.target?.trim()
+  if (!targetName) {
+    return { text: 'Who do you want to help? Try *help [citizen name]*.' }
+  }
+
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+
+  // Find the citizen by name
+  const citizen = await findCitizenByName(supabase, targetName)
+  if (!citizen) {
+    return { text: `You don't know anyone by that name.` }
+  }
+
+  // Get all tasks this citizen has, then check which ones this player has already started/completed
+  const { data: citizenTasks } = await supabase
+    .from('help_tasks')
+    .select('id, title, description')
+    .eq('giver_citizen', citizen.id)
+    .limit(5)
+
+  if (!citizenTasks?.length) {
+    return { text: `${citizen.first_name} doesn't have any tasks available right now.` }
+  }
+
+  const citizenTaskIds = citizenTasks.map((t: { id: string }) => t.id)
+
+  const { data: existingProgress } = await supabase
+    .from('player_task_progress')
+    .select('task_id, status')
+    .eq(key, val)
+    .in('task_id', citizenTaskIds)
+
+  const progressMap = new Map((existingProgress ?? []).map(
+    (p: { task_id: string; status: string }) => [p.task_id, p.status]
+  ))
+
+  // Accept first task that is either 'offered' or not yet touched (player learned about it via conversation)
+  // Skip tasks already in_progress or completed
+  const matchingTask = citizenTasks.find((t: { id: string }) => {
+    const status = progressMap.get(t.id)
+    return !status || status === 'offered'
+  }) as { id: string; title: string; description: string } | undefined
+
+  if (!matchingTask) {
+    const allDone = citizenTasks.every((t: { id: string }) =>
+      progressMap.get(t.id) === 'completed'
+    )
+    if (allDone) return { text: `You've already completed everything ${citizen.first_name} needed help with.` }
+    return { text: `You're already helping ${citizen.first_name} with that.` }
+  }
+
+  // Insert or update to 'in_progress' — avoid upsert to sidestep partial-index limitations
+  const { data: existingRow } = await supabase
+    .from('player_task_progress')
+    .select('task_id')
+    .eq(key, val)
+    .eq('task_id', matchingTask.id)
+    .maybeSingle()
+
+  if (existingRow) {
+    await supabase.from('player_task_progress')
+      .update({ status: 'in_progress', started_at: new Date().toISOString() })
+      .eq(key, val)
+      .eq('task_id', matchingTask.id)
+  } else {
+    await supabase.from('player_task_progress').insert({
+      [key]: val,
+      task_id: matchingTask.id,
+      status: 'in_progress',
+      started_at: new Date().toISOString(),
+    })
+  }
+
+  return {
+    text: `You agree to help ${citizen.first_name} with **${matchingTask.title}**.\n\n*This task now appears in your Helping tab. Type **stop helping** to remove it.*`,
+    task_update: true,
+  }
+}
+
+// ── STOP HELPING ─────────────────────────────────────────────────────────────
+
+async function handleStopHelping(
+  supabase: SupabaseClient,
+  command: ParsedCommand,
+  session: GameSession
+): Promise<GameResponse> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+
+  // Find all in_progress tasks for this player
+  const { data: inProgressRows } = await supabase
+    .from('player_task_progress')
+    .select('task_id')
+    .eq(key, val)
+    .eq('status', 'in_progress')
+
+  if (!inProgressRows?.length) {
+    return { text: `You aren't currently helping anyone.` }
+  }
+
+  // If a citizen name is given, narrow to tasks from that citizen
+  const targetName = command.target?.trim()
+  let taskIdToStop: string | null = null
+  let citizenName: string | null = null
+
+  if (targetName) {
+    const citizen = await findCitizenByName(supabase, targetName)
+    if (!citizen) {
+      return { text: `You don't know anyone by that name.` }
+    }
+    citizenName = citizen.first_name
+
+    const taskIds = inProgressRows.map((r: { task_id: string }) => r.task_id)
+    const { data: citizenTask } = await supabase
+      .from('help_tasks')
+      .select('id, title')
+      .eq('giver_citizen', citizen.id)
+      .in('id', taskIds)
+      .limit(1)
+      .single()
+
+    if (!citizenTask) {
+      return { text: `You aren't helping ${citizen.first_name} with anything right now.` }
+    }
+    taskIdToStop = citizenTask.id
+  } else if (inProgressRows.length === 1) {
+    taskIdToStop = inProgressRows[0].task_id
+  } else {
+    // Multiple tasks — list them and ask to specify
+    const taskIds = inProgressRows.map((r: { task_id: string }) => r.task_id)
+    const { data: taskList } = await supabase
+      .from('help_tasks')
+      .select('id, title, giver_citizen')
+      .in('id', taskIds)
+
+    if (!taskList?.length) return { text: `You aren't currently helping anyone.` }
+
+    const lines = taskList.map((t: { title: string; giver_citizen: string }) =>
+      `- **${t.title}** (for ${t.giver_citizen})`
+    ).join('\n')
+    return { text: `You're helping with multiple tasks. Specify who to stop helping:\n\n${lines}` }
+  }
+
+  // Delete the row — NPC will re-offer if player talks to them again
+  await supabase.from('player_task_progress')
+    .delete()
+    .eq(key, val)
+    .eq('task_id', taskIdToStop)
+
+  const who = citizenName ? ` ${citizenName}` : ''
+  return {
+    text: `You set aside the task${who ? ` for ${who}` : ''}. You can always pick it up again later by talking to them.`,
+    task_update: true,
+  }
 }
 
 async function getTrustMilestoneMessage(

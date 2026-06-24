@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1980" viewBox="0 0 1400 1980">
+<defs>
+  <pattern id="treepat" x="0" y="0" width="1" height="1">
+  </pattern>
+</defs>
+<rect width="1400" height="1980" fill="#EDE8D4"/>
+<polygon points="60,430 90,268 140,218 200,248 255,188 310,228 365,208 420,243 475,198 530,258 580,278 640,400 700,420 720,430 60,430" fill="#78904A"/>
+<path d="M 60,430 Q 120,460 180,420 Q 240,480 300,430 Q 310,676 60,676 Z" fill="#94A868" opacity="0.75"/>
+<path d="M 60,676 Q 120,716 200,696 Q 240,756 260,876 Q 180,916 60,876 Z" fill="#94A868" opacity="0.75"/>
+<path d="M 60,876 Q 120,906 200,944 Q 220,1080 60,1080 Z" fill="#94A868" opacity="0.75"/>
+<path d="M 492,430 Q 542,450 562,676 Q 502,676 492,676 Z" fill="#94A868" opacity="0.6"/>
+<path d="M 924,490 Q 914,836 934,936 Q 924,1140 954,1342 Q 984,1522 944,1760 Q 1004,1820 1204,1820 Q 1336,1820 1356,1542 Q 1344,1004 1304,876 Q 1284,768 1244,510 Q 1144,470 924,490 Z" fill="#7ABFD4"/>
+<path d="M 924,490 Q 914,836 934,936 Q 924,1140 954,1342 Q 984,1522 944,1760 Q 1004,1820 1204,1820 Q 1336,1820 1356,1542 Q 1344,1004 1304,876 Q 1284,768 1244,510 Q 1144,470 924,490 Z" fill="#A8D4E2" opacity="0.35"/>
+<path d="M 1024,816 Q 1104,808 1184,816 Q 1264,824 1344,816" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,886 Q 1104,878 1184,886 Q 1264,894 1344,886" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,956 Q 1104,948 1184,956 Q 1264,964 1344,956" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1026 Q 1104,1018 1184,1026 Q 1264,1034 1344,1026" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1096 Q 1104,1088 1184,1096 Q 1264,1104 1344,1096" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1166 Q 1104,1158 1184,1166 Q 1264,1174 1344,1166" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1236 Q 1104,1228 1184,1236 Q 1264,1244 1344,1236" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1306 Q 1104,1298 1184,1306 Q 1264,1314 1344,1306" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1376 Q 1104,1368 1184,1376 Q 1264,1384 1344,1376" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1446 Q 1104,1438 1184,1446 Q 1264,1454 1344,1446" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1516 Q 1104,1508 1184,1516 Q 1264,1524 1344,1516" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1586 Q 1104,1578 1184,1586 Q 1264,1594 1344,1586" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<path d="M 1024,1656 Q 1104,1648 1184,1656 Q 1264,1664 1344,1656" stroke="#5AAFC8" stroke-width="1" fill="none" opacity="0.3"/>
+<text x="1124" y="916" font-family="Georgia,serif" font-size="22" font-style="italic" fill="#2C1A06" fill-opacity="0.55" text-anchor="middle" letter-spacing="1">Lake Mirrowell</text>
+<ellipse cx="1124" cy="1220" rx="44" ry="27" fill="#94A868" opacity="0.85"/>
+<circle cx="1106" cy="1216" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="1106" cy="1220" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="1124" cy="1210" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="1124" cy="1214" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="1142" cy="1218" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="1142" cy="1222" r="3" fill="#8B7040" opacity="0.5"/>
+<text x="1124" y="1246" font-family="Georgia,serif" font-size="10" font-style="italic" fill="#2C1A06" text-anchor="middle">Finch Island</text>
+<ellipse cx="1196" cy="1442" rx="36" ry="20" fill="#94A868" opacity="0.8"/>
+<circle cx="1182" cy="1438" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="1182" cy="1442" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="1198" cy="1433" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="1198" cy="1437" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="1212" cy="1440" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="1212" cy="1444" r="3" fill="#8B7040" opacity="0.5"/>
+<text x="1196" y="1466" font-family="Georgia,serif" font-size="9.5" font-style="italic" fill="#2C1A06" text-anchor="middle">Spruce Point</text>
+<path d="M 458,440 Q 440,530 454,568 Q 470,592 452,636 Q 456,676 466,704" stroke="#7ABFD4" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M 458,440 Q 440,530 454,568 Q 470,592 452,636 Q 456,676 466,704" stroke="#A8D4E2" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+<ellipse cx="460" cy="696" rx="24" ry="30" fill="#7ABFD4"/>
+<line x1="482" y1="886" x2="160" y2="926" stroke="#C8BC98" stroke-width="16" stroke-linecap="round"/>
+<line x1="482" y1="886" x2="160" y2="926" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+<line x1="330" y1="676" x2="330" y2="1362" stroke="#C8BC98" stroke-width="19" stroke-linecap="round"/>
+<line x1="330" y1="676" x2="330" y2="1362" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+<line x1="482" y1="718" x2="482" y2="1382" stroke="#C8BC98" stroke-width="19" stroke-linecap="round"/>
+<line x1="482" y1="718" x2="482" y2="1382" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+<line x1="620" y1="676" x2="620" y2="1362" stroke="#C8BC98" stroke-width="19" stroke-linecap="round"/>
+<line x1="620" y1="676" x2="620" y2="1362" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+<line x1="750" y1="676" x2="750" y2="1402" stroke="#C8BC98" stroke-width="19" stroke-linecap="round"/>
+<line x1="750" y1="676" x2="750" y2="1402" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+<line x1="852" y1="768" x2="852" y2="1362" stroke="#C8BC98" stroke-width="9" stroke-linecap="round"/>
+<line x1="852" y1="768" x2="852" y2="1362" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-dasharray="8,5"/>
+<line x1="482" y1="718" x2="466" y2="490" stroke="#C8BC98" stroke-width="16" stroke-linecap="round"/>
+<line x1="482" y1="718" x2="466" y2="490" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+<line x1="466" y1="490" x2="454" y2="444" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="466" y1="490" x2="454" y2="444" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="808" x2="852" y2="808" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="808" x2="852" y2="808" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="876" x2="852" y2="876" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="876" x2="852" y2="876" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="944" x2="852" y2="944" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="944" x2="852" y2="944" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="1012" x2="852" y2="1012" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="1012" x2="852" y2="1012" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="1080" x2="852" y2="1080" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="1080" x2="852" y2="1080" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="1148" x2="852" y2="1148" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="1148" x2="852" y2="1148" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="330" y1="676" x2="852" y2="676" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="330" y1="676" x2="852" y2="676" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<line x1="750" y1="1332" x2="852" y2="1352" stroke="#C8BC98" stroke-width="14" stroke-linecap="round"/>
+<line x1="750" y1="1332" x2="852" y2="1352" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+<circle cx="85" cy="680" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="85" cy="686" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="115" cy="720" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="115" cy="726" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="80" cy="760" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="80" cy="766" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="110" cy="800" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="110" cy="806" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="85" cy="840" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="85" cy="846" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="115" cy="880" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="115" cy="886" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="80" cy="920" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="80" cy="926" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="110" cy="960" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="110" cy="966" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="85" cy="1010" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="85" cy="1016" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="130" cy="700" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="130" cy="706" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="150" cy="740" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="150" cy="746" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="130" cy="790" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="130" cy="796" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="155" cy="820" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="155" cy="826" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="135" cy="870" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="135" cy="876" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="145" cy="920" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="145" cy="926" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="130" cy="980" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="130" cy="986" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="170" cy="720" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="170" cy="726" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="190" cy="760" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="190" cy="766" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="175" cy="810" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="175" cy="816" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="180" cy="860" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="180" cy="866" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="165" cy="900" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="165" cy="906" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="185" cy="960" r="12" fill="#8B7040" opacity="0.88"/>
+<circle cx="185" cy="966" r="4" fill="#8B7040" opacity="0.5"/>
+<circle cx="70" cy="385" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="70" cy="390" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="100" cy="360" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="100" cy="365" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="140" cy="370" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="140" cy="375" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="175" cy="390" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="175" cy="395" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="215" cy="365" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="215" cy="370" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="250" cy="385" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="250" cy="390" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="290" cy="370" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="290" cy="375" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="325" cy="390" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="325" cy="395" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="370" cy="368" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="370" cy="373" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="410" cy="382" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="410" cy="387" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="450" cy="360" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="450" cy="365" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="490" cy="378" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="490" cy="383" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="530" cy="385" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="530" cy="390" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="570" cy="370" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="570" cy="375" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="615" cy="388" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="615" cy="393" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="655" cy="380" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="655" cy="385" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="80" cy="412" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="80" cy="417" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="120" cy="400" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="120" cy="405" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="160" cy="415" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="160" cy="420" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="200" cy="408" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="200" cy="413" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="240" cy="400" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="240" cy="405" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="280" cy="415" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="280" cy="420" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="320" cy="408" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="320" cy="413" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="360" cy="402" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="360" cy="407" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="400" cy="416" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="400" cy="421" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="440" cy="406" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="440" cy="411" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="480" cy="418" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="480" cy="423" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="520" cy="404" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="520" cy="409" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="560" cy="416" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="560" cy="421" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="600" cy="408" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="600" cy="413" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="640" cy="420" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="640" cy="425" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="695" cy="400" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="695" cy="405" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="710" cy="420" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="710" cy="425" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="700" cy="385" r="10" fill="#8B7040" opacity="0.88"/>
+<circle cx="700" cy="390" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="512" cy="510" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="512" cy="514" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="537" cy="530" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="537" cy="534" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="522" cy="560" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="522" cy="564" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="542" cy="590" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="542" cy="594" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="512" cy="618" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="512" cy="622" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="532" cy="645" r="9" fill="#8B7040" opacity="0.88"/>
+<circle cx="532" cy="649" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="804" cy="870" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="804" cy="874" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="810" cy="930" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="810" cy="934" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="808" cy="990" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="808" cy="994" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="805" cy="1050" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="805" cy="1054" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="803" cy="1110" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="803" cy="1114" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="806" cy="1170" r="8" fill="#8B7040" opacity="0.88"/>
+<circle cx="806" cy="1174" r="3" fill="#8B7040" opacity="0.5"/>
+<circle cx="330" cy="490" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="350" cy="510" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="370" cy="490" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="330" cy="530" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="354" cy="548" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="375" cy="526" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="314" cy="512" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="318" cy="548" r="9" fill="#6A8A40" opacity="0.8"/>
+<circle cx="342" cy="568" r="9" fill="#6A8A40" opacity="0.8"/>
+<rect x="759" y="768" width="84" height="584" fill="#B2CA82" rx="4" opacity="0.55"/>
+<text x="330" y="756" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C1A06" text-anchor="middle" transform="rotate(-90,330,756)">Maple Row</text>
+<text x="482" y="756" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C1A06" text-anchor="middle" transform="rotate(-90,482,756)">Millpond Row</text>
+<text x="620" y="756" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C1A06" text-anchor="middle" transform="rotate(-90,620,756)">Finch Lane</text>
+<text x="750" y="756" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#2C1A06" text-anchor="middle" transform="rotate(-90,750,756)">Lake Street</text>
+<text x="870" y="876" font-family="Georgia,serif" font-size="9.5" font-weight="normal" fill="#9A8A72" text-anchor="start">Boardwalk</text>
+<text x="864" y="876" font-family="Georgia,serif" font-size="9.5" fill="#9A8A72" text-anchor="start" transform="rotate(90,864,876)">Boardwalk</text>
+<line x1="60" y1="165" x2="60" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="220" y1="165" x2="220" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="380" y1="165" x2="380" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="540" y1="165" x2="540" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="700" y1="165" x2="700" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="860" y1="165" x2="860" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="1020" y1="165" x2="1020" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="1180" y1="165" x2="1180" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="1340" y1="165" x2="1340" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="165" x2="1340" y2="165" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="407" x2="1340" y2="407" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="649" x2="1340" y2="649" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="891" x2="1340" y2="891" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="1134" x2="1340" y2="1134" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="1376" x2="1340" y2="1376" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="1618" x2="1340" y2="1618" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<line x1="60" y1="1860" x2="1340" y2="1860" stroke="#C8BAA0" stroke-width="0.8" opacity="0.7"/>
+<text x="140" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">A</text>
+<text x="140" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">A</text>
+<text x="300" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">B</text>
+<text x="300" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">B</text>
+<text x="460" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">C</text>
+<text x="460" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">C</text>
+<text x="620" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">D</text>
+<text x="620" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">D</text>
+<text x="780" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">E</text>
+<text x="780" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">E</text>
+<text x="940" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">F</text>
+<text x="940" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">F</text>
+<text x="1100" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">G</text>
+<text x="1100" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">G</text>
+<text x="1260" y="157" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">H</text>
+<text x="1260" y="1878" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">H</text>
+<text x="48" y="290" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">1</text>
+<text x="1352" y="290" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">1</text>
+<text x="48" y="532" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">2</text>
+<text x="1352" y="532" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">2</text>
+<text x="48" y="774" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">3</text>
+<text x="1352" y="774" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">3</text>
+<text x="48" y="1016" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">4</text>
+<text x="1352" y="1016" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">4</text>
+<text x="48" y="1259" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">5</text>
+<text x="1352" y="1259" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">5</text>
+<text x="48" y="1501" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">6</text>
+<text x="1352" y="1501" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">6</text>
+<text x="48" y="1743" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">7</text>
+<text x="1352" y="1743" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#9A8A72" text-anchor="middle">7</text>
+<rect x="60" y="165" width="1280" height="1695" fill="none" stroke="#2C1A06" stroke-width="2.5"/>
+<circle cx="750" cy="792" r="11" fill="#B83028"/>
+<text x="750" y="795.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<circle cx="750" cy="832" r="11" fill="#B83028"/>
+<text x="750" y="835.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<circle cx="482" cy="886" r="11" fill="#B83028"/>
+<text x="482" y="889.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<circle cx="482" cy="796" r="11" fill="#B83028"/>
+<text x="482" y="799.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">4</text>
+<circle cx="482" cy="822" r="11" fill="#C86A28"/>
+<text x="482" y="825.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">5</text>
+<circle cx="482" cy="966" r="11" fill="#C86A28"/>
+<text x="482" y="969.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">6</text>
+<circle cx="482" cy="998" r="11" fill="#C86A28"/>
+<text x="482" y="1001.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">7</text>
+<circle cx="482" cy="1036" r="11" fill="#C86A28"/>
+<text x="482" y="1039.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">8</text>
+<circle cx="482" cy="1076" r="11" fill="#C86A28"/>
+<text x="482" y="1079.5" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">9</text>
+<circle cx="482" cy="1062" r="11" fill="#C86A28"/>
+<text x="482" y="1065.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">10</text>
+<circle cx="482" cy="1102" r="11" fill="#C86A28"/>
+<text x="482" y="1105.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">11</text>
+<circle cx="482" cy="1142" r="11" fill="#C86A28"/>
+<text x="482" y="1145.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">12</text>
+<circle cx="620" cy="822" r="11" fill="#C86A28"/>
+<text x="620" y="825.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">13</text>
+<circle cx="620" cy="832" r="11" fill="#C86A28"/>
+<text x="620" y="835.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">14</text>
+<circle cx="620" cy="880" r="11" fill="#C86A28"/>
+<text x="620" y="883.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">15</text>
+<circle cx="620" cy="968" r="11" fill="#C86A28"/>
+<text x="620" y="971.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">16</text>
+<circle cx="620" cy="998" r="11" fill="#C86A28"/>
+<text x="620" y="1001.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">17</text>
+<circle cx="620" cy="1038" r="11" fill="#C86A28"/>
+<text x="620" y="1041.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">18</text>
+<circle cx="175" cy="926" r="11" fill="#C86A28"/>
+<text x="175" y="929.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">19</text>
+<circle cx="750" cy="1168" r="11" fill="#C86A28"/>
+<text x="750" y="1171.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">20</text>
+<circle cx="468" cy="832" r="11" fill="#3A78B0"/>
+<text x="468" y="835.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">21</text>
+<circle cx="482" cy="734" r="11" fill="#3A78B0"/>
+<text x="482" y="737.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">22</text>
+<circle cx="482" cy="1134" r="11" fill="#3A78B0"/>
+<text x="482" y="1137.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">23</text>
+<circle cx="482" cy="930" r="11" fill="#3A78B0"/>
+<text x="482" y="933.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">24</text>
+<circle cx="482" cy="790" r="11" fill="#3A78B0"/>
+<text x="482" y="793.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">25</text>
+<circle cx="750" cy="1134" r="11" fill="#3A78B0"/>
+<text x="750" y="1137.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">26</text>
+<circle cx="330" cy="826" r="11" fill="#3A78B0"/>
+<text x="330" y="829.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">27</text>
+<circle cx="330" cy="880" r="11" fill="#3A78B0"/>
+<text x="330" y="883.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">28</text>
+<circle cx="330" cy="994" r="11" fill="#3A78B0"/>
+<text x="330" y="997.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">29</text>
+<circle cx="330" cy="1062" r="11" fill="#3A78B0"/>
+<text x="330" y="1065.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">30</text>
+<circle cx="330" cy="1104" r="11" fill="#3A78B0"/>
+<text x="330" y="1107.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">31</text>
+<circle cx="330" cy="964" r="11" fill="#3A78B0"/>
+<text x="330" y="967.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">32</text>
+<circle cx="330" cy="1144" r="11" fill="#3A78B0"/>
+<text x="330" y="1147.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">33</text>
+<circle cx="482" cy="1174" r="11" fill="#3A78B0"/>
+<text x="482" y="1177.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">34</text>
+<circle cx="330" cy="1036" r="11" fill="#3A78B0"/>
+<text x="330" y="1039.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">35</text>
+<circle cx="546" cy="876" r="11" fill="#3A8A38"/>
+<text x="546" y="879.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">36</text>
+<circle cx="808" cy="876" r="11" fill="#3A8A38"/>
+<text x="808" y="879.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">37</text>
+<circle cx="908" cy="832" r="11" fill="#3A8A38"/>
+<text x="908" y="835.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">38</text>
+<circle cx="852" cy="1038" r="11" fill="#3A8A38"/>
+<text x="852" y="1041.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">39</text>
+<circle cx="460" cy="696" r="11" fill="#3A8A38"/>
+<text x="460" y="699.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">40</text>
+<circle cx="1124" cy="1220" r="11" fill="#3A8A38"/>
+<text x="1124" y="1223.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">41</text>
+<circle cx="1196" cy="1442" r="11" fill="#3A8A38"/>
+<text x="1196" y="1445.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">42</text>
+<circle cx="458" cy="468" r="11" fill="#3A8A38"/>
+<text x="458" y="471.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">43</text>
+<circle cx="298" cy="320" r="11" fill="#3A8A38"/>
+<text x="298" y="323.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">44</text>
+<circle cx="240" cy="250" r="11" fill="#3A8A38"/>
+<text x="240" y="253.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">45</text>
+<circle cx="400" cy="288" r="11" fill="#3A8A38"/>
+<text x="400" y="291.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">46</text>
+<circle cx="348" cy="498" r="11" fill="#3A8A38"/>
+<text x="348" y="501.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">47</text>
+<circle cx="454" cy="646" r="11" fill="#3A8A38"/>
+<text x="454" y="649.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">48</text>
+<circle cx="620" cy="1164" r="11" fill="#886018"/>
+<text x="620" y="1167.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">49</text>
+<circle cx="844" cy="1142" r="11" fill="#886018"/>
+<text x="844" y="1145.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">50</text>
+<circle cx="750" cy="1332" r="11" fill="#886018"/>
+<text x="750" y="1335.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">51</text>
+<circle cx="238" cy="620" r="11" fill="#886018"/>
+<text x="238" y="623.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">52</text>
+<circle cx="238" cy="576" r="11" fill="#886018"/>
+<text x="238" y="579.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">53</text>
+<circle cx="454" cy="538" r="11" fill="#886018"/>
+<text x="454" y="541.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">54</text>
+<circle cx="842" cy="1206" r="11" fill="#886018"/>
+<text x="842" y="1209.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">55</text>
+<circle cx="828" cy="1172" r="11" fill="#886018"/>
+<text x="828" y="1175.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">56</text>
+<circle cx="466" cy="612" r="11" fill="#886018"/>
+<text x="466" y="615.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">57</text>
+<circle cx="462" cy="582" r="11" fill="#886018"/>
+<text x="462" y="585.5" font-family="Arial,sans-serif" font-size="8.5" font-weight="bold" fill="white" text-anchor="middle">58</text>
+<circle cx="1260" cy="280" r="52" fill="#EDE8D4" stroke="#2C1A06" stroke-width="1.5"/>
+<text x="1260.0" y="224.0" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#2C1A06" text-anchor="middle">N</text>
+<text x="1320.0" y="284.0" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#2C1A06" text-anchor="middle">E</text>
+<text x="1260.0" y="344.0" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#2C1A06" text-anchor="middle">S</text>
+<text x="1200.0" y="284.0" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#2C1A06" text-anchor="middle">W</text>
+<polygon points="1260,234 1251,286 1260,282 1269,286" fill="#C03020"/>
+<polygon points="1260,326 1251,274 1260,278 1269,274" fill="#2C1A06" opacity="0.5"/>
+<polygon points="1306,280 1254,271 1258,280 1254,289" fill="#2C1A06" opacity="0.5"/>
+<polygon points="1214,280 1266,271 1262,280 1266,289" fill="#2C1A06" opacity="0.5"/>
+<circle cx="1260" cy="280" r="4" fill="#EDE8D4" stroke="#2C1A06" stroke-width="1.2"/>
+<text x="60" y="1908" font-family="Georgia,serif" font-size="44" font-weight="bold" fill="#2C1A06" text-anchor="start" letter-spacing="3">BRINDLEWICK</text>
+<text x="63" y="1936" font-family="Georgia,serif" font-size="17" fill="#2C1A06" text-anchor="start" letter-spacing="4" opacity="0.75">NEW ENGLAND</text>
+<text x="60" y="1958" font-family="Georgia,serif" font-size="12" font-style="italic" fill="#2C1A06" text-anchor="start" opacity="0.6">"A town where the mysteries run as deep as the lake."</text>
+<circle cx="498" cy="1892" r="9" fill="#3A78B0"/>
+<text x="512" y="1897" font-family="Arial,sans-serif" font-size="11.5" fill="#2C1A06">Civic & Public Buildings</text>
+<circle cx="693" cy="1892" r="9" fill="#C86A28"/>
+<text x="707" y="1897" font-family="Arial,sans-serif" font-size="11.5" fill="#2C1A06">Shops & Services</text>
+<circle cx="888" cy="1892" r="9" fill="#B83028"/>
+<text x="902" y="1897" font-family="Arial,sans-serif" font-size="11.5" fill="#2C1A06">Dining & Accommodation</text>
+<circle cx="498" cy="1922" r="9" fill="#3A8A38"/>
+<text x="512" y="1927" font-family="Arial,sans-serif" font-size="11.5" fill="#2C1A06">Outdoor & Nature</text>
+<circle cx="693" cy="1922" r="9" fill="#886018"/>
+<text x="707" y="1927" font-family="Arial,sans-serif" font-size="11.5" fill="#2C1A06">Historic Sites</text>
+<rect x="60" y="1982" width="330" height="14" fill="#B83028" rx="2"/>
+<text x="65" y="1993" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white">DINING & ACCOMMODATION</text>
+<circle cx="68" cy="2007" r="7" fill="#B83028"/>
+<text x="68" y="2010.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">1</text>
+<text x="80" y="2011" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Lantern Post Inn</text>
+<circle cx="68" cy="2026" r="7" fill="#B83028"/>
+<text x="68" y="2029.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">2</text>
+<text x="80" y="2030" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Wren & Whistle</text>
+<circle cx="68" cy="2045" r="7" fill="#B83028"/>
+<text x="68" y="2048.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">3</text>
+<text x="80" y="2049" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Millpond Diner</text>
+<circle cx="68" cy="2064" r="7" fill="#B83028"/>
+<text x="68" y="2067.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">4</text>
+<text x="80" y="2068" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Copper Kettle Bakery</text>
+<rect x="60" y="2077" width="330" height="14" fill="#C86A28" rx="2"/>
+<text x="65" y="2088" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white">SHOPPING & SERVICES</text>
+<circle cx="68" cy="2102" r="7" fill="#C86A28"/>
+<text x="68" y="2105.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">5</text>
+<text x="80" y="2106" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Hartwell's General Store</text>
+<circle cx="68" cy="2121" r="7" fill="#C86A28"/>
+<text x="68" y="2124.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">6</text>
+<text x="80" y="2125" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Old Mill Antiques</text>
+<circle cx="68" cy="2140" r="7" fill="#C86A28"/>
+<text x="68" y="2143.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">7</text>
+<text x="80" y="2144" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Finch Pharmacy</text>
+<circle cx="68" cy="2159" r="7" fill="#C86A28"/>
+<text x="68" y="2162.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">8</text>
+<text x="80" y="2163" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Alderman's Hardware</text>
+<circle cx="68" cy="2178" r="7" fill="#C86A28"/>
+<text x="68" y="2181.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">9</text>
+<text x="80" y="2182" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Notions Nook</text>
+<circle cx="68" cy="2197" r="7" fill="#C86A28"/>
+<text x="68" y="2200.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">10</text>
+<text x="80" y="2201" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Thornbury's Cheese & Provisions</text>
+<circle cx="68" cy="2216" r="7" fill="#C86A28"/>
+<text x="68" y="2219.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">11</text>
+<text x="80" y="2220" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Meadow's Florist</text>
+<circle cx="68" cy="2235" r="7" fill="#C86A28"/>
+<text x="68" y="2238.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">12</text>
+<text x="80" y="2239" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Copper Hill Gallery</text>
+<circle cx="408" cy="1988" r="7" fill="#C86A28"/>
+<text x="408" y="1991.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">13</text>
+<text x="420" y="1992" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Webb's Watch Repair</text>
+<circle cx="408" cy="2007" r="7" fill="#C86A28"/>
+<text x="408" y="2010.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">14</text>
+<text x="420" y="2011" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Book Nook</text>
+<circle cx="408" cy="2026" r="7" fill="#C86A28"/>
+<text x="408" y="2029.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">15</text>
+<text x="420" y="2030" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Woolen Bear</text>
+<circle cx="408" cy="2045" r="7" fill="#C86A28"/>
+<text x="408" y="2048.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">16</text>
+<text x="420" y="2049" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Candle & Soap Shop</text>
+<circle cx="408" cy="2064" r="7" fill="#C86A28"/>
+<text x="408" y="2067.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">17</text>
+<text x="420" y="2068" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Cobbler's Corner</text>
+<circle cx="408" cy="2083" r="7" fill="#C86A28"/>
+<text x="408" y="2086.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">18</text>
+<text x="420" y="2087" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Pottery Studio</text>
+<circle cx="408" cy="2102" r="7" fill="#C86A28"/>
+<text x="408" y="2105.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">19</text>
+<text x="420" y="2106" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Perkins Cider House</text>
+<circle cx="408" cy="2121" r="7" fill="#C86A28"/>
+<text x="408" y="2124.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">20</text>
+<text x="420" y="2125" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Ice Cream Cottage (seasonal)</text>
+<rect x="400" y="2134" width="330" height="14" fill="#3A78B0" rx="2"/>
+<text x="405" y="2145" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white">CIVIC & CULTURAL</text>
+<circle cx="408" cy="2159" r="7" fill="#3A78B0"/>
+<text x="408" y="2162.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">21</text>
+<text x="420" y="2163" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Town Hall</text>
+<circle cx="408" cy="2178" r="7" fill="#3A78B0"/>
+<text x="408" y="2181.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">22</text>
+<text x="420" y="2182" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Public Library</text>
+<circle cx="408" cy="2197" r="7" fill="#3A78B0"/>
+<text x="408" y="2200.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">23</text>
+<text x="420" y="2201" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Post Office</text>
+<circle cx="408" cy="2216" r="7" fill="#3A78B0"/>
+<text x="408" y="2219.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">24</text>
+<text x="420" y="2220" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Sheriff's Office</text>
+<circle cx="408" cy="2235" r="7" fill="#3A78B0"/>
+<text x="408" y="2238.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">25</text>
+<text x="420" y="2239" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Chronicle</text>
+<circle cx="748" cy="1988" r="7" fill="#3A78B0"/>
+<text x="748" y="1991.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">26</text>
+<text x="760" y="1992" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Fire Station</text>
+<circle cx="748" cy="2007" r="7" fill="#3A78B0"/>
+<text x="748" y="2010.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">27</text>
+<text x="760" y="2011" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">St. Agatha's Chapel</text>
+<circle cx="748" cy="2026" r="7" fill="#3A78B0"/>
+<text x="748" y="2029.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">28</text>
+<text x="760" y="2030" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Cemetery</text>
+<circle cx="748" cy="2045" r="7" fill="#3A78B0"/>
+<text x="748" y="2048.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">29</text>
+<text x="760" y="2049" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Elementary School</text>
+<circle cx="748" cy="2064" r="7" fill="#3A78B0"/>
+<text x="748" y="2067.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">30</text>
+<text x="760" y="2068" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Community Hall</text>
+<circle cx="748" cy="2083" r="7" fill="#3A78B0"/>
+<text x="748" y="2086.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">31</text>
+<text x="760" y="2087" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Old Schoolhouse Arts Center</text>
+<circle cx="748" cy="2102" r="7" fill="#3A78B0"/>
+<text x="748" y="2105.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">32</text>
+<text x="760" y="2106" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Dr. Okafor's Practice</text>
+<circle cx="748" cy="2121" r="7" fill="#3A78B0"/>
+<text x="748" y="2124.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">33</text>
+<text x="760" y="2125" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Meeting House Museum</text>
+<circle cx="748" cy="2140" r="7" fill="#3A78B0"/>
+<text x="748" y="2143.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">34</text>
+<text x="760" y="2144" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Savings</text>
+<circle cx="748" cy="2159" r="7" fill="#3A78B0"/>
+<text x="748" y="2162.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">35</text>
+<text x="760" y="2163" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Garden Club Greenhouse</text>
+<rect x="740" y="2172" width="330" height="14" fill="#3A8A38" rx="2"/>
+<text x="745" y="2183" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white">OUTDOOR & NATURE</text>
+<circle cx="748" cy="2197" r="7" fill="#3A8A38"/>
+<text x="748" y="2200.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">36</text>
+<text x="760" y="2201" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Town Square</text>
+<circle cx="748" cy="2216" r="7" fill="#3A8A38"/>
+<text x="748" y="2219.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">37</text>
+<text x="760" y="2220" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Lakeside Park</text>
+<circle cx="748" cy="2235" r="7" fill="#3A8A38"/>
+<text x="748" y="2238.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">38</text>
+<text x="760" y="2239" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Lake Pier</text>
+<circle cx="1088" cy="1988" r="7" fill="#3A8A38"/>
+<text x="1088" y="1991.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">39</text>
+<text x="1100" y="1992" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Mira's Boat Rental</text>
+<circle cx="1088" cy="2007" r="7" fill="#3A8A38"/>
+<text x="1088" y="2010.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">40</text>
+<text x="1100" y="2011" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Millpond</text>
+<circle cx="1088" cy="2026" r="7" fill="#3A8A38"/>
+<text x="1088" y="2029.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">41</text>
+<text x="1100" y="2030" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Finch Island</text>
+<circle cx="1088" cy="2045" r="7" fill="#3A8A38"/>
+<text x="1088" y="2048.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">42</text>
+<text x="1100" y="2049" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Spruce Point</text>
+<circle cx="1088" cy="2064" r="7" fill="#3A8A38"/>
+<text x="1088" y="2067.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">43</text>
+<text x="1100" y="2068" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Trailhead</text>
+<circle cx="1088" cy="2083" r="7" fill="#3A8A38"/>
+<text x="1088" y="2086.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">44</text>
+<text x="1100" y="2087" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Warming Hut (1.2 mi)</text>
+<circle cx="1088" cy="2102" r="7" fill="#3A8A38"/>
+<text x="1088" y="2105.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">45</text>
+<text x="1100" y="2106" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">The Lookout (2.1 mi)</text>
+<circle cx="1088" cy="2121" r="7" fill="#3A8A38"/>
+<text x="1088" y="2124.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">46</text>
+<text x="1100" y="2125" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Warden's Cabin</text>
+<circle cx="1088" cy="2140" r="7" fill="#3A8A38"/>
+<text x="1088" y="2143.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">47</text>
+<text x="1100" y="2144" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Finch Family Orchard</text>
+<circle cx="1088" cy="2159" r="7" fill="#3A8A38"/>
+<text x="1088" y="2162.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">48</text>
+<text x="1100" y="2163" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Old Mill Ruins</text>
+<rect x="1080" y="2172" width="330" height="14" fill="#886018" rx="2"/>
+<text x="1085" y="2183" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="white">HISTORIC SITES</text>
+<circle cx="1088" cy="2197" r="7" fill="#886018"/>
+<text x="1088" y="2200.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">49</text>
+<text x="1100" y="2201" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Alderman Estate</text>
+<circle cx="1088" cy="2216" r="7" fill="#886018"/>
+<text x="1088" y="2219.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">50</text>
+<text x="1100" y="2220" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Old Alderman Boathouse</text>
+<circle cx="1088" cy="2235" r="7" fill="#886018"/>
+<text x="1088" y="2238.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">51</text>
+<text x="1100" y="2239" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Station Master's House</text>
+<circle cx="1088" cy="2254" r="7" fill="#886018"/>
+<text x="1088" y="2257.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">52</text>
+<text x="1100" y="2258" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Founders' Graves</text>
+<circle cx="1088" cy="2273" r="7" fill="#886018"/>
+<text x="1088" y="2276.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">53</text>
+<text x="1100" y="2277" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Water Tower</text>
+<circle cx="1088" cy="2292" r="7" fill="#886018"/>
+<text x="1088" y="2295.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">54</text>
+<text x="1100" y="2296" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Covered Bridge</text>
+<circle cx="1088" cy="2311" r="7" fill="#886018"/>
+<text x="1088" y="2314.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">55</text>
+<text x="1100" y="2315" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Brindlewick Lighthouse</text>
+<circle cx="1088" cy="2330" r="7" fill="#886018"/>
+<text x="1088" y="2333.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">56</text>
+<text x="1100" y="2334" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Old Ice House</text>
+<circle cx="1088" cy="2349" r="7" fill="#886018"/>
+<text x="1088" y="2352.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">57</text>
+<text x="1100" y="2353" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Millbrook Farm</text>
+<circle cx="1088" cy="2368" r="7" fill="#886018"/>
+<text x="1088" y="2371.5" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" fill="white" text-anchor="middle">58</text>
+<text x="1100" y="2372" font-family="Arial,sans-serif" font-size="10.5" fill="#2C1A06">Grange Hall</text>
+</svg>

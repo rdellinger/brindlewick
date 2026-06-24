@@ -147,7 +147,7 @@ async function seedCitizens() {
       trust_stages?: Record<string, string>
       routine?: Record<string, Record<string, string>>
       dialogue_topics?: Record<string, string>
-      help_tasks?: Array<{ description: string; reward: string }>
+      help_tasks?: Array<{ id: string; description: string; reward_lore: string; trust_gain?: number }>
       lore_fact?: string
       secret?: string
     }>
@@ -755,12 +755,45 @@ async function seedCitizenRoutines() {
   console.log(`  ✓ home_location: set for ${Object.keys(homeByC).length} citizens`)
 }
 
+// ── Help Tasks ────────────────────────────────────────────────────────────────
+
+async function seedHelpTasks() {
+  console.log('\nSeeding help_tasks…')
+
+  const principalRawFile = readJSON('citizens/principal.json') as Record<string, unknown>
+  const principals = ((principalRawFile.citizens ?? principalRawFile.principal_citizens) as Array<{
+    id: string
+    help_tasks?: Array<{ id: string; description: string; reward_lore?: string; trust_gain?: number }>
+  }>) ?? []
+
+  const rows: Array<Record<string, unknown>> = []
+  for (const c of principals) {
+    for (const t of (c.help_tasks ?? [])) {
+      // Derive title from snake_case id: "organize_returned_books" → "Organize Returned Books"
+      const title = t.id.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+      rows.push({
+        id: t.id,
+        giver_citizen: c.id,
+        title,
+        description: t.description,
+        reward_lore: t.reward_lore ?? null,
+        trust_gain: t.trust_gain ?? 1,
+        mystery_reveals: null,
+        location_req: null,
+        unlock_condition: null,
+        is_tutorial: false,
+      })
+    }
+  }
+
+  if (rows.length) await upsert('help_tasks', rows)
+  else console.log('  ⚠ help_tasks: no tasks found in principal.json')
+}
+
 // ── History ───────────────────────────────────────────────────────────────────
 
 async function seedHistory() {
-  // Town history is stored as help_tasks + citizen_lore in this schema.
-  // The timeline lives in world.json as reference/lore content only —
-  // it's surfaced via Eleanor Finch's dialogue and the research system.
+  // Town history is surfaced via Eleanor Finch's dialogue and the research system.
   console.log('\nSkipping separate history table (embedded in lore/research).')
 }
 
@@ -1290,6 +1323,7 @@ async function main() {
     await seedWorldState()
     await seedLocations()
     await seedCitizens()
+    await seedHelpTasks()
     await seedCitizenRoutines()
     await seedMysteries()
     await seedItems()
