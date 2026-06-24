@@ -121,7 +121,7 @@
       "mystery_tie": "mira_finch",
       "hidden": true,
       "unlock_condition": "eleanor_trust >= 2 or juni_trust >= 1",
-      "connected_locations": ["library"]
+      "exits": ["library"]
     },
     {
       "id": "copper_kettle_bakery",
