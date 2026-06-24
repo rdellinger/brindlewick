@@ -18,7 +18,7 @@ import {
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory } from './player'
-import { checkMysteryClue } from './mysteries'
+import { checkMysteryClue, handleSolveAttempt, findMysteryByInput } from './mysteries'
 import {
   getTimePeriodForDate, getHistoricalLocationDescription,
   getHistoricalCitizensAt, getHistoricalItemsAt,
@@ -74,6 +74,8 @@ export async function executeCommand(
       return handleTravel(supabase, command, session, world)
     case 'return_present':
       return handleReturnPresent(supabase, session, world, timeSlot)
+    case 'solve':
+      return handleSolve(supabase, command, session)
     default:
       return handleUnknown(command)
   }
@@ -983,6 +985,10 @@ You're exploring a small mountain town by typing what you want to do. The game u
 **Checking your progress**
 *journal* · *inventory* · *wait*
 
+**Solving mysteries**
+*solve the honey cake mystery* · *deduce the lake light* · *I think I've figured out the feud*
+When you have enough clues, commit to an answer and see if you're right.
+
 **Catching up**
 *what happened* · *what did I miss* — summarizes recent town events
 *recall Eleanor* · *what do I know about the lake* — your notes on a person or topic
@@ -1478,6 +1484,74 @@ async function handleEleanorQuestProgress(
   }
 
   return null
+}
+
+// ── SOLVE ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Handle a solve/deduce attempt. The player has gathered clues and believes
+ * they know the answer to a mystery. We check which mystery they mean, verify
+ * they have enough clues, and show the resolution if they do.
+ *
+ * Works in two modes:
+ *   "I've worked out the honey cake mystery" → identify + attempt
+ *   "solve" (bare) → list active mysteries and prompt
+ */
+async function handleSolve(
+  supabase: SupabaseClient,
+  command: ParsedCommand,
+  session: GameSession
+): Promise<GameResponse> {
+  const key = session.playerId ? 'player_id' : 'guest_token'
+  const val = session.playerId ?? session.guestToken
+
+  // Try to identify the mystery from the player's input
+  const mysteryId = await findMysteryByInput(supabase, command.raw)
+
+  if (!mysteryId) {
+    // No mystery identified — list active ones and invite
+    const { data: progress } = await supabase
+      .from('player_mystery_progress')
+      .select('mystery_id, mysteries(title)')
+      .eq(key, val)
+      .eq('is_resolved', false)
+
+    if (!progress?.length) {
+      return {
+        text: "You don't have any open mysteries yet. Explore, talk to people, and gather clues — they'll appear in your journal.",
+      }
+    }
+
+    const titles = progress
+      .map((p: { mystery_id: string; mysteries: unknown }) => {
+        const m = p.mysteries as { title?: string } | Array<{ title?: string }>
+        const title = Array.isArray(m) ? m[0]?.title : m?.title
+        return `• ${title ?? p.mystery_id}`
+      })
+      .join('\n')
+
+    return {
+      text: `Which mystery are you working on? Your open threads:\n\n${titles}\n\n*Try: "I think I've solved the honey cake mystery" or "deduce the lake light"*`,
+    }
+  }
+
+  const result = await handleSolveAttempt(supabase, session, mysteryId)
+
+  return {
+    text: result.text,
+    mystery_update: result.success ? { mystery_id: mysteryId, resolved: true } : undefined,
+    journal_entry: result.success
+      ? {
+          id: '',
+          entry_type: 'mystery_clue',
+          title: 'Mystery resolved',
+          content: result.text.replace(/\*[^*]+\*/g, '').trim().slice(0, 300),
+          related_id: mysteryId,
+          game_date: null,
+          created_at: new Date().toISOString(),
+        }
+      : undefined,
+  }
 }
 
 // ── UNKNOWN ───────────────────────────────────────────────────────────────────

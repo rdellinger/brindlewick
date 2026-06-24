@@ -323,6 +323,7 @@ export type CommandIntent =
   | 'recall'         // recall what player knows about a person/thing
   | 'travel'         // travel to a historical date
   | 'return_present' // return to the present from historical travel
+  | 'solve'          // attempt to solve / deduce a mystery
   | 'unknown'        // couldn't parse
 
 // ── World Events ─────────────────────────────────────────────────────────────

@@ -204,6 +204,23 @@
       "lore_note": "E. Webb — a Webb, keeping the lake light. The Webb family has been watching over Brindlewick's mechanisms for a long time."
     },
     {
+      "id": "boathouse_key",
+      "name": "The Boathouse Key",
+      "type": "inventory",
+      "description": "A large iron key on a leather fob, worn smooth from handling. Constance Alderman gave it to you. It opens the old Alderman boathouse at the south end of the lake.",
+      "can_take": true,
+      "mystery_tie": "founders_hidden_room",
+      "requires_condition": "constance_trust >= 4"
+    },
+    {
+      "id": "anonymous_note",
+      "name": "An Anonymous Note",
+      "type": "clue_item",
+      "description": "A small folded note on cream-colored paper, the handwriting precise and careful: 'You are doing better than you know. Keep going. — A Friend.' It was left under your inn room door.",
+      "can_take": true,
+      "mystery_tie": "anonymous_letter_writer"
+    },
+    {
       "id": "inn_guest_book",
       "name": "The Inn Guest Book",
       "type": "readable",

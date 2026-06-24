@@ -260,8 +260,11 @@ async function seedMysteries() {
       summary: string
       resolution: string
       clues: Array<{
-        id: string
+        id: string           // content string ID, e.g. "sv_clue_1"
         description: string
+        source?: string      // what triggers this clue
+        requires?: string | null  // prerequisite condition
+        // legacy fields (not used in current content):
         location_id?: string
         citizen_id?: string
         item_id?: string
@@ -293,10 +296,11 @@ async function seedMysteries() {
 
     const clues = mystery.clues.map((clue, idx) => ({
       mystery_id: mystery.id,
+      clue_id: clue.id,                                          // content string ID
       clue_order: idx,
       description: clue.description,
-      source: clue.citizen_id ?? clue.location_id ?? null,
-      requires_condition: clue.unlock_condition ?? null,
+      source: clue.source ?? clue.citizen_id ?? clue.location_id ?? null,
+      requires_condition: clue.requires ?? clue.unlock_condition ?? null,
       is_hidden: false,
     }))
 
@@ -318,12 +322,14 @@ async function seedItems() {
       id: string
       name: string
       type: string
-      location_id?: string
+      location?: string       // field name used in content file
+      location_id?: string    // alias (legacy)
       description: string
       can_take?: boolean
       lore_note?: string
       readable_content?: string
       mystery_tie?: string
+      mystery_tie_2?: string
       requires_condition?: string
       use_on?: string
     }>
@@ -340,12 +346,13 @@ async function seedItems() {
       id: item.id,
       name: item.name,
       type: item.type,
-      location_id: item.location_id ?? null,
+      location_id: item.location ?? item.location_id ?? null,
       description: item.description,
       can_take: item.can_take ?? false,
       lore_note: item.lore_note ?? null,
       readable_content: item.readable_content ?? null,
       mystery_tie: (mysteryTie && validMysteryIds?.has(mysteryTie)) ? mysteryTie : null,
+      mystery_tie_2: item.mystery_tie_2 ?? null,
       requires_condition: item.requires_condition ?? null,
       use_on: item.use_on ?? null,
     }

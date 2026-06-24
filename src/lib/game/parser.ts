@@ -141,6 +141,19 @@ const INTENT_PATTERNS: Array<{ intent: CommandIntent; patterns: RegExp[] }> = [
       /^(?:back to )?the present$/i,
     ],
   },
+  {
+    intent: 'solve',
+    patterns: [
+      // "solve the honey cake mystery" / "deduce the lake light" / "figure out the feud"
+      /^(?:solve|deduce|figure out|work out|crack|resolve)\s+(?:the\s+)?(.+)/i,
+      // "I think I've solved..." / "I've figured it out..." / "I think I know..."
+      /^(?:i(?:'ve)?\s+(?:think\s+i(?:'ve)?|figured|worked out|solved|know\s+the\s+answer))\s+(.+)/i,
+      // "I think the answer is..." / "I believe..."
+      /^(?:i\s+(?:think|believe)\s+(?:i\s+know|the\s+answer|i\s+have|i've))(.+)/i,
+      // bare "deduce" / "what do I know" about mysteries
+      /^(?:deduce|what(?:'s| is) the (?:answer|solution)|i(?:'ve)? (?:got it|solved it|figured it out))$/i,
+    ],
+  },
 ]
 
 // Precompile first-capture groups
@@ -182,7 +195,7 @@ function tryRegexParse(input: string): ParsedCommand | null {
 const SYSTEM_PROMPT = `You are the command parser for a cozy text adventure game set in the small mountain town of Brindlewick.
 Your job is to identify the player's intent from natural language input.
 
-Valid intents: go, look, talk, ask, take, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, unknown
+Valid intents: go, look, talk, ask, take, use, examine, research, journal, inventory, help, wait, find, catch_up, recall, travel, return_present, solve, unknown
 
 Respond with ONLY valid JSON in this exact shape:
 {"intent":"<intent>","target":"<target or null>","qualifier":"<qualifier or null>","confidence":<0.0-1.0>}
