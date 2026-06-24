@@ -902,15 +902,15 @@ async function dropItem(
   const newInventory = session.inventory.filter(id => id !== item.id)
   await supabase.from(saveTable).update({ inventory: newInventory }).eq(saveKey, saveVal)
 
-  // Record the new location in player_item_locations
-  await supabase.from('player_item_locations').upsert({
-    [pilKey]: pilVal,
-    item_id: item.id,
-    location_id: session.currentLocation,
-    moved_at: new Date().toISOString(),
-  }, {
-    onConflict: pilKey === 'player_id' ? 'player_id,item_id' : 'guest_token,item_id',
-  })
+  // Record the new location in player_item_locations.
+  // Use delete + insert rather than upsert: the unique indexes are partial (WHERE player_id IS NOT NULL /
+  // WHERE guest_token IS NOT NULL), which Supabase's onConflict can't reference by column name alone.
+  await supabase.from('player_item_locations')
+    .delete()
+    .eq(pilKey, pilVal)
+    .eq('item_id', item.id)
+  await supabase.from('player_item_locations')
+    .insert({ [pilKey]: pilVal, item_id: item.id, location_id: session.currentLocation, moved_at: new Date().toISOString() })
 
   return {
     text: `You set down **${item.name}**.${item.lore_note ? `\n\n*${item.lore_note}*` : ''}`,
@@ -967,10 +967,10 @@ async function handleUse(
       // by logging it to player_item_locations with a '__consumed__' sentinel location
       const pilKey = session.playerId ? 'player_id' : 'guest_token'
       const pilVal = session.playerId ?? session.guestToken
-      await supabase.from('player_item_locations').upsert(
-        { [pilKey]: pilVal, item_id: item.id, location_id: '__consumed__', moved_at: new Date().toISOString() },
-        { onConflict: pilKey === 'player_id' ? 'player_id,item_id' : 'guest_token,item_id' }
-      )
+      await supabase.from('player_item_locations')
+        .delete().eq(pilKey, pilVal).eq('item_id', item.id)
+      await supabase.from('player_item_locations')
+        .insert({ [pilKey]: pilVal, item_id: item.id, location_id: '__consumed__', moved_at: new Date().toISOString() })
       await supabase.from('player_consumed_items').insert({ [pciKey]: pciVal, item_id: item.id })
       return { text: consumeText, inventory_update: session.inventory }
     }
