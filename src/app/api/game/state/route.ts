@@ -23,8 +23,20 @@ export async function GET(request: NextRequest) {
 
     // Get current location details
     const locationData = await getLocationWithExits(supabase, session.currentLocation)
+
+    // Load citizen_overrides so summoned citizens appear in the Present list
+    const saveTable = playerId ? 'player_saves' : 'guest_saves'
+    const saveKey   = playerId ? 'player_id'   : 'guest_token'
+    const saveVal   = playerId ?? guestToken
+    const { data: saveRow } = await supabase
+      .from(saveTable)
+      .select('citizen_overrides')
+      .eq(saveKey, saveVal)
+      .single()
+    const citizenOverrides: Record<string, string> = (saveRow?.citizen_overrides as Record<string, string>) ?? {}
+
     const citizens = await getCitizensAtLocation(
-      supabase, session.currentLocation, world.game_date, timeSlot
+      supabase, session.currentLocation, world.game_date, timeSlot, citizenOverrides
     )
     const items = await getItemsAtLocation(supabase, session.currentLocation, session)
 
