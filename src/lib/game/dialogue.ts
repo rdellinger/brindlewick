@@ -16,6 +16,13 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Citizen, ConversationMessage, GameSession } from '../../types/game'
 import { getDialogueForCitizen, getLoreForCitizen } from './world'
 import { getTrustLevel } from './player'
+import { getEasternTime, checkBusinessHours } from '../realtime'
+import type { DowKey } from '../realtime'
+
+export interface LocationContext {
+  name: string
+  business_hours: Partial<Record<DowKey, [number, number] | null>> | null
+}
 
 function formatRosterEntry(c: { first_name: string; last_name: string; occupation?: string | null; personality?: string | null; household?: string[] }): string {
   const parts = [`- ${c.first_name} ${c.last_name}`]
@@ -24,6 +31,36 @@ function formatRosterEntry(c: { first_name: string; last_name: string; occupatio
   if (c.household?.length) parts.push(`family: ${c.household.join(', ')}`)
   // Join with ' | ' after the name
   return parts[0] + (parts.length > 1 ? ' — ' + parts.slice(1).join(' | ') : '')
+}
+
+/**
+ * Builds a WORLD CONTEXT block for the system prompt so NPCs are aware of
+ * the current real-world date, time, season, and their location's hours.
+ */
+function buildWorldContext(location?: LocationContext): string {
+  const et = getEasternTime()
+  const season = et.season.charAt(0).toUpperCase() + et.season.slice(1)
+  const lines = [
+    'WORLD CONTEXT (weave this into responses naturally — do not recite it mechanically):',
+    `- It is currently ${et.displayTime} on ${et.displayDate}`,
+    `- Season: ${season}`,
+  ]
+
+  if (location) {
+    if (location.business_hours) {
+      const status = checkBusinessHours(location.business_hours, et)
+      if (status.open) {
+        lines.push(`- You are at ${location.name}${status.closesAt ? `, which closes at ${status.closesAt} today` : ''}`)
+      } else {
+        const whenOpen = status.opensAt ? ` (opens ${status.opensAt})` : ''
+        lines.push(`- You are at ${location.name}, which is currently closed${whenOpen}`)
+      }
+    } else {
+      lines.push(`- You are at ${location.name}`)
+    }
+  }
+
+  return lines.join('\n')
 }
 
 const TOWN_CONTEXT = `You are generating dialogue for an NPC in Brindlewick, a cozy, safe, warm mountain town text adventure.
@@ -44,7 +81,8 @@ export async function generateNpcDialogue(
   topic: string,
   session: GameSession,
   townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
-  priorHistory: ConversationMessage[] = []
+  priorHistory: ConversationMessage[] = [],
+  location?: LocationContext
 ): Promise<string> {
   // First check the database for scripted dialogue
   const scripted = await getDialogueForCitizen(supabase, citizen.id, trustLevel, topic)
@@ -67,12 +105,14 @@ export async function generateNpcDialogue(
     ? `\n\nPRIOR CONVERSATION HISTORY WITH THIS PLAYER (most recent ${priorHistory.length} messages):\n${priorHistory.map(m => `${m.role === 'user' ? 'Player' : citizen.first_name}: ${m.content}`).join('\n')}\n\nThis player has spoken with you before. Greet them warmly as someone you know. Reference something from your prior conversations naturally if relevant — don't just repeat the same greeting you'd give a stranger.`
     : ''
 
+  const worldContext = buildWorldContext(location)
+
   try {
     const client = getAnthropicClient()
     const message = await client.messages.create({
       model: MODEL,
       max_tokens: 300,
-      system: `${TOWN_CONTEXT}\n\n${citizenContext}${rosterLine}${historyNote}`,
+      system: `${TOWN_CONTEXT}\n\n${worldContext}\n\n${citizenContext}${rosterLine}${historyNote}`,
       messages: [
         {
           role: 'user',
@@ -109,7 +149,8 @@ export async function continueConversation(
   _session: GameSession,
   nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
-  locationMap: Record<string, string> = {}
+  locationMap: Record<string, string> = {},
+  location?: LocationContext
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -132,7 +173,11 @@ export async function continueConversation(
     ? `\nESCORT OFFERS:\nIf it would feel natural to offer to walk the player to a specific place RIGHT NOW (not just mention a place), append exactly [ESCORT:location_id] on a new line at the very end of your response. Use ONLY IDs from this list:\n${Object.entries(locationMap).map(([id, name]) => `  ${id} → ${name}`).join('\n')}\nDo NOT invent location IDs. Only append the tag when you are genuinely offering to escort them immediately.`
     : ''
 
+  const worldContext = buildWorldContext(location)
+
   const systemPrompt = `${TOWN_CONTEXT}
+
+${worldContext}
 
 ${citizenContext}
 

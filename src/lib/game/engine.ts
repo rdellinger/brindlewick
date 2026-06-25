@@ -15,7 +15,7 @@ import {
   findLocationByName, getItemsAtLocation, findItemByName, getItem,
   getTownRoster, getItemCurrentState, filterItemsBySeason, checkLocationOpen,
 } from './world'
-import { generateNpcDialogue, continueConversation } from './dialogue'
+import { generateNpcDialogue, continueConversation, LocationContext } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory, markItemSeen } from './player'
 import { checkMysteryClue, handleSolveAttempt, findMysteryByInput, evaluateCondition } from './mysteries'
@@ -472,12 +472,22 @@ async function handleTalk(
   // Load prior conversation history so the NPC can reference past talks
   const priorHistory = await getConversationHistory(supabase, session, citizen.id)
 
+  // Fetch current location for world context (name + hours)
+  const { data: locRow } = await supabase
+    .from('locations')
+    .select('name, business_hours')
+    .eq('id', session.currentLocation)
+    .single()
+  const talkLocationCtx: LocationContext | undefined = locRow
+    ? { name: locRow.name, business_hours: locRow.business_hours ?? null }
+    : undefined
+
   // Check Eleanor's trust-gated quest chain
   const eleanorResponse = await handleEleanorQuestProgress(supabase, session, citizen, trustLevel)
 
   // Generate greeting — if there's prior history, acknowledge the relationship
   const greetingTopic = priorHistory.length > 0 ? 'returning_visitor' : 'greeting'
-  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, greetingTopic, session, roster, priorHistory)
+  const dialogue = eleanorResponse ?? await generateNpcDialogue(supabase, citizen, trustLevel, greetingTopic, session, roster, priorHistory, talkLocationCtx)
 
   // Increase trust slightly on each interaction
   const newTrust = await updateTrust(supabase, session, citizen.id, trustLevel, 0.5)
@@ -583,19 +593,23 @@ export async function handleConversationMessage(
   // can generate [ESCORT:id] for any place in town, not just adjacent exits.
   const { data: allLocations } = await supabase
     .from('locations')
-    .select('id, name')
+    .select('id, name, business_hours')
     .eq('is_hidden', false)
   const locationMap: Record<string, string> = {}
   for (const loc of allLocations ?? []) {
     locationMap[loc.id] = loc.name
   }
+  const currentLocData = (allLocations ?? []).find(l => l.id === session.currentLocation)
+  const locationContext: LocationContext | undefined = currentLocData
+    ? { name: currentLocData.name, business_hours: currentLocData.business_hours ?? null }
+    : undefined
 
   // Detect farewell words — end conversation after response
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
   // Generate response using full history
-  const rawResponse = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster, locationMap)
+  const rawResponse = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster, locationMap, locationContext)
 
   // Parse and strip [ESCORT:location_id] tag if present
   const escortMatch = rawResponse.match(/\[ESCORT:([a-z_]+)\]/)
