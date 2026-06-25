@@ -63,6 +63,7 @@ interface GameState {
     mysteriesResolved: number
   }
   upcomingEvents: Array<{ name: string; daysAway: number }>
+  activeEvents: Array<{ name: string }>
   journalEntries: JournalEntry[]
   worldEvents: WorldEvent[]
   seenItemIds: string[]
@@ -116,6 +117,7 @@ function GamePageInner() {
     location: null,
     stats: { journalEntries: 0, mysteriesStarted: 0, mysteriesResolved: 0 },
     upcomingEvents: [],
+    activeEvents: [],
     journalEntries: [],
     worldEvents: [],
     seenItemIds: [],
@@ -224,6 +226,7 @@ function GamePageInner() {
         location: data.location,
         stats: data.stats,
         upcomingEvents: data.upcomingEvents,
+        activeEvents: data.activeEvents ?? [],
         journalEntries: data.journalEntries ?? [],
         worldEvents: data.worldEvents ?? [],
         seenItemIds: data.seenItemIds ?? [],

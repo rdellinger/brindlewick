@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '../../../../lib/supabase/server'
 import { buildGameSession, generateGuestToken, getSeenItemIds } from '../../../../lib/game/player'
 import { getLocationWithExits, getLocationDescription, getCitizensAtLocation,
-         getItemsAtLocation, getWorldState, getTimeSlot, getUpcomingEvents } from '../../../../lib/game/world'
+         getItemsAtLocation, getWorldState, getTimeSlot, getUpcomingEvents,
+         getActiveEvents } from '../../../../lib/game/world'
 
 export async function GET(request: NextRequest) {
   try {
@@ -80,6 +81,7 @@ export async function GET(request: NextRequest) {
 
     // Upcoming events for ambient dialogue
     const upcomingEvents = await getUpcomingEvents(supabase, world.game_date, 7)
+    const activeEvents = await getActiveEvents(supabase)
 
     // Mystery progress summary — direct query, no join needed for counts
     const { data: mysteryProgress } = await supabase
@@ -178,6 +180,7 @@ export async function GET(request: NextRequest) {
         name: e.event.name,
         daysAway: e.days_away,
       })),
+      activeEvents: activeEvents.map(e => ({ name: e.name })),
       journalEntries: (journalRows ?? []).map((e: Record<string, unknown>) => ({
         id: e.id as string,
         entry_type: e.entry_type as string,

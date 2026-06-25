@@ -46,6 +46,7 @@ interface GameState {
     mysteriesResolved: number
   }
   upcomingEvents: Array<{ name: string; daysAway: number }>
+  activeEvents: Array<{ name: string }>
   journalEntries: JournalEntry[]
   worldEvents: WorldEvent[]
   seenItemIds: string[]
@@ -150,7 +151,7 @@ function clickableRow(styles?: React.CSSProperties) {
 }
 
 export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }: Props) {
-  const { location, world, stats, upcomingEvents, inventoryItems, tasks, journalEntries, worldEvents, timePosition, hasChronoLogbook, seenItemIds } = gameState
+  const { location, world, stats, upcomingEvents, activeEvents, inventoryItems, tasks, journalEntries, worldEvents, timePosition, hasChronoLogbook, seenItemIds } = gameState
 
   const activeTasks = tasks.filter(t => t.status === 'in_progress')
 
@@ -413,6 +414,29 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                       )}
                       {!exit.label && <span style={{ opacity: 0.6 }}>→</span>}
                       <span style={{ color: 'var(--moss-green)' }}>{exit.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Active events (happening today) */}
+            {activeEvents && activeEvents.length > 0 && (
+              <div>
+                <div
+                  className="text-xs uppercase tracking-widest mb-2"
+                  style={{ color: 'var(--amber)' }}
+                >
+                  Today
+                </div>
+                <ul className="space-y-1">
+                  {activeEvents.map(event => (
+                    <li
+                      key={event.name}
+                      className="text-xs"
+                      style={{ color: 'var(--amber)' }}
+                    >
+                      ✦ {event.name}
                     </li>
                   ))}
                 </ul>

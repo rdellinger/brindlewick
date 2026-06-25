@@ -474,50 +474,164 @@ export async function getAvailableTasksAtLocation(
 
 // ── Calendar / Events ────────────────────────────────────────────────────────
 
-export async function getActiveEvents(
-  supabase: SupabaseClient,
-  gameDate: string
-): Promise<CalendarEvent[]> {
-  const date = new Date(gameDate)
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+/**
+ * Returns the day-of-month for the Nth occurrence of a weekday in a given month.
+ * dayName can be full ("saturday") or 3-char ("sat") — case-insensitive.
+ */
+function getNthWeekdayOfMonth(year: number, month: number, nth: number, dayName: string): number | null {
+  const KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+  const target = KEYS.indexOf(dayName.toLowerCase().slice(0, 3))
+  if (target === -1) return null
+  let count = 0
+  for (let d = 1; d <= 31; d++) {
+    const dt = new Date(year, month - 1, d)
+    if (dt.getMonth() !== month - 1) break
+    if (dt.getDay() === target) { count++; if (count === nth) return d }
+  }
+  return null
+}
 
-  // Get annual events active today
-  const { data } = await supabase
-    .from('calendar_events')
-    .select('*')
-    .or(`event_type.eq.annual,event_type.eq.weekly,event_type.eq.monthly`)
+/**
+ * Returns true if `month` falls within the event's seasonal_restriction.
+ * null restriction = always allowed.
+ * "months:6-10" = June through October.
+ */
+function checkSeasonalRestriction(restriction: string | null, month: number): boolean {
+  if (!restriction) return true
+  if (restriction.startsWith('months:')) {
+    const [s, e] = restriction.slice(7).split('-').map(Number)
+    return month >= s && month <= e
+  }
+  return true
+}
 
-  // Filter to events that are currently active (simplified — full logic in cron)
-  return (data ?? []).filter((event: CalendarEvent) => {
-    if (event.event_type === 'annual' && event.month === month) {
-      if (event.day && Math.abs(event.day - day) <= (event.duration_days ?? 1)) return true
+/**
+ * Compute the next occurrence Date for an event on or after `today`.
+ * Returns null if the event has no computable schedule (triggered, missing fields).
+ */
+function getNextOccurrence(
+  event: CalendarEvent, today: Date, year: number, month: number
+): Date | null {
+  if (event.event_type === 'triggered') return null
+
+  if (event.event_type === 'annual') {
+    if (!event.month) return null
+    const resolveDay = (y: number): number | null => {
+      if (event.day != null) return event.day
+      if (event.week_of_month && event.day_of_week) {
+        return getNthWeekdayOfMonth(y, event.month!, event.week_of_month, event.day_of_week)
+      }
+      return null
     }
+    const d0 = resolveDay(year)
+    if (d0 === null) return null
+    const c0 = new Date(year, event.month - 1, d0)
+    if (c0 >= today) return c0
+    // Event already passed this year — check next year
+    const d1 = resolveDay(year + 1)
+    if (d1 === null) return null
+    return new Date(year + 1, event.month - 1, d1)
+  }
+
+  if (event.event_type === 'weekly') {
+    if (!event.day_of_week) return null
+    const KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    const targetDow = KEYS.indexOf(event.day_of_week.toLowerCase().slice(0, 3))
+    if (targetDow === -1) return null
+    for (let i = 0; i <= 14; i++) {
+      const candidate = new Date(today.getTime() + i * 86_400_000)
+      if (candidate.getDay() === targetDow) {
+        const m = candidate.getMonth() + 1
+        if (checkSeasonalRestriction(event.seasonal_restriction, m)) return candidate
+      }
+    }
+    return null
+  }
+
+  if (event.event_type === 'monthly') {
+    if (!event.day_of_week || !event.week_of_month) return null
+    for (let offset = 0; offset <= 2; offset++) {
+      const ref = new Date(today.getFullYear(), today.getMonth() + offset, 1)
+      const y = ref.getFullYear()
+      const m = ref.getMonth() + 1
+      const d = getNthWeekdayOfMonth(y, m, event.week_of_month, event.day_of_week)
+      if (d !== null) {
+        const candidate = new Date(y, m - 1, d)
+        if (candidate >= today) return candidate
+      }
+    }
+    return null
+  }
+
+  return null
+}
+
+/**
+ * Returns all calendar events active right now (uses real ET clock).
+ */
+export async function getActiveEvents(supabase: SupabaseClient): Promise<CalendarEvent[]> {
+  const et = getEasternTime()
+  const { year, month, day, dowKey } = et
+  const weekOfMonth = Math.ceil(day / 7)
+
+  const { data } = await supabase.from('calendar_events').select('*')
+
+  return (data ?? []).filter((event: CalendarEvent) => {
+    if (event.event_type === 'triggered') return false
+
+    if (event.event_type === 'annual') {
+      if (event.month !== month) return false
+      if (event.day != null) {
+        return day >= event.day && day < event.day + (event.duration_days ?? 1)
+      }
+      if (event.week_of_month && event.day_of_week) {
+        const startDay = getNthWeekdayOfMonth(year, month, event.week_of_month, event.day_of_week)
+        if (startDay === null) return false
+        return day >= startDay && day < startDay + (event.duration_days ?? 1)
+      }
+      return false
+    }
+
+    if (event.event_type === 'weekly') {
+      if (event.day_of_week && event.day_of_week.slice(0, 3) !== dowKey) return false
+      return checkSeasonalRestriction(event.seasonal_restriction, month)
+    }
+
+    if (event.event_type === 'monthly') {
+      if (event.day_of_week && event.day_of_week.slice(0, 3) !== dowKey) return false
+      if (event.week_of_month && weekOfMonth !== event.week_of_month) return false
+      return true
+    }
+
     return false
   }) as CalendarEvent[]
 }
 
+/**
+ * Returns upcoming events within `daysAhead` days (uses real ET clock).
+ * Handles all event types: annual day-based, annual week-based, weekly, monthly.
+ */
 export async function getUpcomingEvents(
   supabase: SupabaseClient,
-  gameDate: string,
+  _gameDate: string,   // kept for API compat; clock is now real-time
   daysAhead = 14
 ): Promise<Array<{ event: CalendarEvent; days_away: number }>> {
-  const date = new Date(gameDate)
-  const { data } = await supabase
-    .from('calendar_events')
-    .select(`*, event_ambient_changes(*)`)
+  const et = getEasternTime()
+  const today = new Date(et.year, et.month - 1, et.day)
 
+  const { data } = await supabase.from('calendar_events').select(`*, event_ambient_changes(*)`)
   if (!data) return []
 
   const upcoming: Array<{ event: CalendarEvent; days_away: number }> = []
-  for (const event of data) {
-    if (event.month && event.day) {
-      const eventDate = new Date(date.getFullYear(), event.month - 1, event.day)
-      const daysAway = Math.ceil((eventDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
-      if (daysAway >= 0 && daysAway <= daysAhead) {
-        upcoming.push({ event, days_away: daysAway })
-      }
+
+  for (const event of data as CalendarEvent[]) {
+    const nextDate = getNextOccurrence(event, today, et.year, et.month)
+    if (!nextDate) continue
+    const daysAway = Math.round((nextDate.getTime() - today.getTime()) / 86_400_000)
+    if (daysAway >= 0 && daysAway <= daysAhead) {
+      upcoming.push({ event, days_away: daysAway })
     }
   }
+
   return upcoming.sort((a, b) => a.days_away - b.days_away)
 }

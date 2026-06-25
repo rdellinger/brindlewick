@@ -451,21 +451,27 @@ async function seedCalendar() {
       month?: number
       day?: number
       day_of_week?: string
+      week_of_month?: number
       duration_days?: number
       setup_days_before?: number
       mystery_tie?: string | null
+      seasonal_restriction?: string | null
+      trigger_condition?: string | null
     }>
     weekly_events: Array<{
       id: string
       name: string
       description?: string
       day_of_week?: string
+      seasonal_restriction?: string | null
       schedule?: string
     }>
     monthly_events: Array<{
       id: string
       name: string
       description?: string
+      week_of_month?: number
+      day_of_week?: string
       schedule?: string
     }>
   }
@@ -473,17 +479,22 @@ async function seedCalendar() {
   const events: Array<Record<string, unknown>> = []
 
   for (const e of raw.annual_events ?? []) {
+    const rawMonth = e.date?.month ?? e.month ?? null
+    const isTriggered = rawMonth === -1 || !!e.trigger_condition
     events.push({
       id: e.id,
       name: e.name,
       description: e.description ?? e.name,
-      event_type: 'annual',
-      month: e.date?.month ?? e.month ?? null,
+      event_type: isTriggered ? 'triggered' : 'annual',
+      month: isTriggered ? null : rawMonth,
       day: e.date?.day ?? e.day ?? null,
-      day_of_week: e.date?.day_of_week ?? e.day_of_week ?? null,
+      week_of_month: e.date?.week ?? e.week_of_month ?? null,
+      day_of_week: (e.date?.day_of_week ?? e.day_of_week ?? null)?.toLowerCase() ?? null,
       duration_days: e.duration_days ?? 1,
       setup_days_before: e.setup_days_before ?? 0,
       mystery_tie: e.mystery_tie ?? null,
+      seasonal_restriction: e.seasonal_restriction ?? null,
+      trigger_condition: e.trigger_condition ?? null,
     })
   }
 
@@ -495,10 +506,13 @@ async function seedCalendar() {
       event_type: 'weekly',
       month: null,
       day: null,
-      day_of_week: e.day_of_week ?? null,
+      week_of_month: null,
+      day_of_week: e.day_of_week?.toLowerCase() ?? null,
       duration_days: 1,
       setup_days_before: 0,
       mystery_tie: null,
+      seasonal_restriction: e.seasonal_restriction ?? null,
+      trigger_condition: null,
     })
   }
 
@@ -510,10 +524,13 @@ async function seedCalendar() {
       event_type: 'monthly',
       month: null,
       day: null,
-      day_of_week: null,
+      week_of_month: e.week_of_month ?? null,
+      day_of_week: e.day_of_week?.toLowerCase() ?? null,
       duration_days: 1,
       setup_days_before: 0,
       mystery_tie: null,
+      seasonal_restriction: null,
+      trigger_condition: null,
     })
   }
 

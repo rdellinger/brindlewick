@@ -57,7 +57,7 @@
     {
       "id": "first_snow_social",
       "name": "The First Snow Social",
-      "date": {"month": -1, "note": "Triggered by first measurable snowfall, typically November or December"},
+      "trigger_condition": "first_snow",
       "duration_days": 1,
       "description": "The First Snow Social is not scheduled — it happens the evening of the first real snowfall of the season. Word goes around organically: people text, call, or simply appear. By 7pm, the community hall is full. Hot cider from Perkins (Agnes always has a reserve). Wally Chen brings chowder from the diner. The school kids perform a short piece they've been secretly rehearsing. It feels like the town taking a breath together before winter.",
       "ambient_changes": {
@@ -141,6 +141,8 @@
       "id": "saturday_market",
       "name": "Farmers' Market",
       "schedule": "Every Saturday, June through October",
+      "day_of_week": "saturday",
+      "seasonal_restriction": "months:6-10",
       "location": "town_square",
       "participants": ["marigold_osei", "agnes_perkins", "fletcher_grange", "beatrice_meadow", "margaret_hollis", "sylvie_tran", "dorothy_alderman", "gus_fairweather", "and_others"]
     },
@@ -148,6 +150,7 @@
       "id": "sunday_chapel",
       "name": "Sunday Service",
       "schedule": "Every Sunday morning",
+      "day_of_week": "sunday",
       "location": "st_agathas_chapel",
       "participants": ["reverend_prewitt", "eleanor_finch_hartwell", "harold_hartwell", "artie_pryce", "mayor_windermere", "many_others"]
     }
@@ -157,6 +160,8 @@
       "id": "community_potluck",
       "name": "Monthly Potluck",
       "schedule": "Third Thursday of every month",
+      "week_of_month": 3,
+      "day_of_week": "thursday",
       "location": "community_hall",
       "description": "The monthly potluck has been running since 1978. Everyone brings something. Dr. Okafor's jollof rice is the event's most anticipated dish."
     }
