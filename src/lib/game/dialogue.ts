@@ -192,7 +192,7 @@ export async function continueConversation(
   const presentNames = new Set(nearbyCitizens.map(c => `${c.first_name} ${c.last_name}`))
   const summonableCitizens = townRoster.filter(c => !presentNames.has(`${c.first_name} ${c.last_name}`) && c.id)
   const summonableLine = summonableCitizens.length > 0
-    ? `\nSUMMON CAPABILITY:\nIf the player asks to speak with someone you know who isn't here but could reasonably come (e.g., a family member, coworker, or someone you can call over), you may summon them by appending [SUMMON:citizen_id] on a new line at the very end of your response. Use ONLY these IDs:\n${summonableCitizens.map(c => `  ${c.id} → ${c.first_name} ${c.last_name}`).join('\n')}\nOnly summon if it makes narrative sense. Say something like "Let me get her" or "I'll call him over" before the tag.`
+    ? `\nSUMMON CAPABILITY:\nIf the player asks to speak with or meet someone you know who isn't currently here but could reasonably come (family member, coworker, neighbor you can call over), you MUST append [SUMMON:citizen_id] on its own line at the very end of your response — this is required for the game to bring them in. Say something like "Let me get her" or "I'll call him over" as part of your natural response, then end with the tag.\nAvailable IDs (only use these exact values):\n${summonableCitizens.map(c => `  ${c.id} → ${c.first_name} ${c.last_name}`).join('\n')}\nDo not invent IDs. Do not summon someone who would have no reason to come.`
     : ''
 
   const worldContext = buildWorldContext(location)

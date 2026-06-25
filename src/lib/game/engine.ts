@@ -644,7 +644,26 @@ export async function handleConversationMessage(
   const escortedToId = escortMatch?.[1] ?? null
 
   // Parse [SUMMON:citizen_id] tag
-  const summonMatch = rawResponse.match(/\[SUMMON:([a-z_]+)\]/)
+  let summonMatch = rawResponse.match(/\[SUMMON:([a-z_]+)\]/)
+
+  // Fallback: if the player asked to speak with someone by name, the NPC agreed (no decline),
+  // but forgot the tag — infer it from the roster
+  if (!summonMatch) {
+    const askMatch = playerMessage.match(/\b(?:talk|speak|chat|meet|see|find)\b.{0,20}?\b(?:with|to)\b\s+(.+)/i)
+      ?? playerMessage.match(/^(?:can i|could i|i'?d like to|i want to)\s+(?:talk|speak|chat|meet|see|find)\b.{0,20}?\b(.+)/i)
+    const npcAgreed = /\b(she'?s coming|he'?s coming|i'?ll (get|call|fetch|grab)|let me get|right out|coming now|on (?:her|his) way|calling|give (?:her|him) a second)\b/i.test(rawResponse)
+    if (askMatch && npcAgreed) {
+      const nameQuery = askMatch[1].trim().replace(/[?.!,].*$/, '').replace(/^(with|to)\s+/i, '').trim()
+      const matched = roster.find(c =>
+        `${c.first_name} ${c.last_name}`.toLowerCase().includes(nameQuery.toLowerCase()) ||
+        c.first_name.toLowerCase() === nameQuery.toLowerCase()
+      )
+      if (matched && matched.id) {
+        summonMatch = ['', matched.id] as RegExpMatchArray
+      }
+    }
+  }
+
   const summonCitizenId = summonMatch?.[1] ?? null
   const cleanResponse = rawResponse.replace(/\s*\[SUMMON:[a-z_]+\]/, '')
 
