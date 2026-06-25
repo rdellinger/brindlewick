@@ -298,6 +298,17 @@ async function handleLook(
 
 // ── GO ────────────────────────────────────────────────────────────────────────
 
+function generateWalkNarration(destName: string): string {
+  const lines = [
+    `You make your way across town to **${destName}**.`,
+    `You set off through the streets of Brindlewick, arriving at **${destName}**.`,
+    `A short walk brings you to **${destName}**.`,
+    `You head through town and find your way to **${destName}**.`,
+    `You navigate the familiar streets and arrive at **${destName}**.`,
+  ]
+  return lines[Math.floor(Math.random() * lines.length)]
+}
+
 async function handleGo(
   supabase: SupabaseClient,
   command: ParsedCommand,
@@ -314,22 +325,7 @@ async function handleGo(
   const destination = await findLocationByName(supabase, target)
   if (!destination) {
     return {
-      text: `You're not sure where "${command.target}" is. Try looking around first to see where you can go.`,
-    }
-  }
-
-  // Check if destination is accessible from current location
-  const { data: exitRow } = await supabase
-    .from('location_exits')
-    .select('*')
-    .eq('from_loc', session.currentLocation)
-    .eq('to_loc', destination.id)
-    .eq('blocked', false)
-    .single()
-
-  if (!exitRow) {
-    return {
-      text: `You can't go directly to ${destination.name} from here. Look around to see where you can go.`,
+      text: `You're not sure where "${command.target}" is. You can ask anyone in town for directions.`,
     }
   }
 
@@ -362,9 +358,22 @@ async function handleGo(
   // Log the visit
   await logLocationVisit(supabase, session, destination.id)
 
+  // Check if it's a direct adjacent exit or a longer walk
+  const { data: directExit } = await supabase
+    .from('location_exits')
+    .select('label')
+    .eq('from_loc', session.currentLocation)
+    .eq('to_loc', destination.id)
+    .eq('blocked', false)
+    .maybeSingle()
+
+  const walkLine = directExit
+    ? `You head ${directExit.label ?? 'over'} to **${destination.name}**.`
+    : generateWalkNarration(destination.name)
+
   // Get the new location description
   const result = await getLocationWithExits(supabase, destination.id)
-  if (!result) return { text: `You arrive at ${destination.name}.` }
+  if (!result) return { text: `${walkLine}` }
 
   const { location, exits } = result
   let desc = getLocationDescription(location, world.game_season, timeSlot)
@@ -398,7 +407,7 @@ async function handleGo(
   }
 
   return {
-    text: `You make your way to **${location.name}**.\n\n${desc}${tutorialHint}${taskCompletion ? `\n\n${taskCompletion}` : ''}`,
+    text: `${walkLine}\n\n${desc}${tutorialHint}${taskCompletion ? `\n\n${taskCompletion}` : ''}`,
     location,
     journal_entry: undefined, // Only log journal for first visits (handled in logLocationVisit)
   }
@@ -586,15 +595,26 @@ export async function handleConversationMessage(
 
   const trustLevel = await getTrustLevel(supabase, session, citizenId)
 
+  // Load citizen overrides for this player (summoned citizens)
+  const saveTable = session.playerId ? 'player_saves' : 'guest_saves'
+  const saveKey = session.playerId ? 'player_id' : 'session_token'
+  const saveVal = session.playerId ?? session.guestToken
+  const { data: saveRow } = await supabase
+    .from(saveTable)
+    .select('citizen_overrides')
+    .eq(saveKey, saveVal)
+    .single()
+  const citizenOverrides: Record<string, string> = (saveRow?.citizen_overrides as Record<string, string>) ?? {}
+
   // Fetch other citizens at the same location so the NPC knows who's nearby
-  const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+  const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot, citizenOverrides)
   const roster = await getTownRoster(supabase)
 
   // Build locationMap for escort offers — all non-hidden locations so the NPC
   // can generate [ESCORT:id] for any place in town, not just adjacent exits.
   const { data: allLocations } = await supabase
     .from('locations')
-    .select('id, name, business_hours')
+    .select('id, name, address, business_hours')
     .eq('is_hidden', false)
   const locationMap: Record<string, string> = {}
   for (const loc of allLocations ?? []) {
@@ -605,17 +625,30 @@ export async function handleConversationMessage(
     ? { name: currentLocData.name, business_hours: currentLocData.business_hours ?? null }
     : undefined
 
+  // Build locationDirectory for NPC map knowledge
+  const locationDirectory = (allLocations ?? []).map((l: { id: string; name: string; address?: string | null }) => ({
+    id: l.id,
+    name: l.name,
+    address: l.address ?? null,
+  }))
+
   // Detect farewell words — end conversation after response
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
   // Generate response using full history
-  const rawResponse = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster, locationMap, locationContext)
+  const rawResponse = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster, locationMap, locationContext, locationDirectory)
 
   // Parse and strip [ESCORT:location_id] tag if present
   const escortMatch = rawResponse.match(/\[ESCORT:([a-z_]+)\]/)
   const escortedToId = escortMatch?.[1] ?? null
-  const response = rawResponse.replace(/\s*\[ESCORT:[a-z_]+\]/, '')
+
+  // Parse [SUMMON:citizen_id] tag
+  const summonMatch = rawResponse.match(/\[SUMMON:([a-z_]+)\]/)
+  const summonCitizenId = summonMatch?.[1] ?? null
+  const cleanResponse = rawResponse.replace(/\s*\[SUMMON:[a-z_]+\]/, '')
+
+  const response = cleanResponse.replace(/\s*\[ESCORT:[a-z_]+\]/, '')
 
   // Small trust gain each conversational exchange
   const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
@@ -770,6 +803,30 @@ export async function handleConversationMessage(
         citizen_name: `${citizen.first_name} ${citizen.last_name}`,
       }
     : undefined
+
+  // Handle [SUMMON:citizen_id] — store override and return summoned citizen info
+  if (summonCitizenId) {
+    const summonedCitizen = await getCitizen(supabase, summonCitizenId)
+    if (summonedCitizen) {
+      const newOverrides = { ...citizenOverrides, [summonCitizenId]: session.currentLocation }
+      await supabase
+        .from(saveTable)
+        .update({ citizen_overrides: newOverrides })
+        .eq(saveKey, saveVal)
+
+      return {
+        text: response,
+        summoned_citizen: {
+          id: summonedCitizen.id,
+          name: `${summonedCitizen.first_name} ${summonedCitizen.last_name}`,
+        },
+        conversation_end: true,
+        trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
+        inventory_update: inventoryUpdate,
+        task_update: taskUpdate,
+      }
+    }
+  }
 
   return {
     text: response,

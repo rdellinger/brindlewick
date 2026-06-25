@@ -406,5 +406,9 @@ export interface GameResponse {
     occupation: string | null
     trust_level: number
   }
+  summoned_citizen?: {      // NPC that was summoned to this location by another NPC
+    id: string
+    name: string
+  } | null
   restart_pending?: boolean  // player asked to restart — waiting for "I understand" confirmation
 }

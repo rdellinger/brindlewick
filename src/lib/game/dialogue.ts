@@ -25,7 +25,7 @@ export interface LocationContext {
   business_hours: Partial<Record<DowKey, [number, number] | null>> | null
 }
 
-function formatRosterEntry(c: { first_name: string; last_name: string; occupation?: string | null; personality?: string | null; household?: string[] }): string {
+function formatRosterEntry(c: { id?: string; first_name: string; last_name: string; occupation?: string | null; personality?: string | null; household?: string[] }): string {
   const parts = [`- ${c.first_name} ${c.last_name}`]
   if (c.occupation) parts.push(c.occupation)
   if (c.personality) parts.push(`personality: ${c.personality}`)
@@ -81,7 +81,7 @@ export async function generateNpcDialogue(
   trustLevel: number,
   topic: string,
   session: GameSession,
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
+  townRoster: Array<{ id?: string; first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   priorHistory: ConversationMessage[] = [],
   location?: LocationContext
 ): Promise<string> {
@@ -149,9 +149,10 @@ export async function continueConversation(
   playerMessage: string,
   session: GameSession,
   nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
+  townRoster: Array<{ id?: string; first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   locationMap: Record<string, string> = {},
-  location?: LocationContext
+  location?: LocationContext,
+  locationDirectory?: Array<{ id: string; name: string; address?: string | null }>
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -183,6 +184,17 @@ export async function continueConversation(
     ? `\nESCORT OFFERS:\nIf it would feel natural to offer to walk the player to a specific place RIGHT NOW (not just mention a place), append exactly [ESCORT:location_id] on a new line at the very end of your response. Use ONLY IDs from this list:\n${Object.entries(locationMap).map(([id, name]) => `  ${id} → ${name}`).join('\n')}\nDo NOT invent location IDs. Only append the tag when you are genuinely offering to escort them immediately.`
     : ''
 
+  const locationDirLine = locationDirectory && locationDirectory.length > 0
+    ? `\nTOWN LOCATIONS (you know where all of these are and can give directions):\n${locationDirectory.map(l => `- ${l.name}${l.address ? ` (${l.address})` : ''}`).join('\n')}`
+    : ''
+
+  // Build summon capability — only citizens NOT already present
+  const presentNames = new Set(nearbyCitizens.map(c => `${c.first_name} ${c.last_name}`))
+  const summonableCitizens = townRoster.filter(c => !presentNames.has(`${c.first_name} ${c.last_name}`) && c.id)
+  const summonableLine = summonableCitizens.length > 0
+    ? `\nSUMMON CAPABILITY:\nIf the player asks to speak with someone you know who isn't here but could reasonably come (e.g., a family member, coworker, or someone you can call over), you may summon them by appending [SUMMON:citizen_id] on a new line at the very end of your response. Use ONLY these IDs:\n${summonableCitizens.map(c => `  ${c.id} → ${c.first_name} ${c.last_name}`).join('\n')}\nOnly summon if it makes narrative sense. Say something like "Let me get her" or "I'll call him over" before the tag.`
+    : ''
+
   const worldContext = buildWorldContext(location)
 
   const systemPrompt = `${TOWN_CONTEXT}
@@ -195,6 +207,8 @@ ${motiveContext}
 ${nearbyLine}
 ${rosterLine}
 ${escortLine}
+${locationDirLine}
+${summonableLine}
 ${gossipLine}
 
 CONVERSATION RULES:

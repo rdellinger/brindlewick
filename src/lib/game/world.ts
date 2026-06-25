@@ -163,7 +163,8 @@ export async function getCitizensAtLocation(
   supabase: SupabaseClient,
   locationId: string,
   gameDate: string,
-  timeSlot: string
+  timeSlot: string,
+  citizenOverrides?: Record<string, string>  // citizen_id → location_id
 ): Promise<Citizen[]> {
   // Use the DB function for accurate schedule-based lookup
   const { data } = await supabase
@@ -173,25 +174,45 @@ export async function getCitizensAtLocation(
       p_time_slot: timeSlot,
     })
 
-  if (!data?.length) return []
+  const citizenIds = (data ?? []).map((row: { citizen_id: string }) => row.citizen_id)
+  let citizens: Citizen[] = []
 
-  const citizenIds = data.map((row: { citizen_id: string }) => row.citizen_id)
-  const { data: citizens } = await supabase
-    .from('citizens')
-    .select('*')
-    .in('id', citizenIds)
+  if (citizenIds.length > 0) {
+    const { data: citizenRows } = await supabase
+      .from('citizens')
+      .select('*')
+      .in('id', citizenIds)
+    citizens = (citizenRows ?? []) as Citizen[]
+  }
 
-  return (citizens ?? []) as Citizen[]
+  // Add any citizens summoned to this location via player overrides
+  if (citizenOverrides) {
+    const summonedHere = Object.entries(citizenOverrides)
+      .filter(([, loc]) => loc === locationId)
+      .map(([cid]) => cid)
+    if (summonedHere.length > 0) {
+      const { data: summonedCitizens } = await supabase
+        .from('citizens')
+        .select('*')
+        .in('id', summonedHere)
+      const existingIds = new Set(citizens.map(c => c.id))
+      for (const c of (summonedCitizens ?? []) as Citizen[]) {
+        if (!existingIds.has(c.id)) citizens.push(c)
+      }
+    }
+  }
+
+  return citizens
 }
 
 export async function getTownRoster(
   supabase: SupabaseClient
-): Promise<Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>> {
+): Promise<Array<{ id: string; first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>> {
   const { data } = await supabase
     .from('citizens')
-    .select('first_name, last_name, occupation, personality, household')
+    .select('id, first_name, last_name, occupation, personality, household')
     .order('last_name')
-  return (data ?? []) as Array<{ first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>
+  return (data ?? []) as Array<{ id: string; first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>
 }
 
 export async function getCitizen(
