@@ -388,15 +388,31 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                   {location.exits.map(exit => (
                     <li
                       key={exit.id}
-                      className="text-sm flex items-center gap-1"
+                      className="text-sm flex items-center gap-2"
                       style={{ ...clickableRow({ color: 'var(--moss-green)' }) }}
                       onClick={() => onCommand(`go to ${exit.name}`)}
                       title={`Go to ${exit.name}`}
                       onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(90,122,90,0.1)')}
                       onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
                     >
-                      <span style={{ opacity: 0.6 }}>→</span>
-                      <span>{exit.name}</span>
+                      {exit.label && (
+                        <span
+                          className="shrink-0"
+                          style={{
+                            fontSize: '0.6rem',
+                            fontWeight: 600,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: 'var(--amber)',
+                            minWidth: '2.5rem',
+                            textAlign: 'right',
+                          }}
+                        >
+                          {exit.label}
+                        </span>
+                      )}
+                      {!exit.label && <span style={{ opacity: 0.6 }}>→</span>}
+                      <span style={{ color: 'var(--moss-green)' }}>{exit.name}</span>
                     </li>
                   ))}
                 </ul>

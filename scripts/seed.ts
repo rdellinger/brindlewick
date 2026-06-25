@@ -103,12 +103,20 @@ async function seedLocations() {
   await upsert('locations', locations)
 
   // Seed exits (location_exits table) — skip any that reference unknown location IDs
+  const dirData = readJSON('exit_directions.json') as { directions: Record<string, string> }
+  const dirMap = dirData.directions
+
   const knownIds = new Set(raw.locations.map(l => l.id))
   const exits: Array<{ from_loc: string; to_loc: string; label: string }> = []
   for (const loc of raw.locations) {
     for (const toId of loc.exits ?? []) {
       if (knownIds.has(toId)) {
-        exits.push({ from_loc: loc.id, to_loc: toId, label: toId.replace(/_/g, ' ') })
+        const key = `${loc.id}:${toId}`
+        const label = dirMap[key] ?? toId.replace(/_/g, ' ')
+        if (!dirMap[key]) {
+          console.warn(`  ⚠ no direction mapping for ${key} — using destination name`)
+        }
+        exits.push({ from_loc: loc.id, to_loc: toId, label })
       } else {
         console.warn(`  ⚠ skipping exit ${loc.id} → ${toId} (unknown location)`)
       }

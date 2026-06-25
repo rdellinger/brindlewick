@@ -1,0 +1,210 @@
+{
+  "directions": {
+    "town_square:town_hall": "north",
+    "town_square:millpond_row": "south",
+    "town_square:lake_street": "east",
+    "town_square:maple_row": "west",
+    "town_square:lantern_post_inn": "inside",
+
+    "town_hall:town_square": "outside",
+    "town_hall:clocktower_stairs": "up",
+
+    "library:millpond_row": "outside",
+    "library:library_archive_room": "downstairs",
+
+    "library_archive_room:library": "upstairs",
+
+    "copper_kettle_bakery:millpond_row": "outside",
+    "hartwells_general_store:millpond_row": "outside",
+    "millpond_diner:millpond_row": "outside",
+    "chronicle_building:millpond_row": "outside",
+
+    "lantern_post_inn:lake_street": "east",
+    "lantern_post_inn:millpond_row": "west",
+    "lantern_post_inn:town_square": "north",
+
+    "wren_and_whistle:lake_street": "outside",
+    "post_office:millpond_row": "outside",
+    "finch_pharmacy:millpond_row": "outside",
+    "aldermans_hardware:millpond_row": "outside",
+    "dr_okafor_practice:maple_row": "outside",
+    "webbs_watch_repair:finch_lane": "outside",
+    "old_mill_antiques:millpond_row": "outside",
+    "book_nook:finch_lane": "outside",
+
+    "lakeside_park:lake_street": "north",
+    "lakeside_park:lakefront_boardwalk": "south",
+    "lakeside_park:lake_pier": "east",
+
+    "lakefront_boardwalk:lakeside_park": "north",
+    "lakefront_boardwalk:miras_boat_rental": "south",
+    "lakefront_boardwalk:old_alderman_boathouse": "north",
+    "lakefront_boardwalk:lighthouse": "south",
+    "lakefront_boardwalk:ice_house": "inside",
+    "lakefront_boardwalk:lake_street": "north",
+    "lakefront_boardwalk:finch_island": "by boat",
+    "lakefront_boardwalk:spruce_point": "south",
+
+    "lake_pier:lakeside_park": "back to shore",
+    "lake_pier:miras_boat_rental": "along the dock",
+
+    "miras_boat_rental:lakefront_boardwalk": "outside",
+    "miras_boat_rental:lake_pier": "to the dock",
+
+    "old_alderman_boathouse:lakefront_boardwalk": "outside",
+
+    "alderman_estate:finch_lane": "east",
+    "alderman_estate:founders_hidden_room": "inside",
+    "alderman_estate:hidden_garden": "into the garden",
+    "alderman_estate:maple_row": "west",
+
+    "st_agathas_chapel:maple_row": "outside",
+    "st_agathas_chapel:brindlewick_cemetery": "to the cemetery",
+
+    "brindlewick_cemetery:st_agathas_chapel": "back to chapel",
+    "brindlewick_cemetery:maple_row": "outside",
+
+    "founders_graves:brindlewick_trailhead": "south",
+    "founders_graves:water_tower": "north",
+
+    "elementary_school:maple_row": "outside",
+    "garden_club_greenhouse:maple_row": "outside",
+    "sheriffs_office:millpond_row": "outside",
+    "fire_station:lake_street": "outside",
+    "perkins_cider_house:millpond_row": "outside",
+
+    "covered_bridge:millpond_row": "north",
+    "covered_bridge:grange_hall": "south",
+    "covered_bridge:brindlewick_trailhead": "south",
+    "covered_bridge:old_mill_ruins": "west",
+
+    "old_mill_ruins:brindlewick_trailhead": "south",
+    "old_mill_ruins:covered_bridge": "east",
+
+    "water_tower:brindlewick_trailhead": "south",
+    "water_tower:founders_graves": "south",
+
+    "lighthouse:lakefront_boardwalk": "back to boardwalk",
+
+    "brindlewick_trailhead:finch_family_orchard": "north",
+    "brindlewick_trailhead:old_mill_ruins": "north",
+    "brindlewick_trailhead:the_lookout": "up the trail",
+    "brindlewick_trailhead:wardens_cabin": "north",
+    "brindlewick_trailhead:warming_hut": "north",
+    "brindlewick_trailhead:founders_graves": "north",
+    "brindlewick_trailhead:water_tower": "north",
+    "brindlewick_trailhead:covered_bridge": "north",
+
+    "the_lookout:brindlewick_trailhead": "down the trail",
+    "the_lookout:warming_hut": "south",
+
+    "wardens_cabin:brindlewick_trailhead": "south",
+    "wardens_cabin:warming_hut": "south",
+
+    "finch_family_orchard:millpond_row": "north",
+    "finch_family_orchard:brindlewick_trailhead": "south",
+
+    "millpond:brindlewick_trailhead": "south",
+    "millpond:millpond_row": "north",
+
+    "community_hall:maple_row": "outside",
+
+    "grange_hall:millpond_row": "north",
+    "grange_hall:millbrook_farm": "south",
+    "grange_hall:covered_bridge": "north",
+
+    "woolen_bear:finch_lane": "outside",
+    "pottery_studio:finch_lane": "outside",
+    "copper_hill_gallery:millpond_row": "outside",
+    "ice_cream_cottage:lake_street": "outside",
+    "meadows_florist:millpond_row": "outside",
+    "brindlewick_bank:millpond_row": "outside",
+    "old_schoolhouse_arts:maple_row": "outside",
+
+    "station_masters_house:lake_street": "east",
+    "station_masters_house:millpond_row": "west",
+
+    "hidden_garden:alderman_estate": "back to the estate",
+
+    "finch_lane:millpond_row": "west",
+    "finch_lane:maple_row": "west",
+    "finch_lane:lake_street": "east",
+    "finch_lane:alderman_estate": "north",
+    "finch_lane:webbs_watch_repair": "inside",
+    "finch_lane:book_nook": "inside",
+    "finch_lane:woolen_bear": "inside",
+    "finch_lane:pottery_studio": "inside",
+
+    "maple_row:town_square": "north",
+    "maple_row:elementary_school": "inside",
+    "maple_row:st_agathas_chapel": "inside",
+    "maple_row:dr_okafor_practice": "inside",
+    "maple_row:community_hall": "inside",
+    "maple_row:brindlewick_cemetery": "south",
+    "maple_row:old_schoolhouse_arts": "inside",
+    "maple_row:millpond_row": "east",
+    "maple_row:finch_lane": "east",
+    "maple_row:alderman_estate": "east",
+    "maple_row:garden_club_greenhouse": "inside",
+    "maple_row:meeting_house_museum": "inside",
+
+    "lake_street:lantern_post_inn": "inside",
+    "lake_street:wren_and_whistle": "inside",
+    "lake_street:fire_station": "inside",
+    "lake_street:ice_cream_cottage": "inside",
+    "lake_street:lakeside_park": "east",
+    "lake_street:lakefront_boardwalk": "east",
+    "lake_street:station_masters_house": "inside",
+    "lake_street:millpond_row": "west",
+    "lake_street:town_square": "north",
+
+    "millpond_row:copper_kettle_bakery": "inside",
+    "millpond_row:hartwells_general_store": "inside",
+    "millpond_row:millpond_diner": "inside",
+    "millpond_row:library": "inside",
+    "millpond_row:post_office": "inside",
+    "millpond_row:chronicle_building": "inside",
+    "millpond_row:finch_pharmacy": "inside",
+    "millpond_row:aldermans_hardware": "inside",
+    "millpond_row:sheriffs_office": "inside",
+    "millpond_row:old_mill_antiques": "inside",
+    "millpond_row:meadows_florist": "inside",
+    "millpond_row:copper_hill_gallery": "inside",
+    "millpond_row:brindlewick_bank": "inside",
+    "millpond_row:town_square": "north",
+    "millpond_row:millpond": "south",
+    "millpond_row:lake_street": "east",
+    "millpond_row:maple_row": "west",
+    "millpond_row:finch_lane": "east",
+    "millpond_row:lantern_post_inn": "inside",
+    "millpond_row:grange_hall": "south",
+    "millpond_row:station_masters_house": "inside",
+    "millpond_row:millbrook_farm": "south",
+    "millpond_row:perkins_cider_house": "inside",
+
+    "finch_island:miras_boat_rental": "by boat",
+    "finch_island:lakefront_boardwalk": "by boat",
+
+    "spruce_point:lakefront_boardwalk": "back to boardwalk",
+
+    "candle_soap_shop:finch_lane": "outside",
+    "notions_nook:millpond_row": "outside",
+    "thornburys_provisions:millpond_row": "outside",
+    "cobblers_corner:finch_lane": "outside",
+
+    "keepers_cottage:millpond_row": "outside",
+    "keepers_cottage:library": "to the library",
+
+    "millbrook_farm:millpond_row": "north",
+    "millbrook_farm:grange_hall": "north",
+
+    "meeting_house_museum:maple_row": "outside",
+    "ice_house:lakefront_boardwalk": "outside",
+
+    "warming_hut:brindlewick_trailhead": "down the trail",
+    "warming_hut:the_lookout": "up the trail",
+    "warming_hut:wardens_cabin": "north",
+
+    "sunday_market:town_square": "outside"
+  }
+}

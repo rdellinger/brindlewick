@@ -254,8 +254,8 @@ async function handleLook(
 
   // Add visible exits
   if (exits.length > 0) {
-    const exitNames = exits.map(e => e.label ? `${e.name} (${e.label})` : e.name).join(', ')
-    desc += `\n\nFrom here you can go to: ${exitNames}.`
+    const exitNames = exits.map(e => e.label ? `**${e.label}** to ${e.name}` : e.name).join(', ')
+    desc += `\n\nFrom here you can go: ${exitNames}.`
   }
 
   // Add visible items (season-filtered, state-aware, pass session for player overrides)
