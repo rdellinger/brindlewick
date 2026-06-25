@@ -9,7 +9,7 @@ import type { ConversationMessage } from '../../../../types/game'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { input, guestToken, conversationHistory, activeCitizenId } = body
+    const { input, guestToken, conversationHistory, activeCitizenId, pendingEscortOffer } = body
 
     if (!input?.trim()) {
       return NextResponse.json({ error: 'No input provided' }, { status: 400 })
@@ -42,7 +42,8 @@ export async function POST(request: NextRequest) {
     if (activeCitizenId && conversationHistory) {
       // Quick check: if the player is trying to navigate or leave, fall through to normal parsing
       const looksLikeNavigation =
-        /^(go|walk|move|head|travel|look|examine|bye|goodbye|farewell|see you|leave|solve|deduce|figure out|i think i|i've figured|i've solved|give me|can i have|accept|take it|stop helping|stop task|abandon)\b/i.test(input.trim())
+        /^(go|move|head|travel|look|examine|bye|goodbye|farewell|see you|leave|solve|deduce|figure out|i think i|i've figured|i've solved|give me|can i have|accept|take it|stop helping|stop task|abandon)\b/i.test(input.trim())
+        || /^walk\s+(to|north|south|east|west|up|down|over|back|through|into|around|the\s+trail|along)\b/i.test(input.trim())  // "walk to X" = navigation; "walk me to X" = escort
         || /^help\s+[a-z]/i.test(input.trim())  // "help [name]" = accept task, not conversation
       if (!looksLikeNavigation) {
         response = await handleConversationMessage(
@@ -50,7 +51,8 @@ export async function POST(request: NextRequest) {
           activeCitizenId,
           conversationHistory as ConversationMessage[],
           input,
-          session
+          session,
+          pendingEscortOffer ?? undefined
         )
       }
     }

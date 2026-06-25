@@ -84,25 +84,37 @@ export async function findLocationByName(
   supabase: SupabaseClient,
   query: string
 ): Promise<Location | null> {
-  // Exact match first
-  const { data: exact } = await supabase
+  // Name match — order by name length ascending so shorter (more exact) matches win.
+  // e.g. "millpond" should prefer "The Millpond" over "The Millpond Diner".
+  const { data: byName } = await supabase
     .from('locations')
     .select('*')
     .ilike('name', `%${query}%`)
     .eq('is_hidden', false)
-    .limit(1)
+    .order('name', { ascending: true })
+    .limit(5)
 
-  if (exact?.[0]) return exact[0] as Location
+  if (byName?.length) {
+    // Pick the shortest matching name (closest to an exact match)
+    const best = byName.reduce((a, b) => a.name.length <= b.name.length ? a : b)
+    return best as Location
+  }
 
-  // Try matching on id too (e.g. 'bakery' → 'copper_kettle_bakery')
+  // Fall back to matching on ID (e.g. 'bakery' → 'copper_kettle_bakery')
   const { data: byId } = await supabase
     .from('locations')
     .select('*')
     .ilike('id', `%${query.toLowerCase().replace(/\s+/g, '_')}%`)
     .eq('is_hidden', false)
-    .limit(1)
+    .order('id', { ascending: true })
+    .limit(5)
 
-  return (byId?.[0] ?? null) as Location | null
+  if (byId?.length) {
+    const best = byId.reduce((a, b) => a.id.length <= b.id.length ? a : b)
+    return best as Location
+  }
+
+  return null
 }
 
 export function getLocationDescription(

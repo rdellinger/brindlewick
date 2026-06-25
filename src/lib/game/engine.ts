@@ -553,7 +553,8 @@ export async function handleConversationMessage(
   citizenId: string,
   history: ConversationMessage[],
   playerMessage: string,
-  session: GameSession
+  session: GameSession,
+  pendingEscortOffer?: { destination_id: string; destination_name: string }
 ): Promise<GameResponse> {
   // Local mutable copy so inventory stays accurate if the player receives items mid-conversation
   let currentInventory = [...session.inventory]
@@ -572,12 +573,28 @@ export async function handleConversationMessage(
   const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
   const roster = await getTownRoster(supabase)
 
+  // Build locationMap for escort offers — all non-hidden locations so the NPC
+  // can generate [ESCORT:id] for any place in town, not just adjacent exits.
+  const { data: allLocations } = await supabase
+    .from('locations')
+    .select('id, name')
+    .eq('is_hidden', false)
+  const locationMap: Record<string, string> = {}
+  for (const loc of allLocations ?? []) {
+    locationMap[loc.id] = loc.name
+  }
+
   // Detect farewell words — end conversation after response
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later', 'leave']
   const isFarewell = farewellWords.some(w => playerMessage.toLowerCase().includes(w))
 
   // Generate response using full history
-  const response = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster)
+  const rawResponse = await continueConversation(supabase, citizen, trustLevel, history, playerMessage, session, nearbyCitizens, roster, locationMap)
+
+  // Parse and strip [ESCORT:location_id] tag if present
+  const escortMatch = rawResponse.match(/\[ESCORT:([a-z_]+)\]/)
+  const escortedToId = escortMatch?.[1] ?? null
+  const response = rawResponse.replace(/\s*\[ESCORT:[a-z_]+\]/, '')
 
   // Small trust gain each conversational exchange
   const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
@@ -624,7 +641,8 @@ export async function handleConversationMessage(
   // If the player says yes to a task, mark it in_progress so the Helping
   // sidebar updates without requiring a fresh `talk` command.
   let taskUpdate: boolean | undefined
-  const isAccepting = /\b(yes|sure|okay|of course|absolutely|i'?ll (help|do it)|happy to|i (can|will)|sounds good|count me in)\b/.test(msgLower)
+  const isAccepting = /\b(yes|yeah|yep|yup|sure|okay|ok|of course|absolutely|definitely|certainly|gladly|i'?ll (help|do it|go)|happy to|i (can|will)|i'?d (love|like) to|sounds (good|great|wonderful|lovely)|that (sounds|would be)|great|perfect|wonderful|let'?s (go|do it)|lead the way|alright|all right|by all means|count me in|please do|why not)\b/.test(msgLower)
+    && !/\bnot (sure|certain|really|quite|yet)\b/.test(msgLower)
   if (isAccepting) {
     const saveKey = session.playerId ? 'player_id' : 'guest_token'
     const saveVal = session.playerId ?? session.guestToken
@@ -645,12 +663,100 @@ export async function handleConversationMessage(
     }
   }
 
+  // ── Handle escort execution ─────────────────────────────────────────────────
+  // Three cases:
+  //   A) Player directly requested escort → parse destination from their message,
+  //      resolve with findLocationByName (same as 'go' command), execute if NPC agrees.
+  //      Does NOT depend on NPC generating [ESCORT:] tag.
+  //   B) NPC had already offered via [ESCORT:] tag (pendingEscortOffer set) and player accepts.
+  //   C) NPC generated [ESCORT:] tag this turn but player didn't directly ask → store as offer.
+
+  const isEscortRequest = /\b(escort|walk\s+(me|with\s+me)|take\s+me|show\s+me|guide\s+me|lead\s+me|bring\s+me|come\s+with\s+me)\b/.test(msgLower)
+
+  // Case A: extract destination from the player's words
+  let playerRequestedDestId: string | null = null
+  if (isEscortRequest) {
+    const destMatch = playerMessage.match(
+      /\b(?:escort|walk|take|show|guide|lead|bring|come)\s+(?:with\s+)?(?:me\s+)?(?:(?:the\s+way\s+)?to\s+(?:the\s+)?|over\s+to\s+(?:the\s+)?|where\s+(?:the\s+)?)?(.+)/i
+    )
+    if (destMatch) {
+      const raw = destMatch[1]
+        .trim()
+        .replace(/[?.!,].*$/, '')                                                           // strip trailing punctuation
+        .replace(/\s+\b(please|now|right now|quickly|if you can|if you don't mind)\b.*$/i, '') // strip filler
+        .replace(/\s+\bis\b.*$/i, '')                                                       // strip "where X is"
+        .trim()
+      const query = raw.replace(/^the\s+/i, '').trim()
+      const destLocation = await findLocationByName(supabase, query)
+      playerRequestedDestId = destLocation?.id ?? null
+      console.log('[escort] player requested:', query, '→', playerRequestedDestId)
+    }
+  }
+
+  // NPC declining words — don't move the player if they refused
+  const npcDeclined = /\b(can'?t|cannot|sorry|afraid|unable|don'?t know the way|not sure|wouldn'?t|don'?t think I can|not able)\b/i.test(response)
+
+  const escortDestId =
+    // Case A: player asked + destination resolved + NPC didn't refuse
+    (playerRequestedDestId && !npcDeclined) ? playerRequestedDestId
+    // Case B: player accepted a previously-stored offer
+    : (isAccepting && pendingEscortOffer) ? pendingEscortOffer.destination_id
+    : null
+
+  console.log('[escort] escortDestId:', escortDestId, '| isEscortRequest:', isEscortRequest, '| playerRequestedDestId:', playerRequestedDestId, '| npcDeclined:', npcDeclined, '| pendingEscortOffer:', pendingEscortOffer?.destination_id)
+
+  if (escortDestId) {
+    const playerKey = session.playerId ? 'player_id' : 'session_token'
+    const playerVal = session.playerId ?? session.guestToken
+    const table = session.playerId ? 'player_saves' : 'guest_saves'
+
+    console.log('[escort] moving player to:', escortDestId, 'table:', table, 'key:', playerKey, 'val:', playerVal)
+
+    const { error: updateErr } = await supabase
+      .from(table)
+      .update({ current_location: escortDestId, updated_at: new Date().toISOString() })
+      .eq(playerKey, playerVal)
+
+    if (updateErr) console.error('[escort] DB update error:', updateErr)
+
+    const updatedSession = { ...session, currentLocation: escortDestId }
+    await logLocationVisit(supabase, updatedSession, escortDestId)
+
+    const newLocationResult = await getLocationWithExits(supabase, escortDestId)
+    console.log('[escort] newLocation:', newLocationResult?.location?.name)
+    return {
+      text: response,
+      location: newLocationResult?.location,
+      conversation_end: true,
+      trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
+      inventory_update: inventoryUpdate,
+      task_update: taskUpdate,
+      escorting_citizen: {
+        id: citizenId,
+        name: `${citizen.first_name} ${citizen.last_name}`,
+        occupation: citizen.occupation,
+        trust_level: newTrust,
+      },
+    }
+  }
+
+  // Case C: NPC generated [ESCORT:] tag proactively (store as pending offer for next turn)
+  const escortOffer = escortedToId
+    ? {
+        destination_id: escortedToId,
+        destination_name: locationMap[escortedToId] ?? escortedToId.replace(/_/g, ' '),
+        citizen_id: citizenId,
+        citizen_name: `${citizen.first_name} ${citizen.last_name}`,
+      }
+    : undefined
+
   return {
     text: response,
     conversation_end: isFarewell ? true : undefined,
     trust_update: newTrust !== Math.floor(trustLevel) ? { citizen_id: citizenId, new_level: newTrust } : undefined,
     inventory_update: inventoryUpdate,
     task_update: taskUpdate,
+    escort_offer: escortOffer,
   }
   void world; void timeSlot  // suppress unused warnings
 }

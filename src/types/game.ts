@@ -390,5 +390,17 @@ export interface GameResponse {
     itemName: string
     dialogueHint: string
   }
+  escort_offer?: {          // NPC is offering to walk the player to a location
+    destination_id: string
+    destination_name: string
+    citizen_id: string
+    citizen_name: string
+  }
+  escorting_citizen?: {     // NPC that just escorted the player — inject into destination sidebar
+    id: string
+    name: string
+    occupation: string | null
+    trust_level: number
+  }
   restart_pending?: boolean  // player asked to restart — waiting for "I understand" confirmation
 }

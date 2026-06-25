@@ -5,9 +5,9 @@
       "name": "The Town Square",
       "type": "civic",
       "area": "center",
-      "short_desc": "The heart of Brindlewick — a wide, grassy rectangle ringed by old maples, with a granite war memorial at its center.",
-      "long_desc": "The town square is where Brindlewick gathers and breathes. Four old sugar maples anchor its corners, their roots lifting the brick paths in gentle arcs. The granite war memorial stands at the center — four names in relief: William Hartwell, Joseph Finch, Thomas Grange, Lena Alderman. Someone has left a small bunch of wildflowers at its base; someone usually has. In summer, the square fills with tables for Founder's Day. In winter, a modest Christmas tree is lit here on the first Sunday of December, and the smell of cider drifts from thermoses. Benches face every direction. Pigeons, unhurried, own the eastern corner.",
-      "history": "The square has been the gathering place since 1830, when the first communal bonfire was held here to celebrate a successful harvest. Its current form — the brick paths, the memorial, the benches — was established in 1901 for the first Founder's Day.",
+      "short_desc": "The heart of Brindlewick \u2014 a wide, grassy rectangle ringed by old maples, with a granite war memorial at its center.",
+      "long_desc": "The town square is where Brindlewick gathers and breathes. Four old sugar maples anchor its corners, their roots lifting the brick paths in gentle arcs. The granite war memorial stands at the center \u2014 four names in relief: William Hartwell, Joseph Finch, Thomas Grange, Lena Alderman. Someone has left a small bunch of wildflowers at its base; someone usually has. In summer, the square fills with tables for Founder's Day. In winter, a modest Christmas tree is lit here on the first Sunday of December, and the smell of cider drifts from thermoses. Benches face every direction. Pigeons, unhurried, own the eastern corner.",
+      "history": "The square has been the gathering place since 1830, when the first communal bonfire was held here to celebrate a successful harvest. Its current form \u2014 the brick paths, the memorial, the benches \u2014 was established in 1901 for the first Founder's Day.",
       "items_present": [
         "town_notice_board",
         "war_memorial_plaque"
@@ -17,7 +17,8 @@
         "millpond_row",
         "lake_street",
         "maple_row",
-        "lantern_post_inn"
+        "lantern_post_inn",
+        "sunday_market"
       ],
       "time_variations": {
         "morning": "A few people cut across the square on their way to work. The bakery smell drifts over from Millpond Row.",
@@ -27,9 +28,10 @@
       "seasonal_variations": {
         "spring": "Crocuses push through the lawn around the memorial. The maples are budding, pale green.",
         "summer": "Full green shade. Tables appear most Saturdays for the farmers' market.",
-        "autumn": "The maples turn first — deep orange, then copper. Leaves skitter across the brick paths.",
+        "autumn": "The maples turn first \u2014 deep orange, then copper. Leaves skitter across the brick paths.",
         "winter": "Snow on the benches. The war memorial is frost-white. The Christmas tree stands at the center until January."
-      }
+      },
+      "address": "Brindlewick Town Square"
     },
     {
       "id": "town_hall",
@@ -37,8 +39,8 @@
       "type": "civic",
       "area": "center",
       "short_desc": "A solid brick building from 1896, with a clocktower that has run exactly three minutes slow for over 150 years.",
-      "long_desc": "The Town Hall is the most substantial building in Brindlewick — two stories of dark red brick with tall windows and a white wooden clocktower that rises above the roofline like a polite suggestion of grandeur. The clock face is large and clearly readable from the square, its black hands at their perpetual three-minute offset. Mayor Windermere's office is on the second floor with a view of the lake. The ground floor holds the meeting room (open to the public), the town clerk's office, and a glass display case containing a scale model of Brindlewick as it appeared in 1900, made by a schoolchild who grew up to be an architect.",
-      "history": "Built 1896. The clocktower mechanism is original — installed by Cornelius Webb and set deliberately 3 minutes slow as a private tribute to Thomas Alderman. Every attempt to adjust it has resulted in it returning to 3 minutes slow within a week, which local engineers find baffling and locals find charming.",
+      "long_desc": "The Town Hall is the most substantial building in Brindlewick \u2014 two stories of dark red brick with tall windows and a white wooden clocktower that rises above the roofline like a polite suggestion of grandeur. The clock face is large and clearly readable from the square, its black hands at their perpetual three-minute offset. Mayor Windermere's office is on the second floor with a view of the lake. The ground floor holds the meeting room (open to the public), the town clerk's office, and a glass display case containing a scale model of Brindlewick as it appeared in 1900, made by a schoolchild who grew up to be an architect.",
+      "history": "Built 1896. The clocktower mechanism is original \u2014 installed by Cornelius Webb and set deliberately 3 minutes slow as a private tribute to Thomas Alderman. Every attempt to adjust it has resulted in it returning to 3 minutes slow within a week, which local engineers find baffling and locals find charming.",
       "items_present": [
         "clocktower_access_key",
         "town_model_display",
@@ -57,15 +59,16 @@
         "morning": "The town clerk, Vera Tibbs, is already at her desk. The building smells of old paper and floor wax.",
         "afternoon": "Mayor Windermere's voice can sometimes be heard through the ceiling, on the phone.",
         "evening": "Locked. The clocktower light is on."
-      }
+      },
+      "address": "1 Town Square North"
     },
     {
       "id": "clocktower_stairs",
       "name": "The Clocktower",
       "type": "hidden",
       "area": "center",
-      "short_desc": "A narrow staircase leads to the clockwork chamber — tick-tock, tick-tock, three minutes behind the world.",
-      "long_desc": "The staircase to the clocktower is behind a door marked 'Maintenance — No Entry' that is never actually locked. Fourteen steep wooden steps bring you to a small chamber smelling of oil and old wood. The clockwork fills the room — brass gears, a slow swinging pendulum, the quiet authority of measured time. On the main gear housing, scratched in careful letters almost too small to read without leaning close: 'C.W. 1856 — for T.A. — 3 minutes to be kind.' The view from the clocktower window takes in the entire town and the full length of the lake.",
+      "short_desc": "A narrow staircase leads to the clockwork chamber \u2014 tick-tock, tick-tock, three minutes behind the world.",
+      "long_desc": "The staircase to the clocktower is behind a door marked 'Maintenance \u2014 No Entry' that is never actually locked. Fourteen steep wooden steps bring you to a small chamber smelling of oil and old wood. The clockwork fills the room \u2014 brass gears, a slow swinging pendulum, the quiet authority of measured time. On the main gear housing, scratched in careful letters almost too small to read without leaning close: 'C.W. 1856 \u2014 for T.A. \u2014 3 minutes to be kind.' The view from the clocktower window takes in the entire town and the full length of the lake.",
       "history": "The mechanism was installed by Cornelius Webb in 1856 and reinstalled here when the Town Hall was rebuilt in 1896. The inscription has been here since 1856.",
       "items_present": [
         "webb_inscription",
@@ -73,7 +76,11 @@
       ],
       "mystery_tie": "clocktower_secret",
       "hidden": true,
-      "unlock_condition": "player has visited town_hall and has curiosity about the clock"
+      "unlock_condition": "player has visited town_hall and has curiosity about the clock",
+      "exits": [
+        "town_hall"
+      ],
+      "address": "1 Town Square North (Clocktower Chamber)"
     },
     {
       "id": "library",
@@ -81,7 +88,7 @@
       "type": "civic",
       "area": "center",
       "short_desc": "A warm, generous building on Millpond Row, smelling of old paper and lemon polish, with a fireplace that's lit nine months of the year.",
-      "long_desc": "The library occupies a converted Victorian house on Millpond Row, its facade made respectable with a carved wooden sign and window boxes that Juniper Salcedo tends with evident care. Inside: the reading room is everything. Tall windows face south and fill it with winter sun. The fireplace has a carved mantelpiece bearing the library's motto: 'Every question is welcome here.' Shelves line every wall, some original and dark with age. The reference section is Eleanor's domain — meticulous card catalogues alongside the digital terminals, because Eleanor believes both have merits. A back room houses the town archive: bound copies of every Chronicle going back to 1901, the original town records in acid-free boxes, and a locked glass case containing the most fragile documents.",
+      "long_desc": "The library occupies a converted Victorian house on Millpond Row, its facade made respectable with a carved wooden sign and window boxes that Juniper Salcedo tends with evident care. Inside: the reading room is everything. Tall windows face south and fill it with winter sun. The fireplace has a carved mantelpiece bearing the library's motto: 'Every question is welcome here.' Shelves line every wall, some original and dark with age. The reference section is Eleanor's domain \u2014 meticulous card catalogues alongside the digital terminals, because Eleanor believes both have merits. A back room houses the town archive: bound copies of every Chronicle going back to 1901, the original town records in acid-free boxes, and a locked glass case containing the most fragile documents.",
       "history": "Built as a private house in 1888; purchased and converted for the library in 1899. First librarian was Dorothy Finch. The current head librarian, Eleanor Finch-Hartwell, is her great-great-niece.",
       "items_present": [
         "library_catalogue",
@@ -95,21 +102,23 @@
       ],
       "exits": [
         "millpond_row",
-        "library_archive_room"
+        "library_archive_room",
+        "keepers_cottage"
       ],
       "research_system": true,
       "time_variations": {
         "morning": "Eleanor is shelving. Juni is cataloguing new donations at the front desk. The kettle is on.",
         "afternoon": "Often has a few readers. After school, the study tables fill with children.",
         "evening": "Open until 7pm weekdays. The fireplace is always lit after October."
-      }
+      },
+      "address": "16 Millpond Row"
     },
     {
       "id": "library_archive_room",
       "name": "The Library Archive Room",
       "type": "hidden",
       "area": "center",
-      "short_desc": "The back room of the library — cool, hushed, smelling of old paper and time.",
+      "short_desc": "The back room of the library \u2014 cool, hushed, smelling of old paper and time.",
       "long_desc": "Eleanor unlocks the archive room for researchers who ask politely and have a good reason. The room is cool and dim, its shelves packed with bound Chronicle volumes, deed boxes, census records, and the accumulated paper memory of 200 years. The locked glass case holds the most fragile items: an 1825 letter from Alderman Finch to a cousin describing 'a lake so clear you can see the bottom at twelve feet,' the original town charter with all signatures, and a small watercolor signed only 'M.F.' depicting the lake from the eastern shore with a girl sitting in the foreground. Juni has been trying to identify the artist for two years.",
       "items_present": [
         "finch_founding_letter",
@@ -120,15 +129,18 @@
       "mystery_tie": "mira_finch",
       "hidden": true,
       "unlock_condition": "eleanor_trust >= 2 or juni_trust >= 1",
-      "exits": ["library"]
+      "exits": [
+        "library"
+      ],
+      "address": "16 Millpond Row (Archive, Lower Level)"
     },
     {
       "id": "copper_kettle_bakery",
       "name": "The Copper Kettle Bakery",
       "type": "commercial",
       "area": "millpond_row",
-      "short_desc": "The warm center of the town's mornings — breads, pastries, a famous honey cake, and whatever Marigold felt like making today.",
-      "long_desc": "The smell reaches you half a block before you arrive: butter and yeast and something floral. The Copper Kettle occupies what was once a Victorian tearoom, and Marigold Osei has kept the original pressed-tin ceiling, the small round tables, and the etched glass on the door. The counter runs the length of the back wall, stacked with loaves and trays. The famous Brindlewick Honey Cake sits on its own glass stand near the register — a dense, golden slab with a particular floral sweetness that people have been trying to reproduce at home for fifteen years. Mari makes four a week; they always sell out.",
+      "short_desc": "The warm center of the town's mornings \u2014 breads, pastries, a famous honey cake, and whatever Marigold felt like making today.",
+      "long_desc": "The smell reaches you half a block before you arrive: butter and yeast and something floral. The Copper Kettle occupies what was once a Victorian tearoom, and Marigold Osei has kept the original pressed-tin ceiling, the small round tables, and the etched glass on the door. The counter runs the length of the back wall, stacked with loaves and trays. The famous Brindlewick Honey Cake sits on its own glass stand near the register \u2014 a dense, golden slab with a particular floral sweetness that people have been trying to reproduce at home for fifteen years. Mari makes four a week; they always sell out.",
       "history": "The building has operated as a bakery or tearoom since 1875. Mari Osei bought it in 2009 and 'made it what it was always trying to be,' in her own words.",
       "items_present": [
         "honey_cake_sample",
@@ -146,15 +158,16 @@
         "morning": "Busiest time. Queue sometimes reaches the door. Mari is behind the counter, flour-dusted, cheerful.",
         "afternoon": "Quieter. Mari is often baking for tomorrow. A good time to actually talk.",
         "evening": "Closed after 5pm. 'A baker's day starts at 4am,' Mari says."
-      }
+      },
+      "address": "8 Millpond Row"
     },
     {
       "id": "hartwells_general_store",
       "name": "Hartwell's General Store",
       "type": "commercial",
       "area": "millpond_row",
-      "short_desc": "The oldest continuous business in Brindlewick — groceries, hardware, peculiar sundries, and Harold Hartwell himself.",
-      "long_desc": "Hartwell's has been in some form on this site since James Hartwell set up his trading post in 1826. The current building dates from 1937. It sells everything from coffee beans to lamp oil, from rubber boots to birthday cards. The shelves have the comfortable chaos of a shop that has stocked itself by demand rather than plan. Harold Hartwell, 74, knows where everything is — including things you didn't know the store carried. He also knows most of the town's business, being married to the librarian and having watched three generations of families buy their groceries.",
+      "short_desc": "The oldest continuous business in Brindlewick \u2014 groceries, hardware, peculiar sundries, and Harold Hartwell himself.",
+      "long_desc": "Hartwell's has been in some form on this site since James Hartwell set up his trading post in 1826. The current building dates from 1937. It sells everything from coffee beans to lamp oil, from rubber boots to birthday cards. The shelves have the comfortable chaos of a shop that has stocked itself by demand rather than plan. Harold Hartwell, 74, knows where everything is \u2014 including things you didn't know the store carried. He also knows most of the town's business, being married to the librarian and having watched three generations of families buy their groceries.",
       "history": "Continuous Hartwell family operation since 1826, with gaps only during WWII (1942-45, when James Hartwell Jr. was serving).",
       "items_present": [
         "local_honey_display",
@@ -165,7 +178,8 @@
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "26 Millpond Row"
     },
     {
       "id": "millpond_diner",
@@ -173,21 +187,22 @@
       "type": "commercial",
       "area": "millpond_row",
       "short_desc": "Booths, counter stools, good coffee, and the kind of breakfast that makes decisions easier.",
-      "long_desc": "The Millpond has been the town's informal meeting room for sixty years — the kind of place where deals are made over eggs and important conversations happen in corner booths. The coffee is strong. The pie is excellent. The walls are covered with photographs of the town across the decades, all unlabeled, which is a source of ongoing friendly dispute. Wally Chen, the owner and cook, has been here since 6am every day for 31 years. His daughter June does the front of house on weekdays.",
+      "long_desc": "The Millpond has been the town's informal meeting room for sixty years \u2014 the kind of place where deals are made over eggs and important conversations happen in corner booths. The coffee is strong. The pie is excellent. The walls are covered with photographs of the town across the decades, all unlabeled, which is a source of ongoing friendly dispute. Wally Chen, the owner and cook, has been here since 6am every day for 31 years. His daughter June does the front of house on weekdays.",
       "npcs_frequent": [
         "wally_chen",
         "june_chen"
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "22 Millpond Row"
     },
     {
       "id": "chronicle_building",
       "name": "The Brindlewick Chronicle",
       "type": "civic",
       "area": "millpond_row",
-      "short_desc": "The town's weekly newspaper — a slightly listing building whose noticeboard is read more religiously than any church bulletin.",
+      "short_desc": "The town's weekly newspaper \u2014 a slightly listing building whose noticeboard is read more religiously than any church bulletin.",
       "long_desc": "The Chronicle building is narrow and three stories tall, which makes it look like it's been squeezed from both sides by the neighboring buildings. Inside: a printing area in the back (the original press is kept for display; it hasn't printed anything since 1968), a newsroom that is really one large desk covered in paper, and Oliver Peregrine's office upstairs, which smells of pipe tobacco despite the fact that Oliver quit smoking in 2008. The Chronicle comes out every Thursday. Its most-read feature is the anonymous 'Dear Neighbor' advice column.",
       "npcs_frequent": [
         "oliver_peregrine"
@@ -195,14 +210,15 @@
       "exits": [
         "millpond_row"
       ],
-      "mystery_tie": "anonymous_letter_writer"
+      "mystery_tie": "anonymous_letter_writer",
+      "address": "12 Millpond Row"
     },
     {
       "id": "lantern_post_inn",
       "name": "The Lantern Post Inn",
       "type": "accommodation",
       "area": "lake_street",
-      "short_desc": "The town's inn — warm, comfortable, smelling of woodsmoke and clean linen, with a porch that faces the lake.",
+      "short_desc": "The town's inn \u2014 warm, comfortable, smelling of woodsmoke and clean linen, with a porch that faces the lake.",
       "long_desc": "The Lantern Post is a rambling Victorian house that has been accumulating additions since 1885. The original section has low ceilings and creaky floors; the 1985 addition has higher ceilings and a view of the water. Teddy Birch, 34, runs it with uncomplicated enthusiasm and a gift for making guests feel they've come home. The porch runs the full length of the original building, with rocking chairs and a view across Lake Street to the water. The common room has a fireplace, mismatched furniture that somehow all works together, and a shelf of books guests have left behind over decades.",
       "npcs_frequent": [
         "teddy_birch"
@@ -211,15 +227,16 @@
         "lake_street",
         "millpond_row",
         "town_square"
-      ]
+      ],
+      "address": "2 Lake Street"
     },
     {
       "id": "wren_and_whistle",
       "name": "The Wren & Whistle",
       "type": "commercial",
       "area": "lake_street",
-      "short_desc": "The town's pub, open since 1851 — a low-ceilinged room with good ale, better food, and the most reliable gossip in Brindlewick.",
-      "long_desc": "The Wren & Whistle is the oldest building still in continuous original use in Brindlewick. The ceiling is low, the beams are original, and the floor is uneven in ways that become comforting once you know them. Clem Rourke occupies the corner stool most evenings. Barnaby Mossgrove comes in Tuesdays and Thursdays. The menu is simple and excellent — pies, soups, sandwiches, the occasional special. The cider is from Perkins. The beer comes from a small brewery two valleys over. The fireplace takes up most of one wall and is lit from October to April.",
+      "short_desc": "The town's pub, open since 1851 \u2014 a low-ceilinged room with good ale, better food, and the most reliable gossip in Brindlewick.",
+      "long_desc": "The Wren & Whistle is the oldest building still in continuous original use in Brindlewick. The ceiling is low, the beams are original, and the floor is uneven in ways that become comforting once you know them. Clem Rourke occupies the corner stool most evenings. Barnaby Mossgrove comes in Tuesdays and Thursdays. The menu is simple and excellent \u2014 pies, soups, sandwiches, the occasional special. The cider is from Perkins. The beer comes from a small brewery two valleys over. The fireplace takes up most of one wall and is lit from October to April.",
       "npcs_frequent": [
         "barnaby_mossgrove",
         "clem_rourke",
@@ -227,7 +244,8 @@
       ],
       "exits": [
         "lake_street"
-      ]
+      ],
+      "address": "6 Lake Street"
     },
     {
       "id": "post_office",
@@ -242,7 +260,8 @@
       "exits": [
         "millpond_row"
       ],
-      "mystery_tie": "anonymous_letter_writer"
+      "mystery_tie": "anonymous_letter_writer",
+      "address": "30 Millpond Row"
     },
     {
       "id": "finch_pharmacy",
@@ -256,7 +275,8 @@
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "34 Millpond Row"
     },
     {
       "id": "aldermans_hardware",
@@ -270,7 +290,8 @@
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "38 Millpond Row"
     },
     {
       "id": "dr_okafor_practice",
@@ -278,13 +299,14 @@
       "type": "civic",
       "area": "maple_row",
       "short_desc": "A converted house on Maple Row that smells of antiseptic and, inexplicably, cardamom.",
-      "long_desc": "Dr. Ignatius Okafor's practice occupies the ground floor of a white clapboard house he also lives in — his apartment is upstairs. The waiting room has comfortable chairs, a fish tank, and magazines that are never more than three months old. Dr. Okafor is the only physician within 20 miles and sees everyone from newborns to centenarians. He is warm, precise, and has the quality of making patients feel that whatever they're dealing with is both perfectly manageable and worthy of his complete attention.",
+      "long_desc": "Dr. Ignatius Okafor's practice occupies the ground floor of a white clapboard house he also lives in \u2014 his apartment is upstairs. The waiting room has comfortable chairs, a fish tank, and magazines that are never more than three months old. Dr. Okafor is the only physician within 20 miles and sees everyone from newborns to centenarians. He is warm, precise, and has the quality of making patients feel that whatever they're dealing with is both perfectly manageable and worthy of his complete attention.",
       "npcs_frequent": [
         "dr_okafor"
       ],
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "18 Maple Row"
     },
     {
       "id": "webbs_watch_repair",
@@ -292,7 +314,7 @@
       "type": "commercial",
       "area": "finch_lane",
       "short_desc": "A small shop smelling of oil and metal, where Rosalind Webb fixes anything with moving parts.",
-      "long_desc": "The shop is barely wider than a hallway — a bench along the window, a wall of clocks, and Rosalind Webb bent over her work with a magnifying loupe. She fixes watches, clocks, music boxes, mechanical toys, and, reportedly, once fixed a music hall organ. The wall of clocks is a tourist attraction in itself: every one of them keeping different time except for one, the oldest, which runs three minutes slow. Rosalind will tell you it belonged to her great-grandfather if you ask.",
+      "long_desc": "The shop is barely wider than a hallway \u2014 a bench along the window, a wall of clocks, and Rosalind Webb bent over her work with a magnifying loupe. She fixes watches, clocks, music boxes, mechanical toys, and, reportedly, once fixed a music hall organ. The wall of clocks is a tourist attraction in itself: every one of them keeping different time except for one, the oldest, which runs three minutes slow. Rosalind will tell you it belonged to her great-grandfather if you ask.",
       "npcs_frequent": [
         "rosalind_webb"
       ],
@@ -300,7 +322,8 @@
         "finch_lane"
       ],
       "mystery_tie": "moving_statue",
-      "mystery_tie_2": "clocktower_secret"
+      "mystery_tie_2": "clocktower_secret",
+      "address": "4 Finch Lane"
     },
     {
       "id": "old_mill_antiques",
@@ -308,7 +331,7 @@
       "type": "commercial",
       "area": "millpond_row",
       "short_desc": "Three rooms of accumulated things, a stuck drawer that has never been opened, and the smell of a century's worth of history.",
-      "long_desc": "Miriam Thatcher runs the Old Mill Antiques out of a building that was once a grain merchant's warehouse. The shop has three rooms of furniture, objects, books, and curiosities accumulated over forty years. The famous stuck drawer is in a rolltop desk in the back room — Miriam has given up trying to open it and incorporated it into the shop's mythology. (The drawer is stuck because there's a clockwork mechanism inside, a small trinket box with a timer that will open on a specific date.) The shop smells of beeswax and old paper.",
+      "long_desc": "Miriam Thatcher runs the Old Mill Antiques out of a building that was once a grain merchant's warehouse. The shop has three rooms of furniture, objects, books, and curiosities accumulated over forty years. The famous stuck drawer is in a rolltop desk in the back room \u2014 Miriam has given up trying to open it and incorporated it into the shop's mythology. (The drawer is stuck because there's a clockwork mechanism inside, a small trinket box with a timer that will open on a specific date.) The shop smells of beeswax and old paper.",
       "npcs_frequent": [
         "miriam_thatcher"
       ],
@@ -320,7 +343,8 @@
         "stuck_drawer_desk",
         "antique_almanac_1879",
         "portrait_unknown_woman"
-      ]
+      ],
+      "address": "50 Millpond Row"
     },
     {
       "id": "book_nook",
@@ -334,7 +358,8 @@
       ],
       "exits": [
         "finch_lane"
-      ]
+      ],
+      "address": "8 Finch Lane"
     },
     {
       "id": "lakeside_park",
@@ -342,7 +367,7 @@
       "type": "outdoor",
       "area": "lakefront",
       "short_desc": "A grassy park sloping to the boardwalk, with the statue of Alderman Finch, the lake glittering beyond.",
-      "long_desc": "Lakeside Park is the town's front yard — a gentle slope from Lake Street down to the boardwalk, with a dozen willows along the water's edge and the bronze statue of Alderman Finch standing in the center. The statue is life-sized, depicting Finch with one hand raised as if pointing at the lake. He has been pointing slightly more to the left than he was when installed. On summer evenings, this is where the town comes to sit. Families spread blankets. The teenagers congregate at the far willows. Older residents take the benches near the statue.",
+      "long_desc": "Lakeside Park is the town's front yard \u2014 a gentle slope from Lake Street down to the boardwalk, with a dozen willows along the water's edge and the bronze statue of Alderman Finch standing in the center. The statue is life-sized, depicting Finch with one hand raised as if pointing at the lake. He has been pointing slightly more to the left than he was when installed. On summer evenings, this is where the town comes to sit. Families spread blankets. The teenagers congregate at the far willows. Older residents take the benches near the statue.",
       "items_present": [
         "alderman_finch_statue"
       ],
@@ -355,16 +380,17 @@
       "time_variations": {
         "morning": "Dog walkers and early runners. The lake is misty in cool months.",
         "afternoon": "Families, children. In summer, swimmers.",
-        "evening": "The most beautiful time — the light off the water, the willows moving."
-      }
+        "evening": "The most beautiful time \u2014 the light off the water, the willows moving."
+      },
+      "address": "Lake Street at the Lakefront"
     },
     {
       "id": "lakefront_boardwalk",
       "name": "The Lakefront Boardwalk",
       "type": "outdoor",
       "area": "lakefront",
-      "short_desc": "A wide wooden boardwalk along the lake's northern shore — the best place to watch the lake light on clear nights.",
-      "long_desc": "The boardwalk runs 600 yards along the lake's northern edge, from the park to the old boathouse. It was originally built in 1989 and restored in 2015; the new planks still smell faintly of cedar when it rains. Benches face the water at intervals. At night, on clear evenings especially, the view south across the lake is extraordinary — the mountains reflected, the two islands dark shapes in the silver water. From the southern-facing section of the boardwalk, due south, you can sometimes see the lake light: faint, pale blue-green, trembling just below the surface.",
+      "short_desc": "A wide wooden boardwalk along the lake's northern shore \u2014 the best place to watch the lake light on clear nights.",
+      "long_desc": "The boardwalk runs 600 yards along the lake's northern edge, from the park to the old boathouse. It was originally built in 1989 and restored in 2015; the new planks still smell faintly of cedar when it rains. Benches face the water at intervals. At night, on clear evenings especially, the view south across the lake is extraordinary \u2014 the mountains reflected, the two islands dark shapes in the silver water. From the southern-facing section of the boardwalk, due south, you can sometimes see the lake light: faint, pale blue-green, trembling just below the surface.",
       "mystery_tie": "lake_light",
       "exits": [
         "lakeside_park",
@@ -379,20 +405,22 @@
       "time_variations": {
         "evening": "The best time. Locals walk here after dinner. The lake light is visible on clear nights from the southern stretch.",
         "night": "The boardwalk is lit by small lantern-post lights. The lake light is visible at its best around midnight on very clear nights."
-      }
+      },
+      "address": "Lake Mirrowell Boardwalk"
     },
     {
       "id": "lake_pier",
       "name": "The Lake Pier",
       "type": "outdoor",
       "area": "lakefront",
-      "short_desc": "An old wooden pier extending sixty feet into the lake — fishing in the morning, watching the stars at night.",
+      "short_desc": "An old wooden pier extending sixty feet into the lake \u2014 fishing in the morning, watching the stars at night.",
       "long_desc": "The pier has been here in some form since the 1840s. The current structure dates from 1971. It extends sixty feet into the lake, with a wider platform at the end and two benches worn smooth by decades of sitting. Fishing is permitted and practiced. The water is clear enough here to see the bottom for a good fifteen feet. At the end of the pier, looking south, you are directly north of where the lake light appears.",
       "mystery_tie": "lake_light",
       "exits": [
         "lakeside_park",
         "miras_boat_rental"
-      ]
+      ],
+      "address": "Foot of Lakeside Park"
     },
     {
       "id": "miras_boat_rental",
@@ -400,22 +428,24 @@
       "type": "commercial",
       "area": "lakefront",
       "short_desc": "Rowboats, canoes, fishing gear, and Sadie Mirabel, who knows the lake better than anyone alive.",
-      "long_desc": "The little yellow building at the end of the boardwalk has offered boat rentals since 1962, when the first Sadie Mirabel (grandmother of the current one) started it. The name has always been 'Mira's' — a play on 'Mirrowell' and, perhaps, something else. The current Sadie Mirabel, 58, runs the boats, sells bait, and is the person to ask about the lake: its moods, its currents, its depths, and, if you're patient and have earned a bit of her trust, what she thinks is down there in the deep water due south.",
+      "long_desc": "The little yellow building at the end of the boardwalk has offered boat rentals since 1962, when the first Sadie Mirabel (grandmother of the current one) started it. The name has always been 'Mira's' \u2014 a play on 'Mirrowell' and, perhaps, something else. The current Sadie Mirabel, 58, runs the boats, sells bait, and is the person to ask about the lake: its moods, its currents, its depths, and, if you're patient and have earned a bit of her trust, what she thinks is down there in the deep water due south.",
       "npcs_frequent": [
         "sadie_mirabel"
       ],
       "mystery_tie": "lake_light",
       "exits": [
         "lakefront_boardwalk",
-        "lake_pier"
-      ]
+        "lake_pier",
+        "finch_island"
+      ],
+      "address": "1 Pier Road"
     },
     {
       "id": "old_alderman_boathouse",
       "name": "The Old Alderman Boathouse",
       "type": "historical",
       "area": "lakefront",
-      "short_desc": "A weathered structure at the end of the boardwalk — locked, slightly leaning, full of something.",
+      "short_desc": "A weathered structure at the end of the boardwalk \u2014 locked, slightly leaning, full of something.",
       "long_desc": "The Alderman family boathouse dates from 1872, replacing the one lost in the 1879 flood. It has been unused for at least forty years. The door is padlocked. Through the gaps in the boards you can see old boats, rusted equipment, and what appears to be a considerable collection of the Alderman family's storage. Constance Alderman has a key. She says she keeps meaning to sort through it.",
       "npcs_relevant": [
         "constance_alderman"
@@ -424,15 +454,16 @@
       "exits": [
         "lakefront_boardwalk"
       ],
-      "locked": true
+      "locked": true,
+      "address": "3 Pier Road"
     },
     {
       "id": "alderman_estate",
       "name": "The Alderman Estate",
       "type": "residential_historic",
       "area": "finch_lane",
-      "short_desc": "The largest, oldest house in Brindlewick — a Victorian pile set back from the road behind iron gates, where Constance Alderman has lived for 85 years.",
-      "long_desc": "The Alderman Estate is a three-story Victorian house in good repair but clearly old — wide porches, shuttered upper windows, a garden that is large and well-tended but somehow private. The iron gate at the road is never locked but feels private enough that people generally don't walk up the drive without being invited. Constance Alderman, 85, lives here with her housekeeper, Dot Flowers, and a remarkable number of cats. The east wing, according to what Eleanor found in the town records, contains a sealed room that has been walled off since 1866.",
+      "short_desc": "The largest, oldest house in Brindlewick \u2014 a Victorian pile set back from the road behind iron gates, where Constance Alderman has lived for 85 years.",
+      "long_desc": "The Alderman Estate is a three-story Victorian house in good repair but clearly old \u2014 wide porches, shuttered upper windows, a garden that is large and well-tended but somehow private. The iron gate at the road is never locked but feels private enough that people generally don't walk up the drive without being invited. Constance Alderman, 85, lives here with her housekeeper, Dot Flowers, and a remarkable number of cats. The east wing, according to what Eleanor found in the town records, contains a sealed room that has been walled off since 1866.",
       "npcs_frequent": [
         "constance_alderman"
       ],
@@ -443,15 +474,16 @@
         "hidden_garden",
         "maple_row"
       ],
-      "locked": "partial"
+      "locked": "partial",
+      "address": "1 Estate Drive"
     },
     {
       "id": "founders_hidden_room",
       "name": "Alderman Finch's Study",
       "type": "hidden",
       "area": "alderman_estate",
-      "short_desc": "A sealed room untouched since 1866 — the founder's desk, his papers, a particular watercolor on the wall.",
-      "long_desc": "The room is small — a private study, twelve feet square, with a fireplace that hasn't been lit in 160 years. The desk is covered in papers, preserved by the cold and the sealed air. Bookshelves. An oil lamp. On the wall above the desk, a watercolor of the lake at dawn — signed, in the corner, 'M.F.' The founder's diary is in the top desk drawer. It contains the full history of the town's founding, including the true account of Mira Finch, who named the lake and was written out of the family record.",
+      "short_desc": "A sealed room untouched since 1866 \u2014 the founder's desk, his papers, a particular watercolor on the wall.",
+      "long_desc": "The room is small \u2014 a private study, twelve feet square, with a fireplace that hasn't been lit in 160 years. The desk is covered in papers, preserved by the cold and the sealed air. Bookshelves. An oil lamp. On the wall above the desk, a watercolor of the lake at dawn \u2014 signed, in the corner, 'M.F.' The founder's diary is in the top desk drawer. It contains the full history of the town's founding, including the true account of Mira Finch, who named the lake and was written out of the family record.",
       "mystery_tie": "founders_hidden_room",
       "mystery_tie_2": "mira_finch",
       "hidden": true,
@@ -460,7 +492,11 @@
         "mira_finch_painting_original",
         "alderman_finch_correspondence"
       ],
-      "unlock_condition": "has_three_clues_for_hidden_room"
+      "unlock_condition": "has_three_clues_for_hidden_room",
+      "exits": [
+        "alderman_estate"
+      ],
+      "address": "1 Estate Drive (Sealed East Wing)"
     },
     {
       "id": "st_agathas_chapel",
@@ -478,15 +514,16 @@
       "exits": [
         "maple_row",
         "brindlewick_cemetery"
-      ]
+      ],
+      "address": "40 Maple Row"
     },
     {
       "id": "brindlewick_cemetery",
       "name": "Brindlewick Cemetery",
       "type": "outdoor",
       "area": "maple_row",
-      "short_desc": "Behind the chapel — generations of Brindlewick families, their stones moss-covered and familiar.",
-      "long_desc": "The cemetery is behind the chapel, separated by a low stone wall. The oldest stones are nearest the chapel wall, worn nearly smooth by weather. The Finch and Alderman plots are the largest. Among the stones, if you look carefully, is one that stands slightly apart from the others, near the back wall — smaller, plainly inscribed: 'Mira Finch, 1815-1878. She named the lake.' Someone has placed it here; it wasn't here in the 1960s. No one knows who put it.",
+      "short_desc": "Behind the chapel \u2014 generations of Brindlewick families, their stones moss-covered and familiar.",
+      "long_desc": "The cemetery is behind the chapel, separated by a low stone wall. The oldest stones are nearest the chapel wall, worn nearly smooth by weather. The Finch and Alderman plots are the largest. Among the stones, if you look carefully, is one that stands slightly apart from the others, near the back wall \u2014 smaller, plainly inscribed: 'Mira Finch, 1815-1878. She named the lake.' Someone has placed it here; it wasn't here in the 1960s. No one knows who put it.",
       "mystery_tie": "mira_finch",
       "items_present": [
         "mira_finch_gravestone"
@@ -494,19 +531,21 @@
       "exits": [
         "st_agathas_chapel",
         "maple_row"
-      ]
+      ],
+      "address": "Behind St. Agatha's Chapel, Maple Row"
     },
     {
       "id": "founders_graves",
       "name": "The Founders' Graves",
       "type": "outdoor",
       "area": "copper_hill",
-      "short_desc": "An older cemetery on the lower slope of Copper Hill — a dozen stones, the oldest in town.",
+      "short_desc": "An older cemetery on the lower slope of Copper Hill \u2014 a dozen stones, the oldest in town.",
       "long_desc": "Before the main cemetery was established in 1845, the earliest settlers buried their dead on the lower slope of Copper Hill. There are twelve graves here, in a small enclosure of old stone walls. The two Alderman founders, the first Hartwell, three Finches. The stones are old enough that some are hard to read. Thomas Alderman's stone, the largest, has an inscription: 'He helped. When in doubt, he helped.' The old water tower is visible a short walk up the slope.",
       "exits": [
         "brindlewick_trailhead",
         "water_tower"
-      ]
+      ],
+      "address": "Founders' Enclosure, Copper Hill Road"
     },
     {
       "id": "elementary_school",
@@ -514,13 +553,14 @@
       "type": "civic",
       "area": "maple_row",
       "short_desc": "A brick building from 1949, still using the original schoolhouse bell from 1836.",
-      "long_desc": "The elementary school is a solid postwar building with a large playground and the kind of institutional smell (pencil shavings, floor cleaner) that is somehow comforting. It houses grades K-8; high schoolers travel by bus to the regional school two towns over. Petra Holloway teaches science here. The original schoolhouse bell — bronze, twelve inches across, dated 1836 — hangs in a frame in the front corridor.",
+      "long_desc": "The elementary school is a solid postwar building with a large playground and the kind of institutional smell (pencil shavings, floor cleaner) that is somehow comforting. It houses grades K-8; high schoolers travel by bus to the regional school two towns over. Petra Holloway teaches science here. The original schoolhouse bell \u2014 bronze, twelve inches across, dated 1836 \u2014 hangs in a frame in the front corridor.",
       "npcs_frequent": [
         "petra_holloway"
       ],
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "14 Maple Row"
     },
     {
       "id": "garden_club_greenhouse",
@@ -528,13 +568,14 @@
       "type": "civic",
       "area": "maple_row",
       "short_desc": "A glass-and-steel greenhouse where the Garden Club grows everything that goes into the town's common planters.",
-      "long_desc": "The Garden Club greenhouse is larger than you'd expect — a proper commercial-sized structure behind the school. It's open to visitors on Saturday mornings. Inside: rows of seedlings, overwintering tropicals, a legendary collection of begonias, and the perennial low-level debate about whether a particular rose cultivar counts as a hybrid tea. Dorothy Alderman (Constance's niece) runs the club with mild tyranny and considerable expertise.",
+      "long_desc": "The Garden Club greenhouse is larger than you'd expect \u2014 a proper commercial-sized structure behind the school. It's open to visitors on Saturday mornings. Inside: rows of seedlings, overwintering tropicals, a legendary collection of begonias, and the perennial low-level debate about whether a particular rose cultivar counts as a hybrid tea. Dorothy Alderman (Constance's niece) runs the club with mild tyranny and considerable expertise.",
       "npcs_frequent": [
         "dorothy_alderman"
       ],
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "34 Maple Row"
     },
     {
       "id": "sheriffs_office",
@@ -542,14 +583,15 @@
       "type": "civic",
       "area": "millpond_row",
       "short_desc": "Brindlewick's law enforcement occupies a single office with a coffee maker, a coat rack, and a bulletin board of mildly vexing situations.",
-      "long_desc": "Sheriff Levi Quartermaine runs the most peaceable police operation in the county — mostly parking, the occasional noise complaint, and a quarterly visit from a raccoon that has worked out how to open the dumpster behind the diner. The bulletin board holds: three missing cats, one lost bicycle (a child's, left against the library fence), and a handwritten note that says 'The statue has moved again (est. 1/8 inch north, this spring). Monitoring continues.' Levi has been monitoring the statue for seven years.",
+      "long_desc": "Sheriff Levi Quartermaine runs the most peaceable police operation in the county \u2014 mostly parking, the occasional noise complaint, and a quarterly visit from a raccoon that has worked out how to open the dumpster behind the diner. The bulletin board holds: three missing cats, one lost bicycle (a child's, left against the library fence), and a handwritten note that says 'The statue has moved again (est. 1/8 inch north, this spring). Monitoring continues.' Levi has been monitoring the statue for seven years.",
       "npcs_frequent": [
         "sheriff_quartermaine"
       ],
       "mystery_tie": "moving_statue",
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "44 Millpond Row"
     },
     {
       "id": "fire_station",
@@ -557,21 +599,22 @@
       "type": "civic",
       "area": "lake_street",
       "short_desc": "A volunteer fire department that mostly handles chimney fires and floods the square's ice rink in winter.",
-      "long_desc": "The fire station has two bays — a modern pumper truck and a 1968 ladder truck that is kept running by the combined will of the volunteer department and Barnaby Mossgrove, who can fix anything. The department is all-volunteer, and most of the town is on the roster. Their biggest annual event is not a fire but the Winter Market, which they organize and host in the station's parking lot.",
+      "long_desc": "The fire station has two bays \u2014 a modern pumper truck and a 1968 ladder truck that is kept running by the combined will of the volunteer department and Barnaby Mossgrove, who can fix anything. The department is all-volunteer, and most of the town is on the roster. Their biggest annual event is not a fire but the Winter Market, which they organize and host in the station's parking lot.",
       "npcs_frequent": [
         "barnaby_mossgrove"
       ],
       "exits": [
         "lake_street"
-      ]
+      ],
+      "address": "14 Lake Street"
     },
     {
       "id": "perkins_cider_house",
       "name": "Perkins Cider House",
       "type": "commercial",
       "area": "outskirts",
-      "short_desc": "On the Alderman Road, half a mile out of town — Agnes Perkins's cider operation, her apple orchard, and the source of a particular ingredient.",
-      "long_desc": "The Perkins property is a working farm — orchard, chicken yard, vegetable garden, and the cider barn where Agnes makes her famous dry cider and, in good years, a limited run of something she calls her 'elder blend.' The walk out here is pleasant: the Alderman Road follows the creek for a bit before curving into the hills. Agnes, 71, is the fourth generation to run the place and the most opinionated. She and Constance Alderman have kept up the Alderman-Perkins feud as a sort of performance art.",
+      "short_desc": "On the Alderman Road, half a mile out of town \u2014 Agnes Perkins's cider operation, her apple orchard, and the source of a particular ingredient.",
+      "long_desc": "The Perkins property is a working farm \u2014 orchard, chicken yard, vegetable garden, and the cider barn where Agnes makes her famous dry cider and, in good years, a limited run of something she calls her 'elder blend.' The walk out here is pleasant: the Alderman Road follows the creek for a bit before curving into the hills. Agnes, 71, is the fourth generation to run the place and the most opinionated. She and Constance Alderman have kept up the Alderman-Perkins feud as a sort of performance art.",
       "npcs_frequent": [
         "agnes_perkins"
       ],
@@ -583,7 +626,8 @@
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "Alderman Road, \u00bd mile from Millpond Row"
     },
     {
       "id": "covered_bridge",
@@ -591,7 +635,7 @@
       "type": "outdoor",
       "area": "herons_creek",
       "short_desc": "A covered wooden bridge over Heron's Creek on the north road, with a hidden inscription on its interior beam.",
-      "long_desc": "The covered bridge spans Heron's Creek on the north road out of town — a classic New England structure, red-painted, about 40 feet long. The interior smells of old wood and creek water. The bridge was built in 1842 and has been repaired many times. On the main upper beam, in the interior, in small careful letters that require looking up and leaning close: 'M.F. was here — 1833. The lake is hers.' It is carved, not painted, and is the oldest inscription in town. No one had noticed it until Juni Salcedo discovered it in 2021 while photographing the bridge for a restoration grant application.",
+      "long_desc": "The covered bridge spans Heron's Creek on the north road out of town \u2014 a classic New England structure, red-painted, about 40 feet long. The interior smells of old wood and creek water. The bridge was built in 1842 and has been repaired many times. On the main upper beam, in the interior, in small careful letters that require looking up and leaning close: 'M.F. was here \u2014 1833. The lake is hers.' It is carved, not painted, and is the oldest inscription in town. No one had noticed it until Juni Salcedo discovered it in 2021 while photographing the bridge for a restoration grant application.",
       "mystery_tie": "mira_finch",
       "items_present": [
         "mira_finch_inscription"
@@ -601,7 +645,8 @@
         "grange_hall",
         "brindlewick_trailhead",
         "old_mill_ruins"
-      ]
+      ],
+      "address": "Old Mill Road over Heron's Creek"
     },
     {
       "id": "old_mill_ruins",
@@ -609,11 +654,12 @@
       "type": "outdoor",
       "area": "herons_creek",
       "short_desc": "The stone foundations and one standing wall of the mill from 1862, beside Heron's Creek.",
-      "long_desc": "The old grist mill operated until 1902 and was largely dismantled in 1930. What remains is the stone foundation, one gable end wall standing to full height, and the millrace — the channel that directed the creek into the wheel. The millrace is full of watercress and small trout. The standing wall has a faded painted advertisement on it: BRINDLEWICK MILLS — FINEST FLOUR IN THE VALLEY, the letters just legible in the right light. A path follows the creek bank north toward the covered bridge.",
+      "long_desc": "The old grist mill operated until 1902 and was largely dismantled in 1930. What remains is the stone foundation, one gable end wall standing to full height, and the millrace \u2014 the channel that directed the creek into the wheel. The millrace is full of watercress and small trout. The standing wall has a faded painted advertisement on it: BRINDLEWICK MILLS \u2014 FINEST FLOUR IN THE VALLEY, the letters just legible in the right light. A path follows the creek bank north toward the covered bridge.",
       "exits": [
         "brindlewick_trailhead",
         "covered_bridge"
-      ]
+      ],
+      "address": "Old Mill Site, Heron's Creek"
     },
     {
       "id": "water_tower",
@@ -621,33 +667,35 @@
       "type": "civic",
       "area": "copper_hill",
       "short_desc": "The old water tower on the lower slope of Copper Hill, painted white with 'BRINDLEWICK' in faded red.",
-      "long_desc": "The water tower dates from 1934, when the town's first pressurized water system was installed. It was decommissioned when a new system was built in 1989 but kept for its historical value and because 'BRINDLEWICK' in 18-inch red letters is visible from the main road and serves as a welcome sign. From its base you have a view of the town's full layout — the streets, the square, the library, the inn — and the lake beyond. The old founders' burial ground is a short walk down the slope.",
+      "long_desc": "The water tower dates from 1934, when the town's first pressurized water system was installed. It was decommissioned when a new system was built in 1989 but kept for its historical value and because 'BRINDLEWICK' in 18-inch red letters is visible from the main road and serves as a welcome sign. From its base you have a view of the town's full layout \u2014 the streets, the square, the library, the inn \u2014 and the lake beyond. The old founders' burial ground is a short walk down the slope.",
       "exits": [
         "brindlewick_trailhead",
         "founders_graves"
-      ]
+      ],
+      "address": "Copper Hill Road (Lower Slope)"
     },
     {
       "id": "lighthouse",
       "name": "The Brindlewick Lighthouse",
       "type": "historic",
       "area": "lakefront",
-      "short_desc": "A small lighthouse at the lake's edge, built in 1882 — it has never warned anyone away from anything, but the light is beautiful.",
-      "long_desc": "The lighthouse is only 30 feet tall, which makes it the least imposing lighthouse in New England. It was built as a memorial after the 1879 flood and as a practical guide for fishing boats returning after dark. The light — automated since 1957 — is visible across the full length of the lake. A small door at the base leads to a circular staircase. The keeper's log is stored in the library; the last entry by a human keeper is dated November 14, 1957.",
+      "short_desc": "A small lighthouse at the lake's edge, built in 1882 \u2014 it has never warned anyone away from anything, but the light is beautiful.",
+      "long_desc": "The lighthouse is only 30 feet tall, which makes it the least imposing lighthouse in New England. It was built as a memorial after the 1879 flood and as a practical guide for fishing boats returning after dark. The light \u2014 automated since 1957 \u2014 is visible across the full length of the lake. A small door at the base leads to a circular staircase. The keeper's log is stored in the library; the last entry by a human keeper is dated November 14, 1957.",
       "items_present": [
         "lighthouse_logbook_copy"
       ],
       "exits": [
         "lakefront_boardwalk"
-      ]
+      ],
+      "address": "Mirrowell Shore, Lighthouse Point"
     },
     {
       "id": "brindlewick_trailhead",
       "name": "The Brindlewick Trailhead",
       "type": "outdoor",
       "area": "north_edge",
-      "short_desc": "The start of the mountain trail system — a wooden signpost and a trail box with maps and a pencil stub.",
-      "long_desc": "The trailhead is on the north side of town where the houses thin out and the trees begin. A large wooden signpost indicates distances: The Lookout (2.1 mi), Copper Hill Summit (3.4 mi), Heron's Creek Loop (1.8 mi). A weatherproof box holds trail maps — always slightly damp, pencil stub attached on a string. A register book inside has the handwritten entries of everyone who's gone up: dates, names, notes. The earliest entry is from 1978.",
+      "short_desc": "The start of the mountain trail system \u2014 a wooden signpost and a trail box with maps and a pencil stub.",
+      "long_desc": "The trailhead is on the north side of town where the houses thin out and the trees begin. A large wooden signpost indicates distances: The Lookout (2.1 mi), Copper Hill Summit (3.4 mi), Heron's Creek Loop (1.8 mi). A weatherproof box holds trail maps \u2014 always slightly damp, pencil stub attached on a string. A register book inside has the handwritten entries of everyone who's gone up: dates, names, notes. The earliest entry is from 1978.",
       "items_present": [
         "trail_register",
         "trail_map"
@@ -660,27 +708,30 @@
         "warming_hut",
         "founders_graves",
         "water_tower",
-        "covered_bridge"
-      ]
+        "covered_bridge",
+        "millpond"
+      ],
+      "address": "North End of Forest Road"
     },
     {
       "id": "the_lookout",
       "name": "The Lookout",
       "type": "outdoor",
       "area": "mountain",
-      "short_desc": "A cleared rocky ledge at 2.1 miles — the best view of Brindlewick and the valley, the lake spread below you.",
+      "short_desc": "A cleared rocky ledge at 2.1 miles \u2014 the best view of Brindlewick and the valley, the lake spread below you.",
       "long_desc": "The trail opens suddenly onto a broad rocky ledge, and the view is worth every step: the full valley below, the town a cluster of white and red rooftops around the green square, the lake a long silver shape extending southward, the farms and orchards of the outskirts, and beyond them, more mountains. On clear days you can see 40 miles. There is a single bench here, installed in 1989 by the Garden Club, with a small bronze plate: 'In memory of Dorothy Webb, who came up here every birthday.'",
       "exits": [
         "brindlewick_trailhead",
         "warming_hut"
-      ]
+      ],
+      "address": "Brindlewick Trail Summit (2.1 miles)"
     },
     {
       "id": "wardens_cabin",
       "name": "The Warden's Cabin",
       "type": "residential",
       "area": "mountain",
-      "short_desc": "The forest warden's cabin at the edge of the state forest — smoke from the chimney, a stack of firewood, a friendly dog.",
+      "short_desc": "The forest warden's cabin at the edge of the state forest \u2014 smoke from the chimney, a stack of firewood, a friendly dog.",
       "long_desc": "Clem Rourke (55) lives here year-round, having transitioned from full-time warden to part-time when he semi-retired. The cabin is warm, cluttered with field guides and hiking maps, and inhabited by a large dog named Biscuit. Clem knows every trail in the system, every bird that nests in the valley, and has strong opinions about the lake. He is the person Fletcher Grange usually calls when something odd is happening in the natural world.",
       "npcs_frequent": [
         "clem_rourke"
@@ -688,49 +739,53 @@
       "exits": [
         "brindlewick_trailhead",
         "warming_hut"
-      ]
+      ],
+      "address": "1 Forest Service Road"
     },
     {
       "id": "finch_family_orchard",
       "name": "The Finch Family Orchard",
       "type": "outdoor",
       "area": "outskirts",
-      "short_desc": "Twenty-odd acres of apple trees on the south-facing slope of the north hill — not officially open to the public, but no one's ever been turned away.",
-      "long_desc": "The Finch orchard occupies the south-facing lower slope of the hill above town — sheltered from the north, angled toward the afternoon sun, which is why the apples have thrived here since 1856. Eleanor's family still owns it but leases the working operation to a neighboring farmer. In October it's extraordinary — the air sweet, the light low and golden, every tree loaded. A stone wall marks the eastern boundary. On the interior of the gate post, carved in 1856: 'A.F. planted the first tree here.' Nobody is sure who A.F. was.",
+      "short_desc": "Twenty-odd acres of apple trees on the south-facing slope of the north hill \u2014 not officially open to the public, but no one's ever been turned away.",
+      "long_desc": "The Finch orchard occupies the south-facing lower slope of the hill above town \u2014 sheltered from the north, angled toward the afternoon sun, which is why the apples have thrived here since 1856. Eleanor's family still owns it but leases the working operation to a neighboring farmer. In October it's extraordinary \u2014 the air sweet, the light low and golden, every tree loaded. A stone wall marks the eastern boundary. On the interior of the gate post, carved in 1856: 'A.F. planted the first tree here.' Nobody is sure who A.F. was.",
       "exits": [
         "millpond_row",
         "brindlewick_trailhead"
-      ]
+      ],
+      "address": "1 North Hill Road"
     },
     {
       "id": "millpond",
       "name": "The Millpond",
       "type": "outdoor",
       "area": "herons_creek",
-      "short_desc": "A broad, still section of Heron's Creek where the old mill backed up the water — now a duck pond, beloved and slow.",
-      "long_desc": "The millpond is a remnant of the old mill's operation — the original dam is still in place, though much reduced. The water is still and shallow, full of rushes and ducks. A wooden footbridge crosses the creek just above the pond. In summer this is a popular spot for children. In winter it freezes reliably enough for skating, and the fire department brings a small warming hut.",
+      "short_desc": "A broad, still section of Heron's Creek where the old mill backed up the water \u2014 now a duck pond, beloved and slow.",
+      "long_desc": "The millpond is a remnant of the old mill's operation \u2014 the original dam is still in place, though much reduced. The water is still and shallow, full of rushes and ducks. A wooden footbridge crosses the creek just above the pond. In summer this is a popular spot for children. In winter it freezes reliably enough for skating, and the fire department brings a small warming hut.",
       "exits": [
         "brindlewick_trailhead",
         "millpond_row"
-      ]
+      ],
+      "address": "Mill Pond, Heron's Creek"
     },
     {
       "id": "community_hall",
       "name": "The Community Hall",
       "type": "civic",
       "area": "maple_row",
-      "short_desc": "A large barn-style building where the town gathers for events — Harvest Fair prep, Winter Market planning, and the monthly potluck.",
+      "short_desc": "A large barn-style building where the town gathers for events \u2014 Harvest Fair prep, Winter Market planning, and the monthly potluck.",
       "long_desc": "The Community Hall was built in 1956 by the combined effort of a dozen families who wanted a large indoor space for events that wouldn't require renting anything. It has a proper stage, a commercial kitchen, folding tables and chairs enough for 300, and a mounted moose head above the door that has been there as long as anyone can remember and that no one has claimed responsibility for. Every major town event organizes here.",
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "28 Maple Row"
     },
     {
       "id": "grange_hall",
       "name": "The Grange Hall",
       "type": "civic",
       "area": "outskirts",
-      "short_desc": "The farmers' organization hall on the north road — older than most buildings in town, used for the Harvest Fair committee meetings.",
+      "short_desc": "The farmers' organization hall on the north road \u2014 older than most buildings in town, used for the Harvest Fair committee meetings.",
       "long_desc": "The Grange Hall is a 1910 building that smells of old wood and agricultural history. It's used primarily for the Grange's own monthly meetings, Harvest Fair planning, and as a storage facility for fair supplies. Fletcher Grange (no relation to the organization; the name confusion has been going on for 60 years) is on the board.",
       "npcs_frequent": [
         "fletcher_grange"
@@ -739,7 +794,8 @@
         "millpond_row",
         "millbrook_farm",
         "covered_bridge"
-      ]
+      ],
+      "address": "2 Old Mill Road"
     },
     {
       "id": "woolen_bear",
@@ -747,27 +803,29 @@
       "type": "commercial",
       "area": "finch_lane",
       "short_desc": "Yarn, knitwear, and knitting instruction from Margaret Hollis, who has been knitting since age 6.",
-      "long_desc": "The shop is warm and softly colored — walls of yarn in every weight and hue, finished garments on display, a spinning wheel in the window that sometimes turns. Margaret Hollis, 52, runs the shop and offers knitting classes that are perpetually oversubscribed. The shop cat is an orange tabby named Butter.",
+      "long_desc": "The shop is warm and softly colored \u2014 walls of yarn in every weight and hue, finished garments on display, a spinning wheel in the window that sometimes turns. Margaret Hollis, 52, runs the shop and offers knitting classes that are perpetually oversubscribed. The shop cat is an orange tabby named Butter.",
       "npcs_frequent": [
         "margaret_hollis"
       ],
       "exits": [
         "finch_lane"
-      ]
+      ],
+      "address": "12 Finch Lane"
     },
     {
       "id": "pottery_studio",
       "name": "Brindlewick Pottery Studio",
       "type": "commercial",
       "area": "finch_lane",
-      "short_desc": "Sylvie Tran's studio — wheel-thrown pots, the smell of clay, and someone who notices everything.",
-      "long_desc": "The pottery studio occupies a converted outbuilding behind the Finch Lane houses. The front section is the shop; the back is the working studio, visible through a window. Sylvie Tran, 33, makes functional, beautiful pottery — bowls, mugs, serving dishes — that she sells here and at a few shops in the city. She is observant in the manner of someone who spends long hours looking at the shapes of things, and she notices things about people that they haven't said.",
+      "short_desc": "Sylvie Tran's studio \u2014 wheel-thrown pots, the smell of clay, and someone who notices everything.",
+      "long_desc": "The pottery studio occupies a converted outbuilding behind the Finch Lane houses. The front section is the shop; the back is the working studio, visible through a window. Sylvie Tran, 33, makes functional, beautiful pottery \u2014 bowls, mugs, serving dishes \u2014 that she sells here and at a few shops in the city. She is observant in the manner of someone who spends long hours looking at the shapes of things, and she notices things about people that they haven't said.",
       "npcs_frequent": [
         "sylvie_tran"
       ],
       "exits": [
         "finch_lane"
-      ]
+      ],
+      "address": "16 Finch Lane"
     },
     {
       "id": "copper_hill_gallery",
@@ -782,7 +840,8 @@
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "58 Millpond Row"
     },
     {
       "id": "ice_cream_cottage",
@@ -801,32 +860,35 @@
       ],
       "exits": [
         "lake_street"
-      ]
+      ],
+      "address": "20 Lake Street"
     },
     {
       "id": "meadows_florist",
       "name": "Meadow's Florist",
       "type": "commercial",
       "area": "millpond_row",
-      "short_desc": "Flowers, dried arrangements, and window boxes — run by Beatrice Meadow, who grows most of what she sells.",
+      "short_desc": "Flowers, dried arrangements, and window boxes \u2014 run by Beatrice Meadow, who grows most of what she sells.",
       "long_desc": "The florist is a bright, fragrant shop on Millpond Row. Beatrice Meadow grows a substantial portion of her stock in the field behind her house on Birch Hollow Road, supplementing with the greenhouse and local farms. She has done the flowers for every wedding in Brindlewick for 28 years.",
       "npcs_frequent": [
         "beatrice_meadow"
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "54 Millpond Row"
     },
     {
       "id": "brindlewick_bank",
       "name": "Brindlewick Savings",
       "type": "civic",
       "area": "millpond_row",
-      "short_desc": "A small independent bank in a handsome 1920s building — the same family has run it for four generations.",
+      "short_desc": "A small independent bank in a handsome 1920s building \u2014 the same family has run it for four generations.",
       "long_desc": "The bank occupies a well-preserved 1921 building with a proper vault door visible through the glass partition. The Hartwell-adjacent family that runs it (the Morrows) have been here since 1921. It is not a national bank; it is not affiliated with any chain. It is the Brindlewick Savings Bank, and the fact that it survived every financial crisis is a point of deep local pride.",
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "62 Millpond Row"
     },
     {
       "id": "old_schoolhouse_arts",
@@ -834,13 +896,14 @@
       "type": "civic",
       "area": "maple_row",
       "short_desc": "The original 1836 schoolhouse, now an arts center for classes and community events.",
-      "long_desc": "The original schoolhouse — Patience Alderman's room, where she taught every age in 1836 — was preserved and converted into an arts center in 1992. It offers pottery classes (supplementary to the studio), painting, music lessons, and hosts the annual children's art show. The slate board from 1836 is still on the wall, now protected behind glass, still showing a long division problem no one has thought to erase.",
+      "long_desc": "The original schoolhouse \u2014 Patience Alderman's room, where she taught every age in 1836 \u2014 was preserved and converted into an arts center in 1992. It offers pottery classes (supplementary to the studio), painting, music lessons, and hosts the annual children's art show. The slate board from 1836 is still on the wall, now protected behind glass, still showing a long division problem no one has thought to erase.",
       "items_present": [
         "1836_slate_board"
       ],
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "32 Maple Row"
     },
     {
       "id": "station_masters_house",
@@ -848,14 +911,16 @@
       "type": "historic",
       "area": "lake_street",
       "short_desc": "The old station master's house at the south end of Lake Street, beside the disused railway platform where the valley line once terminated.",
-      "long_desc": "The Station Master's House sits at the quiet southern foot of Lake Street, where the old Mirrowell Valley Branch Line once arrived from the south. The line closed in 1923; Gerald Hobbs, the last station master, locked up and left the same week. The house has been vacant since. The railway platform beside it is an overgrown concrete slab — you can still make out the painted letters 'BRINDLEWICK' in faded black on the concrete face. And on a nail by the door, as Hobbs left it, is a brass door key on a faded red ribbon, slightly greened with age.",
+      "long_desc": "The Station Master's House sits at the quiet southern foot of Lake Street, where the old Mirrowell Valley Branch Line once arrived from the south. The line closed in 1923; Gerald Hobbs, the last station master, locked up and left the same week. The house has been vacant since. The railway platform beside it is an overgrown concrete slab \u2014 you can still make out the painted letters 'BRINDLEWICK' in faded black on the concrete face. And on a nail by the door, as Hobbs left it, is a brass door key on a faded red ribbon, slightly greened with age.",
       "items_present": [
         "station_masters_key"
       ],
       "mystery_tie": "station_masters_key",
       "exits": [
-        "lake_street"
-      ]
+        "lake_street",
+        "millpond_row"
+      ],
+      "address": "1 Depot Lane"
     },
     {
       "id": "hidden_garden",
@@ -863,7 +928,7 @@
       "type": "hidden",
       "area": "alderman_estate",
       "short_desc": "A walled garden at the back of the Alderman Estate, full of flowers that shouldn't survive this climate.",
-      "long_desc": "The walled garden at the back of the Alderman Estate is hidden by an overgrown hawthorn hedge. Inside: a formal garden in full bloom, with species that have no business flowering this far north — a southern magnolia, a fig tree trained against the south wall, lavender in abundance. It is warm in here in a way that seems disproportionate. Constance Alderman says the south-facing wall and the old brick create a microclimate. She's right, but it's still remarkable. This is where she comes when she needs to think.",
+      "long_desc": "The walled garden at the back of the Alderman Estate is hidden by an overgrown hawthorn hedge. Inside: a formal garden in full bloom, with species that have no business flowering this far north \u2014 a southern magnolia, a fig tree trained against the south wall, lavender in abundance. It is warm in here in a way that seems disproportionate. Constance Alderman says the south-facing wall and the old brick create a microclimate. She's right, but it's still remarkable. This is where she comes when she needs to think.",
       "npcs_frequent": [
         "constance_alderman"
       ],
@@ -871,14 +936,15 @@
       "unlock_condition": "constance_trust >= 3",
       "exits": [
         "alderman_estate"
-      ]
+      ],
+      "address": "1 Estate Drive (Walled Garden)"
     },
     {
       "id": "finch_lane",
       "name": "Finch Lane",
       "type": "street",
       "area": "center",
-      "short_desc": "The oldest residential street in Brindlewick — narrow, tree-lined, with front porches and window boxes.",
+      "short_desc": "The oldest residential street in Brindlewick \u2014 narrow, tree-lined, with front porches and window boxes.",
       "long_desc": "Finch Lane runs parallel to the lake one block back, lined with old houses, most dating from the 1860s-1890s. The trees here are the tallest in town, maples and elms that arch over the road. Most houses have porches. People sit on them. Conversations happen across fences. It is the street where Eleanor grew up, where Rosalind Webb's shop has been for three generations, and where the Alderman Estate occupies its large corner lot.",
       "exits": [
         "millpond_row",
@@ -888,15 +954,18 @@
         "webbs_watch_repair",
         "book_nook",
         "woolen_bear",
-        "pottery_studio"
-      ]
+        "pottery_studio",
+        "candle_soap_shop",
+        "cobblers_corner"
+      ],
+      "address": "Finch Lane, Brindlewick"
     },
     {
       "id": "maple_row",
       "name": "Maple Row",
       "type": "street",
       "area": "center",
-      "short_desc": "The main residential and civic street — school, chapel, cemetery, doctor, and a long row of houses.",
+      "short_desc": "The main residential and civic street \u2014 school, chapel, cemetery, doctor, and a long row of houses.",
       "long_desc": "Maple Row is where most of Brindlewick's civic institutions cluster: the elementary school, the chapel, the old schoolhouse arts center, the community hall, and the doctor's practice. It's also a residential street, running from the north edge of town south to the town square area. The row of maples it's named for are gone (removed in 1988 after disease) but a replanting program in 2005 has replaced them with young maples that are beginning to look proper.",
       "exits": [
         "town_square",
@@ -911,15 +980,16 @@
         "alderman_estate",
         "garden_club_greenhouse",
         "meeting_house_museum"
-      ]
+      ],
+      "address": "Maple Row, Brindlewick"
     },
     {
       "id": "lake_street",
       "name": "Lake Street",
       "type": "street",
       "area": "lakefront",
-      "short_desc": "The street between town and water — the inn, the pub, and the smell of the lake at every turn.",
-      "long_desc": "Lake Street runs along the inland side of the lakefront, between the town's main streets and the park. The inn and pub anchor its northern end. Going south, houses with lake views, the fire station, the ice cream cottage, and finally the path to the boardwalk. The smell of the lake is always present here — clean and cold in winter, warm and slightly weedy in August.",
+      "short_desc": "The street between town and water \u2014 the inn, the pub, and the smell of the lake at every turn.",
+      "long_desc": "Lake Street runs along the inland side of the lakefront, between the town's main streets and the park. The inn and pub anchor its northern end. Going south, houses with lake views, the fire station, the ice cream cottage, and finally the path to the boardwalk. The smell of the lake is always present here \u2014 clean and cold in winter, warm and slightly weedy in August.",
       "exits": [
         "lantern_post_inn",
         "wren_and_whistle",
@@ -929,16 +999,18 @@
         "lakefront_boardwalk",
         "station_masters_house",
         "millpond_row",
-        "town_square"
-      ]
+        "town_square",
+        "finch_lane"
+      ],
+      "address": "Lake Street, Brindlewick"
     },
     {
       "id": "millpond_row",
       "name": "Millpond Row",
       "type": "street",
       "area": "center",
-      "short_desc": "The commercial main street — bakery, general store, diner, library, post office, and most things you need.",
-      "long_desc": "Millpond Row is the town's commercial spine — a street of modest Victorian and early 20th century buildings in good repair, their facades varied but harmonious. The bakery smell from the Copper Kettle carries the length of the street in the morning. The library's reading room windows glow on winter afternoons. The notice board in front of Hartwell's General Store is the town's most-read publication.",
+      "short_desc": "The commercial main street \u2014 bakery, general store, diner, library, post office, and most things you need.",
+      "long_desc": "Millpond Row is the town's commercial spine \u2014 a street of modest Victorian and early 20th century buildings in good repair, their facades varied but harmonious. The bakery smell from the Copper Kettle carries the length of the street in the morning. The library's reading room windows glow on winter afternoons. The notice board in front of Hartwell's General Store is the town's most-read publication.",
       "exits": [
         "copper_kettle_bakery",
         "hartwells_general_store",
@@ -962,33 +1034,41 @@
         "grange_hall",
         "station_masters_house",
         "millbrook_farm",
-        "perkins_cider_house"
-      ]
+        "perkins_cider_house",
+        "covered_bridge",
+        "finch_family_orchard",
+        "keepers_cottage",
+        "notions_nook",
+        "thornburys_provisions"
+      ],
+      "address": "Millpond Row, Brindlewick"
     },
     {
       "id": "finch_island",
       "name": "Finch Island",
       "type": "outdoor",
       "area": "lake",
-      "short_desc": "The larger of Lake Mirrowell's two islands — wooded, accessible by rowboat, with the ruins of a summer camp.",
-      "long_desc": "Finch Island is about three acres of mixed woodland, accessible only by boat. A footpath circles it in about twenty minutes. At the south end, the ruins of the Old Sycamore Camp (a 1930s-60s summer camp) — a few cabin foundations, a firepit, an overgrown playing field. The island is home to herons, which nest in the tall pines at the north end. No one lives here. The island is public land.",
+      "short_desc": "The larger of Lake Mirrowell's two islands \u2014 wooded, accessible by rowboat, with the ruins of a summer camp.",
+      "long_desc": "Finch Island is about three acres of mixed woodland, accessible only by boat. A footpath circles it in about twenty minutes. At the south end, the ruins of the Old Sycamore Camp (a 1930s-60s summer camp) \u2014 a few cabin foundations, a firepit, an overgrown playing field. The island is home to herons, which nest in the tall pines at the north end. No one lives here. The island is public land.",
       "exits": [
         "miras_boat_rental",
         "lakefront_boardwalk"
       ],
-      "boat_required": true
+      "boat_required": true,
+      "address": "Finch Island, Lake Mirrowell"
     },
     {
       "id": "spruce_point",
       "name": "Spruce Point",
       "type": "outdoor",
       "area": "lakefront",
-      "short_desc": "A wooded headland on the lake's eastern shore, accessible by trail — a good view of the western mountains and the town.",
-      "long_desc": "Spruce Point is a twenty-minute walk east along the lake shore path. The trail is pleasant; the destination is a rocky headland where spruce trees grow at the water's edge. Looking back west, you see the town of Brindlewick reflected in the lake, and in the middle distance, the lighthouse. If the lake light is going to be visible, it's visible from here — and the angle suggests it comes from the deepest section of the lake, due south of the lighthouse.",
+      "short_desc": "A wooded headland on the lake's eastern shore, accessible by trail \u2014 a good view of the western mountains and the town.",
+      "long_desc": "Spruce Point is a twenty-minute walk east along the lake shore path. The trail is pleasant; the destination is a rocky headland where spruce trees grow at the water's edge. Looking back west, you see the town of Brindlewick reflected in the lake, and in the middle distance, the lighthouse. If the lake light is going to be visible, it's visible from here \u2014 and the angle suggests it comes from the deepest section of the lake, due south of the lighthouse.",
       "mystery_tie": "lake_light",
       "exits": [
         "lakefront_boardwalk"
-      ]
+      ],
+      "address": "Spruce Point, Lake Mirrowell East Shore"
     },
     {
       "id": "candle_soap_shop",
@@ -1002,7 +1082,8 @@
       ],
       "exits": [
         "finch_lane"
-      ]
+      ],
+      "address": "20 Finch Lane"
     },
     {
       "id": "notions_nook",
@@ -1010,13 +1091,14 @@
       "type": "commercial",
       "area": "millpond_row",
       "short_desc": "Fabric, thread, buttons, and all the materials needed to make or repair soft things.",
-      "long_desc": "The Notions Nook has been on Millpond Row since 1967 and has always been run by a member of the Choi family — currently Min-Ji Choi, 48. It sells fabric by the yard, patterns, thread, buttons, zippers, ribbons, and everything else the crafty or the practical-minded require. Min-Ji also does alterations and can fix almost anything made of cloth.",
+      "long_desc": "The Notions Nook has been on Millpond Row since 1967 and has always been run by a member of the Choi family \u2014 currently Min-Ji Choi, 48. It sells fabric by the yard, patterns, thread, buttons, zippers, ribbons, and everything else the crafty or the practical-minded require. Min-Ji also does alterations and can fix almost anything made of cloth.",
       "npcs_frequent": [
         "minji_choi"
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "68 Millpond Row"
     },
     {
       "id": "thornburys_provisions",
@@ -1024,13 +1106,14 @@
       "type": "commercial",
       "area": "millpond_row",
       "short_desc": "Cheese, charcuterie, local preserves, and the occasional thing you'd only find here.",
-      "long_desc": "Thornbury's is a specialty food shop run by Edna Thornbury, 62 — cheese from local farms and further afield, cured meats, pickles, jams, local maple syrup, the Perkins cider by the bottle. It is the shop you visit when you want something particular.",
+      "long_desc": "Thornbury's is a specialty food shop run by Edna Thornbury, 62 \u2014 cheese from local farms and further afield, cured meats, pickles, jams, local maple syrup, the Perkins cider by the bottle. It is the shop you visit when you want something particular.",
       "npcs_frequent": [
         "edna_thornbury"
       ],
       "exits": [
         "millpond_row"
-      ]
+      ],
+      "address": "72 Millpond Row"
     },
     {
       "id": "cobblers_corner",
@@ -1044,7 +1127,8 @@
       ],
       "exits": [
         "finch_lane"
-      ]
+      ],
+      "address": "24 Finch Lane"
     },
     {
       "id": "keepers_cottage",
@@ -1060,22 +1144,24 @@
       "exits": [
         "millpond_row",
         "library"
-      ]
+      ],
+      "address": "16\u00bd Millpond Row"
     },
     {
       "id": "millbrook_farm",
       "name": "Millbrook Farm",
       "type": "outdoor",
       "area": "outskirts",
-      "short_desc": "A working farm on the north edge of town — vegetables, chickens, and Fletcher Grange talking to his crops.",
-      "long_desc": "Millbrook Farm is a 40-acre working farm that has been in some kind of cultivation since the 1840s. Fletcher Grange, 61, runs it now — mixed vegetables, chickens, a small beef herd. He is not technically of the Grange organization but serves on their board out of a sense of nominal obligation. He talks to his crops. He maintains this is agronomically sensible and quotes studies. The results suggest he may be right.",
+      "short_desc": "A working farm on the north edge of town \u2014 vegetables, chickens, and Fletcher Grange talking to his crops.",
+      "long_desc": "Millbrook Farm is a 40-acre working farm that has been in some kind of cultivation since the 1840s. Fletcher Grange, 61, runs it now \u2014 mixed vegetables, chickens, a small beef herd. He is not technically of the Grange organization but serves on their board out of a sense of nominal obligation. He talks to his crops. He maintains this is agronomically sensible and quotes studies. The results suggest he may be right.",
       "npcs_frequent": [
         "fletcher_grange"
       ],
       "exits": [
         "millpond_row",
         "grange_hall"
-      ]
+      ],
+      "address": "8 Old Mill Road"
     },
     {
       "id": "meeting_house_museum",
@@ -1090,18 +1176,20 @@
       ],
       "exits": [
         "maple_row"
-      ]
+      ],
+      "address": "24 Maple Row"
     },
     {
       "id": "ice_house",
       "name": "The Old Ice House",
       "type": "historic",
       "area": "lakefront",
-      "short_desc": "A mid-19th century ice storage building near the boardwalk — unused, but still standing, still cold inside.",
+      "short_desc": "A mid-19th century ice storage building near the boardwalk \u2014 unused, but still standing, still cold inside.",
       "long_desc": "The ice house is a thick-walled stone building near the old boathouse, used until the 1940s for storing lake ice cut in winter. It's on the town's historic register and therefore can't be demolished. It's locked, but the stone keeps it noticeably cooler than the outside air even in summer, which you can feel near its walls. Inside (visible through a high small window): sawdust on the floor, the memory of cold.",
       "exits": [
         "lakefront_boardwalk"
-      ]
+      ],
+      "address": "5 Pier Road"
     },
     {
       "id": "warming_hut",
@@ -1117,14 +1205,15 @@
         "brindlewick_trailhead",
         "the_lookout",
         "wardens_cabin"
-      ]
+      ],
+      "address": "Brindlewick Trail (1.2 miles from trailhead)"
     },
     {
       "id": "sunday_market",
       "name": "The Farmers' Market",
       "type": "event_space",
       "area": "town_square",
-      "short_desc": "Saturday morning, June through October — tables and tents in the town square, everyone selling something.",
+      "short_desc": "Saturday morning, June through October \u2014 tables and tents in the town square, everyone selling something.",
       "long_desc": "The farmers' market happens every Saturday from the first Saturday in June to the last in October. It fills the town square with tents: produce from Millbrook Farm and the Finch orchard, Perkins cider, Meadow's flowers, Sylvie Tran's pottery, Margaret Hollis's knitwear, someone's jam, someone else's honey. The Copper Kettle sells out of whatever Mari brings within the first hour.",
       "seasonal": true,
       "season_open": [
@@ -1134,7 +1223,8 @@
       "recurring": "weekly_saturday",
       "exits": [
         "town_square"
-      ]
+      ],
+      "address": "Brindlewick Town Square (Saturday Market)"
     }
   ]
 }

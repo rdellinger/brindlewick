@@ -108,7 +108,8 @@ export async function continueConversation(
   playerMessage: string,
   _session: GameSession,
   nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
-  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = []
+  townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
+  locationMap: Record<string, string> = {}
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -127,6 +128,10 @@ export async function continueConversation(
     ? `BRINDLEWICK RESIDENTS (real people only — never invent names not on this list):\n${townRoster.map(c => formatRosterEntry(c)).join('\n')}`
     : ''
 
+  const escortLine = Object.keys(locationMap).length > 0
+    ? `\nESCORT OFFERS:\nIf it would feel natural to offer to walk the player to a specific place RIGHT NOW (not just mention a place), append exactly [ESCORT:location_id] on a new line at the very end of your response. Use ONLY IDs from this list:\n${Object.entries(locationMap).map(([id, name]) => `  ${id} → ${name}`).join('\n')}\nDo NOT invent location IDs. Only append the tag when you are genuinely offering to escort them immediately.`
+    : ''
+
   const systemPrompt = `${TOWN_CONTEXT}
 
 ${citizenContext}
@@ -134,6 +139,7 @@ ${citizenContext}
 ${motiveContext}
 ${nearbyLine}
 ${rosterLine}
+${escortLine}
 
 CONVERSATION RULES:
 - You are mid-conversation with the player. Respond naturally, in first person as ${citizen.first_name}.

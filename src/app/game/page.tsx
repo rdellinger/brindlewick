@@ -128,6 +128,18 @@ function GamePageInner() {
     history: ConversationMessage[]
   } | null>(null)
   const [pendingRestart, setPendingRestart] = useState(false)
+  const [pendingEscortOffer, setPendingEscortOffer] = useState<{
+    destination_id: string
+    destination_name: string
+    citizen_id: string
+    citizen_name: string
+  } | null>(null)
+  const [escortingCitizen, setEscortingCitizen] = useState<{
+    id: string
+    name: string
+    occupation: string | null
+    trust_level: number
+  } | null>(null)
   const outputEndRef = useRef<HTMLDivElement>(null)
 
   // Initialize: check auth, load guest token, run migration if just logged in
@@ -182,6 +194,30 @@ function GamePageInner() {
     }, 500)
     return () => clearTimeout(timer)
   }, [output.length])
+
+  // After escort: inject the escorting NPC into location.citizens once loadGameState resolves
+  useEffect(() => {
+    if (!escortingCitizen || !gameState.location) return
+    const alreadyPresent = gameState.location.citizens.some(c => c.id === escortingCitizen.id)
+    if (!alreadyPresent) {
+      setGameState(prev => prev.location ? {
+        ...prev,
+        location: {
+          ...prev.location,
+          citizens: [
+            ...prev.location.citizens,
+            {
+              id: escortingCitizen.id,
+              name: escortingCitizen.name,
+              occupation: escortingCitizen.occupation,
+              trustLevel: escortingCitizen.trust_level,
+            },
+          ],
+        },
+      } : prev)
+    }
+    setEscortingCitizen(null)
+  }, [gameState.location, escortingCitizen])
 
   const loadGameState = useCallback(async (token: string | null) => {
     try {
@@ -263,6 +299,7 @@ function GamePageInner() {
           guestToken: token,
           activeCitizenId: activeConversation?.citizenId ?? null,
           conversationHistory: activeConversation?.history ?? null,
+          pendingEscortOffer: pendingEscortOffer ?? null,
         }),
       })
 
@@ -299,6 +336,8 @@ function GamePageInner() {
             { role: 'assistant' as const, content: data.text },
           ],
         })
+        setPendingEscortOffer(null)
+        setEscortingCitizen(null)
       } else if (activeConversation && !data.conversation_end) {
         // Append to ongoing conversation history
         setActiveConversation(prev => prev ? {
@@ -309,8 +348,16 @@ function GamePageInner() {
             { role: 'assistant', content: data.text },
           ],
         } : null)
+        // Track any escort offer the NPC just made
+        if (data.escort_offer) {
+          setPendingEscortOffer(data.escort_offer)
+        } else if (pendingEscortOffer) {
+          // Clear offer once the player's reply was processed (accepted or not)
+          setPendingEscortOffer(null)
+        }
       } else if (data.conversation_end) {
         setActiveConversation(null)
+        setPendingEscortOffer(null)
       }
 
       // Set pending restart flag if engine asked for confirmation
@@ -333,8 +380,9 @@ function GamePageInner() {
           } : prev.location,
         }))
 
-        // Reload full state after a move
+        // Reload full state after a move, then the escortingCitizen useEffect will inject the NPC
         if (data.location) {
+          if (data.escorting_citizen) setEscortingCitizen(data.escorting_citizen)
           loadGameState(data.guestToken ?? token)
         }
       }
@@ -384,7 +432,7 @@ function GamePageInner() {
     } finally {
       setIsLoading(false)
     }
-  }, [gameState.guestToken, isLoading, loadGameState, activeConversation])
+  }, [gameState.guestToken, isLoading, loadGameState, activeConversation, pendingEscortOffer])
 
   return (
     <div
