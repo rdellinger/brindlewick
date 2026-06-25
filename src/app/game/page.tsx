@@ -134,12 +134,6 @@ function GamePageInner() {
     citizen_id: string
     citizen_name: string
   } | null>(null)
-  const [escortingCitizen, setEscortingCitizen] = useState<{
-    id: string
-    name: string
-    occupation: string | null
-    trust_level: number
-  } | null>(null)
   const outputEndRef = useRef<HTMLDivElement>(null)
 
   // Initialize: check auth, load guest token, run migration if just logged in
@@ -194,30 +188,6 @@ function GamePageInner() {
     }, 500)
     return () => clearTimeout(timer)
   }, [output.length])
-
-  // After escort: inject the escorting NPC into location.citizens once loadGameState resolves
-  useEffect(() => {
-    if (!escortingCitizen || !gameState.location) return
-    const alreadyPresent = gameState.location.citizens.some(c => c.id === escortingCitizen.id)
-    if (!alreadyPresent) {
-      setGameState(prev => prev.location ? {
-        ...prev,
-        location: {
-          ...prev.location,
-          citizens: [
-            ...prev.location.citizens,
-            {
-              id: escortingCitizen.id,
-              name: escortingCitizen.name,
-              occupation: escortingCitizen.occupation,
-              trustLevel: escortingCitizen.trust_level,
-            },
-          ],
-        },
-      } : prev)
-    }
-    setEscortingCitizen(null)
-  }, [gameState.location, escortingCitizen])
 
   const loadGameState = useCallback(async (token: string | null) => {
     try {
@@ -337,7 +307,6 @@ function GamePageInner() {
           ],
         })
         setPendingEscortOffer(null)
-        setEscortingCitizen(null)
       } else if (activeConversation && !data.conversation_end) {
         // Append to ongoing conversation history
         setActiveConversation(prev => prev ? {
@@ -380,10 +349,31 @@ function GamePageInner() {
           } : prev.location,
         }))
 
-        // Reload full state after a move, then the escortingCitizen useEffect will inject the NPC
+        // Reload full state after a move, then inject escorting NPC into the fresh citizens list
         if (data.location) {
-          if (data.escorting_citizen) setEscortingCitizen(data.escorting_citizen)
-          loadGameState(data.guestToken ?? token)
+          const escortCitizen = data.escorting_citizen
+          await loadGameState(data.guestToken ?? token)
+          if (escortCitizen) {
+            setGameState(prev => {
+              if (!prev.location) return prev
+              if (prev.location.citizens.some(c => c.id === escortCitizen.id)) return prev
+              return {
+                ...prev,
+                location: {
+                  ...prev.location,
+                  citizens: [
+                    ...prev.location.citizens,
+                    {
+                      id: escortCitizen.id,
+                      name: escortCitizen.name,
+                      occupation: escortCitizen.occupation,
+                      trustLevel: escortCitizen.trust_level,
+                    },
+                  ],
+                },
+              }
+            })
+          }
         }
       }
 
