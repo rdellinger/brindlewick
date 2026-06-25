@@ -300,20 +300,36 @@ export async function getCitizenHoldings(
   supabase: SupabaseClient,
   citizenId: string
 ): Promise<Item[]> {
+  // Items physically held by the citizen
   const { data: holdings } = await supabase
     .from('citizen_item_holdings')
     .select('item_id')
     .eq('citizen_id', citizenId)
 
-  if (!holdings?.length) return []
+  const heldIds = new Set((holdings ?? []).map((h: { item_id: string }) => h.item_id))
 
-  const itemIds = holdings.map((h: { item_id: string }) => h.item_id)
-  const { data: items } = await supabase
+  // Items where citizen is the designated vendor (always "in stock")
+  const { data: vendorItems } = await supabase
     .from('items')
     .select('*')
-    .in('id', itemIds)
+    .eq('vendor_citizen_id', citizenId)
 
-  return (items ?? []) as Item[]
+  const vendorItemList = (vendorItems ?? []) as Item[]
+
+  // Merge: start with vendor items (always available), then add any held items not already covered
+  const allIds = new Set(vendorItemList.map(i => i.id))
+  const extraIds = [...heldIds].filter(id => !allIds.has(id))
+
+  let result = [...vendorItemList]
+  if (extraIds.length) {
+    const { data: extraItems } = await supabase
+      .from('items')
+      .select('*')
+      .in('id', extraIds)
+    result = [...result, ...((extraItems ?? []) as Item[])]
+  }
+
+  return result
 }
 
 /**

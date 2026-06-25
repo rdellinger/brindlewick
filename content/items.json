@@ -181,6 +181,21 @@
       "use_on": "marigold_osei"
     },
     {
+      "id": "slice_of_honey_cake",
+      "name": "Slice of Honey Cake",
+      "type": "inventory",
+      "location": null,
+      "description": "A generous slice of honey cake from the Copper Kettle Bakery, wrapped in brown paper. The golden crust is still slightly warm. Marigold said it's not quite her grandmother's recipe — something about the honey — but it's extraordinary nonetheless.",
+      "can_take": true,
+      "weight_class": "tiny",
+      "rarity": "common",
+      "impression_value": 1,
+      "impression_category": "food",
+      "is_ambient": false,
+      "is_consumable": true,
+      "vendor_citizen_id": "marigold_osei"
+    },
+    {
       "id": "station_masters_key",
       "name": "The Station Master's Key",
       "type": "examine",

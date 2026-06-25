@@ -42,6 +42,26 @@
       "sort_order": 10
     },
     {
+      "citizen_id": "marigold_osei",
+      "trigger_type": "world_tick",
+      "trigger_condition": "at_location:copper_kettle_bakery",
+      "action_type": "pick_up",
+      "item_id": "slice_of_honey_cake",
+      "once_only": false,
+      "dialogue_hint": null,
+      "sort_order": 0
+    },
+    {
+      "citizen_id": "marigold_osei",
+      "trigger_type": "on_ask",
+      "trigger_condition": null,
+      "action_type": "give_to_player",
+      "item_id": "slice_of_honey_cake",
+      "once_only": false,
+      "dialogue_hint": "Marigold cuts you a generous slice of honey cake and wraps it in brown paper.",
+      "sort_order": 10
+    },
+    {
       "citizen_id": "constance_alderman",
       "trigger_type": "world_tick",
       "trigger_condition": null,

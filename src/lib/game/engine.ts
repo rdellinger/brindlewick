@@ -724,7 +724,7 @@ export async function handleConversationMessage(
       .from('player_task_progress')
       .select('task_id, help_tasks!inner(giver_citizen)')
       .eq(saveKey, saveVal)
-      .eq('status', 'available')
+      .eq('status', 'offered')
       .eq('help_tasks.giver_citizen', citizenId)
     if (availableTasks?.length) {
       await supabase
