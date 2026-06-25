@@ -376,8 +376,9 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
               </div>
             )}
 
-            {/* Exits — clickable to go */}
-            {location?.exits && location.exits.length > 0 && (
+            {/* Exits — clickable to go. Filter out "inside" entries (shop doors on a street)
+                so Nearby shows only truly adjacent areas, not every storefront on the block. */}
+            {location?.exits && location.exits.filter(e => e.label !== 'inside').length > 0 && (
               <div>
                 <div
                   className="text-xs uppercase tracking-widest mb-2"
@@ -386,7 +387,7 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                   Nearby
                 </div>
                 <ul className="space-y-1">
-                  {location.exits.map(exit => (
+                  {location.exits.filter(e => e.label !== 'inside').map(exit => (
                     <li
                       key={exit.id}
                       className="text-sm flex items-center gap-2"
