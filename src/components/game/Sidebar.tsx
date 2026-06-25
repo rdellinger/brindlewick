@@ -376,8 +376,7 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
               </div>
             )}
 
-            {/* Exits — clickable to go. Filter out "inside" entries (shop doors on a street),
-                then deduplicate by direction so only one destination shows per compass heading. */}
+            {/* Compass exits — filter out "inside" entries and deduplicate by direction label */}
             {(() => {
               const seenLabels = new Set<string>()
               const nearbyExits = (location?.exits ?? []).filter(e => {
@@ -424,6 +423,50 @@ export default function Sidebar({ gameState, activeTab, onTabChange, onCommand }
                         </span>
                       )}
                       {!exit.label && <span style={{ opacity: 0.6 }}>→</span>}
+                      <span style={{ color: 'var(--moss-green)' }}>{exit.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              )
+            })()}
+
+            {/* Buildings you can enter — "inside" exits shown as a compact secondary list */}
+            {(() => {
+              const insideExits = (location?.exits ?? []).filter(e => e.label === 'inside')
+              return insideExits.length > 0 && (
+              <div>
+                <div
+                  className="text-xs uppercase tracking-widest mb-2"
+                  style={{ color: 'var(--soft-gray)' }}
+                >
+                  Enter
+                </div>
+                <ul className="space-y-1">
+                  {insideExits.map(exit => (
+                    <li
+                      key={exit.id}
+                      className="text-sm flex items-center gap-2"
+                      style={{ ...clickableRow({ color: 'var(--moss-green)' }) }}
+                      onClick={() => onCommand(`go to ${exit.name}`)}
+                      title={`Enter ${exit.name}`}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(90,122,90,0.1)')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
+                    >
+                      <span
+                        className="shrink-0"
+                        style={{
+                          fontSize: '0.6rem',
+                          fontWeight: 600,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          color: 'var(--amber)',
+                          minWidth: '2.5rem',
+                          textAlign: 'right',
+                        }}
+                      >
+                        in
+                      </span>
                       <span style={{ color: 'var(--moss-green)' }}>{exit.name}</span>
                     </li>
                   ))}
