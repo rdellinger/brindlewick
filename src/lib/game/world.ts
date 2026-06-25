@@ -102,34 +102,47 @@ export async function findLocationByName(
   supabase: SupabaseClient,
   query: string
 ): Promise<Location | null> {
-  // Name match — order by name length ascending so shorter (more exact) matches win.
-  // e.g. "millpond" should prefer "The Millpond" over "The Millpond Diner".
-  const { data: byName } = await supabase
-    .from('locations')
-    .select('*')
-    .ilike('name', `%${query}%`)
-    .eq('is_hidden', false)
-    .order('name', { ascending: true })
-    .limit(5)
+  // Normalise: strip leading "the " so "the diner" → "diner", "the bakery" → "bakery"
+  const stripped = query.replace(/^the\s+/i, '').trim()
 
-  if (byName?.length) {
-    // Pick the shortest matching name (closest to an exact match)
-    const best = byName.reduce((a, b) => a.name.length <= b.name.length ? a : b)
-    return best as Location
+  // Helper: pick shortest match (closest to exact)
+  const shortest = (rows: Location[]) => rows.reduce((a, b) => a.name.length <= b.name.length ? a : b)
+
+  // 1. Try the stripped query first (catches "the diner" → "diner" in "Millpond Diner")
+  for (const q of [stripped, query]) {
+    const { data } = await supabase
+      .from('locations')
+      .select('*')
+      .ilike('name', `%${q}%`)
+      .eq('is_hidden', false)
+      .order('name', { ascending: true })
+      .limit(5)
+    if (data?.length) return shortest(data as Location[])
   }
 
-  // Fall back to matching on ID (e.g. 'bakery' → 'copper_kettle_bakery')
-  const { data: byId } = await supabase
-    .from('locations')
-    .select('*')
-    .ilike('id', `%${query.toLowerCase().replace(/\s+/g, '_')}%`)
-    .eq('is_hidden', false)
-    .order('id', { ascending: true })
-    .limit(5)
+  // 2. Try individual significant words (≥4 chars) from the stripped query
+  const words = stripped.split(/\s+/).filter(w => w.length >= 4)
+  for (const word of words) {
+    const { data } = await supabase
+      .from('locations')
+      .select('*')
+      .ilike('name', `%${word}%`)
+      .eq('is_hidden', false)
+      .order('name', { ascending: true })
+      .limit(5)
+    if (data?.length) return shortest(data as Location[])
+  }
 
-  if (byId?.length) {
-    const best = byId.reduce((a, b) => a.id.length <= b.id.length ? a : b)
-    return best as Location
+  // 3. Fall back to matching on ID (e.g. 'bakery' → 'copper_kettle_bakery')
+  for (const q of [stripped, query]) {
+    const { data } = await supabase
+      .from('locations')
+      .select('*')
+      .ilike('id', `%${q.toLowerCase().replace(/\s+/g, '_')}%`)
+      .eq('is_hidden', false)
+      .order('id', { ascending: true })
+      .limit(5)
+    if (data?.length) return shortest(data as Location[])
   }
 
   return null
