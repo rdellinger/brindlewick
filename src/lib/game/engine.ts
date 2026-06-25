@@ -32,6 +32,7 @@ import {
   setTimePosition, grantChronoLogbook,
   TOWN_FOUNDING_YEAR,
 } from './temporal'
+import { recordWitnessedAction, makePlayerKey } from './gossip'
 
 // ── Main dispatcher ──────────────────────────────────────────────────────────
 
@@ -966,6 +967,30 @@ async function handleTake(
 
   // Check if picking this item up completes a task
   const taskCompletion = await checkTaskCompletion(supabase, session, 'visited_location', session.currentLocation)
+
+  // Record witnessed action if other citizens are present
+  try {
+    const world = await getWorldState(supabase)
+    const timeSlot = getTimeSlot()
+    const witnesses = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot)
+    const witnessIds = witnesses.map(c => c.id)
+    if (witnessIds.length > 0) {
+      const playerKey = makePlayerKey(session.playerId, session.guestToken)
+      const { data: locRow } = await supabase
+        .from('locations')
+        .select('name')
+        .eq('id', session.currentLocation)
+        .single()
+      const locationName = locRow?.name ?? session.currentLocation
+      await recordWitnessedAction(
+        supabase, playerKey,
+        `The visitor was seen taking ${item.name} from ${locationName}`,
+        session.currentLocation, witnessIds
+      )
+    }
+  } catch {
+    // Non-fatal — gossip recording failure should never break gameplay
+  }
 
   return {
     text: taskCompletion

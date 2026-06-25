@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminSupabaseClient } from '@/lib/supabase/server'
 import { processWorldTickBehaviors } from '@/lib/game/npc_items'
+import { spreadGossip } from '@/lib/game/gossip'
 
 /**
  * Called by Vercel Cron at midnight UTC every day.
@@ -44,6 +45,14 @@ export async function POST(request: NextRequest) {
   } catch (npcErr) {
     // Non-fatal
     console.error('[cron/advance-world] NPC item tick failed:', npcErr)
+  }
+
+  // 4. Spread gossip between co-located citizens
+  try {
+    const gossipResult = await spreadGossip(supabase)
+    console.log('[cron/advance-world] Gossip spread:', gossipResult.spread, 'new connections')
+  } catch (gossipErr) {
+    console.error('[cron/advance-world] Gossip spread failed:', gossipErr)
   }
 
   // 3. Generate a world event for today

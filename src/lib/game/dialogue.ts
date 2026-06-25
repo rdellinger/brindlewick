@@ -18,6 +18,7 @@ import { getDialogueForCitizen, getLoreForCitizen } from './world'
 import { getTrustLevel } from './player'
 import { getEasternTime, checkBusinessHours } from '../realtime'
 import type { DowKey } from '../realtime'
+import { getPlayerGossipForNpc, detectAndStorePlayerFact, makePlayerKey } from './gossip'
 
 export interface LocationContext {
   name: string
@@ -146,7 +147,7 @@ export async function continueConversation(
   trustLevel: number,
   history: ConversationMessage[],
   playerMessage: string,
-  _session: GameSession,
+  session: GameSession,
   nearbyCitizens: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   townRoster: Array<{ first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   locationMap: Record<string, string> = {},
@@ -155,6 +156,15 @@ export async function continueConversation(
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
   const motiveContext = buildMotiveContext(citizen, trustLevel)
+
+  // Load gossip this NPC knows about the player
+  const playerKey = makePlayerKey(session.playerId, session.guestToken)
+  const gossipKnown = await getPlayerGossipForNpc(supabase, citizen.id, playerKey)
+  const gossipRating = citizen.gossip_rating ?? 5
+  const willShareGossip = gossipRating >= 4 && gossipKnown.length > 0 && Math.random() < gossipRating / 10
+  const gossipLine = willShareGossip
+    ? `\nGOSSIP YOU KNOW ABOUT THIS PLAYER (mention naturally if relevant — don't force it):\n${gossipKnown.map(g => `- ${g}`).join('\n')}`
+    : ''
 
   // Detect farewell — end conversation gracefully
   const farewellWords = ['bye', 'goodbye', 'farewell', 'see you', 'good night', 'take care', 'gotta go', 'later']
@@ -185,6 +195,7 @@ ${motiveContext}
 ${nearbyLine}
 ${rosterLine}
 ${escortLine}
+${gossipLine}
 
 CONVERSATION RULES:
 - You are mid-conversation with the player. Respond naturally, in first person as ${citizen.first_name}.
@@ -208,6 +219,10 @@ ${isFarewell ? `- The player is saying goodbye. Give a warm, brief send-off in c
       messages,
     })
     const text = result.content[0].type === 'text' ? result.content[0].text : ''
+
+    // Detect personal facts in player's message and store as gossip
+    await detectAndStorePlayerFact(supabase, playerMessage, playerKey, citizen.id)
+
     return formatDialogue(citizen, text.trim())
   } catch {
     if (lore?.gossip_text) return formatDialogue(citizen, lore.gossip_text)

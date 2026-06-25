@@ -66,6 +66,7 @@ export interface Citizen {
   backstory: string | null
   trust_max: number
   is_mystery_related: boolean
+  gossip_rating: number
 }
 
 export interface CitizenDialogue {

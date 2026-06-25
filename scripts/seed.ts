@@ -265,6 +265,14 @@ async function seedCitizens() {
     process.stdout.write(`\r  ✓ supporting citizens: ${Math.min(offset + BATCH, supportingRaw.citizens.length)}/${supportingRaw.citizens.length}`)
   }
   console.log()
+
+  // Seed gossip ratings
+  const ratingsFile = readJSON('citizens/gossip_ratings.json') as { gossip_ratings: Record<string, number> }
+  const ratingRows = Object.entries(ratingsFile.gossip_ratings).map(([id, rating]) => ({ id, gossip_rating: rating }))
+  for (const row of ratingRows) {
+    await supabase.from('citizens').update({ gossip_rating: row.gossip_rating }).eq('id', row.id)
+  }
+  console.log(`  ✓ gossip_ratings: ${ratingRows.length} citizens updated`)
 }
 
 // ── Mysteries ─────────────────────────────────────────────────────────────────
