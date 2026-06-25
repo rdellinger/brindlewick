@@ -625,11 +625,12 @@ export async function handleConversationMessage(
     ? { name: currentLocData.name, business_hours: currentLocData.business_hours ?? null }
     : undefined
 
-  // Build locationDirectory for NPC map knowledge
-  const locationDirectory = (allLocations ?? []).map((l: { id: string; name: string; address?: string | null }) => ({
+  // Build locationDirectory for NPC map knowledge (includes hours so NPCs can answer "when does X close?")
+  const locationDirectory = (allLocations ?? []).map((l: { id: string; name: string; address?: string | null; business_hours?: unknown }) => ({
     id: l.id,
     name: l.name,
     address: l.address ?? null,
+    business_hours: (l.business_hours ?? null) as Partial<Record<string, [number, number] | null>> | null,
   }))
 
   // Detect farewell words — end conversation after response
@@ -939,7 +940,15 @@ async function handleAsk(
   }
 
   const trustLevel = await getTrustLevel(supabase, session, citizen.id)
-  const dialogue = await generateNpcDialogue(supabase, citizen, trustLevel, topic, session)
+  const { data: askLocRow } = await supabase
+    .from('locations')
+    .select('name, business_hours')
+    .eq('id', session.currentLocation)
+    .single()
+  const askLocationCtx: LocationContext | undefined = askLocRow
+    ? { name: askLocRow.name, business_hours: askLocRow.business_hours ?? null }
+    : undefined
+  const dialogue = await generateNpcDialogue(supabase, citizen, trustLevel, topic, session, [], [], askLocationCtx)
 
   // Check for mystery clue unlock
   const mysteryUpdate = await checkTopicForMysteryClue(supabase, session, citizen.id, topic, trustLevel)

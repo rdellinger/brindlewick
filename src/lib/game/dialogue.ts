@@ -42,7 +42,7 @@ function buildWorldContext(location?: LocationContext): string {
   const et = getEasternTime()
   const season = et.season.charAt(0).toUpperCase() + et.season.slice(1)
   const lines = [
-    'WORLD CONTEXT (weave this into responses naturally — do not recite it mechanically):',
+    'WORLD CONTEXT (use this to inform your responses; answer directly and accurately if asked about the time, date, season, or hours):',
     `- It is currently ${et.displayTime} on ${et.displayDate}`,
     `- Season: ${season}`,
   ]
@@ -152,7 +152,7 @@ export async function continueConversation(
   townRoster: Array<{ id?: string; first_name: string; last_name: string; occupation: string | null; personality?: string | null; household?: string[] }> = [],
   locationMap: Record<string, string> = {},
   location?: LocationContext,
-  locationDirectory?: Array<{ id: string; name: string; address?: string | null }>
+  locationDirectory?: Array<{ id: string; name: string; address?: string | null; business_hours?: Partial<Record<DowKey, [number, number] | null>> | null }>
 ): Promise<string> {
   const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
@@ -184,8 +184,18 @@ export async function continueConversation(
     ? `\nESCORT OFFERS:\nIf it would feel natural to offer to walk the player to a specific place RIGHT NOW (not just mention a place), append exactly [ESCORT:location_id] on a new line at the very end of your response. Use ONLY IDs from this list:\n${Object.entries(locationMap).map(([id, name]) => `  ${id} → ${name}`).join('\n')}\nDo NOT invent location IDs. Only append the tag when you are genuinely offering to escort them immediately.`
     : ''
 
+  const et = getEasternTime()
   const locationDirLine = locationDirectory && locationDirectory.length > 0
-    ? `\nTOWN LOCATIONS (you know where all of these are and can give directions):\n${locationDirectory.map(l => `- ${l.name}${l.address ? ` (${l.address})` : ''}`).join('\n')}`
+    ? `\nTOWN LOCATIONS (you know where all of these are, can give directions, and know their hours):\n${locationDirectory.map(l => {
+        const base = `- ${l.name}${l.address ? ` (${l.address})` : ''}`
+        if (!l.business_hours) return base
+        const status = checkBusinessHours(l.business_hours, et)
+        if (status.open) {
+          return `${base} — open${status.closesAt ? ` until ${status.closesAt}` : ''}`
+        } else {
+          return `${base} — closed${status.opensAt ? ` (opens ${status.opensAt})` : ' today'}`
+        }
+      }).join('\n')}`
     : ''
 
   // Build summon capability — only citizens NOT already present
