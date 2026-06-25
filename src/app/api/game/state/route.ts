@@ -150,6 +150,8 @@ export async function GET(request: NextRequest) {
         season: world.game_season,
         dayOfWeek: world.day_of_week,
         timeSlot,
+        time: world.game_time ?? null,
+        displayDate: world.display_date ?? null,
       },
       location: locationData ? {
         ...locationData.location,

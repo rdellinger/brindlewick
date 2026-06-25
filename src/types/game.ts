@@ -7,6 +7,8 @@ export interface WorldState {
   day_of_week: string
   time_scale: string
   last_tick_at: string
+  game_time?: string       // "2:47 PM" — real ET time
+  display_date?: string    // "Thursday, June 26" — real ET date
 }
 
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter'
@@ -36,6 +38,7 @@ export interface Location {
   time_variant_night: string | null
   mystery_tie: string | null
   research_available: boolean
+  business_hours: Record<string, [number, number] | null> | null
 }
 
 export interface LocationExit {

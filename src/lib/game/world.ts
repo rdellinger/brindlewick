@@ -9,28 +9,46 @@ import type {
   Location, Citizen, Item, ItemStateTransition, WorldState, CitizenDialogue,
   CitizenLore, MysteryClue, HelpTask, CalendarEvent, GameSession,
 } from '../../types/game'
+import { getEasternTime, checkBusinessHours, getRealWorldState } from '../realtime'
 
 // ── World State ──────────────────────────────────────────────────────────────
 
-export async function getWorldState(supabase: SupabaseClient): Promise<WorldState> {
-  const { data, error } = await supabase
-    .from('world_state')
-    .select('*')
-    .eq('id', 1)
-    .single()
-  if (error) throw error
-  return data as WorldState
+/**
+ * Returns world state derived from the REAL US Eastern Time clock.
+ * The DB world_state table is no longer the source of truth for date/season.
+ */
+export async function getWorldState(_supabase: SupabaseClient): Promise<WorldState> {
+  return getRealWorldState() as WorldState
 }
 
-export function getTimeSlot(date?: Date): string {
-  const hour = (date ?? new Date()).getHours()
-  if (hour < 6) return 'night'
-  if (hour < 9) return 'early_morning'
-  if (hour < 12) return 'morning'
-  if (hour < 14) return 'midday'
-  if (hour < 18) return 'afternoon'
-  if (hour < 21) return 'evening'
-  return 'night'
+export function getTimeSlot(_date?: Date): string {
+  return getEasternTime().timeSlot
+}
+
+// ── Business Hours ────────────────────────────────────────────────────────────
+
+export interface LocationOpenStatus {
+  open: boolean
+  message: string | null   // null = open (no gate needed)
+}
+
+/**
+ * Check whether a location with business hours is currently open.
+ * Returns { open: true, message: null } if no hours defined (always open).
+ */
+export function checkLocationOpen(location: Location): LocationOpenStatus {
+  if (!location.business_hours) return { open: true, message: null }
+  const et = getEasternTime()
+  const status = checkBusinessHours(location.business_hours, et)
+  if (status.open) return { open: true, message: null }
+
+  let msg = `**${location.name}** is closed right now.`
+  if (status.closedToday && status.opensAt) {
+    msg += ` It next opens ${status.opensAt}.`
+  } else if (status.opensAt) {
+    msg += ` It opens at ${status.opensAt}.`
+  }
+  return { open: false, message: msg }
 }
 
 // ── Locations ────────────────────────────────────────────────────────────────

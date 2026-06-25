@@ -47,6 +47,8 @@ interface GameState {
     season: string
     dayOfWeek: string
     timeSlot: string
+    time: string | null        // "2:47 PM"
+    displayDate: string | null // "Thursday, June 26"
   } | null
   location: {
     name: string
@@ -128,6 +130,22 @@ function GamePageInner() {
     history: ConversationMessage[]
   } | null>(null)
   const [pendingRestart, setPendingRestart] = useState(false)
+  // Live ET clock — ticks every minute
+  const [liveClock, setLiveClock] = useState<{ time: string; displayDate: string } | null>(null)
+  useEffect(() => {
+    function tick() {
+      const now = new Date()
+      const etStr = now.toLocaleString('en-US', { timeZone: 'America/New_York' })
+      const et = new Date(etStr)
+      const time = et.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+      const displayDate = et.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+      setLiveClock({ time, displayDate })
+    }
+    tick()
+    const interval = setInterval(tick, 60_000)
+    return () => clearInterval(interval)
+  }, [])
+
   const [pendingEscortOffer, setPendingEscortOffer] = useState<{
     destination_id: string
     destination_name: string
@@ -463,10 +481,13 @@ function GamePageInner() {
               >
                 {gameState.world.season.charAt(0).toUpperCase() + gameState.world.season.slice(1)}
                 {' · '}
-                {new Date(gameState.world.date).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {liveClock ? liveClock.displayDate : new Date(gameState.world.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                {liveClock && (
+                  <>
+                    {' · '}
+                    <span style={{ color: 'var(--amber)' }}>{liveClock.time}</span>
+                  </>
+                )}
               </div>
             )}
 

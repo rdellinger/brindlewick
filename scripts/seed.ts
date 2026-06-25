@@ -62,6 +62,7 @@ async function seedLocations() {
       short_desc: string
       long_desc: string
       history_text?: string
+      // Flat legacy format (deprecated — prefer nested below)
       seasonal_variant_spring?: string
       seasonal_variant_summer?: string
       seasonal_variant_autumn?: string
@@ -70,6 +71,11 @@ async function seedLocations() {
       time_variant_afternoon?: string
       time_variant_evening?: string
       time_variant_night?: string
+      // Nested format (current JSON format)
+      seasonal_variations?: { spring?: string; summer?: string; autumn?: string; winter?: string }
+      time_variations?: { early_morning?: string; morning?: string; midday?: string; afternoon?: string; evening?: string; night?: string }
+      // Business hours { mon/tue/.../sun: [open_24h, close_24h] | null }
+      business_hours?: Record<string, [number, number] | null>
       mystery_tie?: string
       is_hidden?: boolean
       unlock_condition?: string
@@ -79,26 +85,32 @@ async function seedLocations() {
     }>
   }
 
-  const locations = raw.locations.map(l => ({
-    id: l.id,
-    name: l.name,
-    type: l.type,
-    area: l.area,
-    short_desc: l.short_desc,
-    long_desc: l.long_desc,
-    history_text: l.history_text ?? null,
-    seasonal_variant_spring: l.seasonal_variant_spring ?? null,
-    seasonal_variant_summer: l.seasonal_variant_summer ?? null,
-    seasonal_variant_autumn: l.seasonal_variant_autumn ?? null,
-    seasonal_variant_winter: l.seasonal_variant_winter ?? null,
-    time_variant_morning: l.time_variant_morning ?? null,
-    time_variant_afternoon: l.time_variant_afternoon ?? null,
-    time_variant_evening: l.time_variant_evening ?? null,
-    time_variant_night: l.time_variant_night ?? null,
-    mystery_tie: l.mystery_tie ?? null,
-    is_hidden: l.is_hidden ?? false,
-    unlock_condition: l.unlock_condition ?? null,
-  }))
+  const locations = raw.locations.map(l => {
+    // Nested format takes precedence over legacy flat fields
+    const sv = l.seasonal_variations ?? {}
+    const tv = l.time_variations ?? {}
+    return {
+      id: l.id,
+      name: l.name,
+      type: l.type,
+      area: l.area,
+      short_desc: l.short_desc,
+      long_desc: l.long_desc,
+      history_text: l.history_text ?? null,
+      seasonal_variant_spring:  sv.spring   ?? l.seasonal_variant_spring   ?? null,
+      seasonal_variant_summer:  sv.summer   ?? l.seasonal_variant_summer   ?? null,
+      seasonal_variant_autumn:  sv.autumn   ?? l.seasonal_variant_autumn   ?? null,
+      seasonal_variant_winter:  sv.winter   ?? l.seasonal_variant_winter   ?? null,
+      time_variant_morning:     tv.morning  ?? l.time_variant_morning      ?? null,
+      time_variant_afternoon:   (tv.afternoon ?? tv.midday) ?? l.time_variant_afternoon ?? null,
+      time_variant_evening:     tv.evening  ?? l.time_variant_evening      ?? null,
+      time_variant_night:       tv.night    ?? l.time_variant_night        ?? null,
+      business_hours:           l.business_hours ?? null,
+      mystery_tie:              l.mystery_tie ?? null,
+      is_hidden:                l.is_hidden ?? false,
+      unlock_condition:         l.unlock_condition ?? null,
+    }
+  })
 
   await upsert('locations', locations)
 

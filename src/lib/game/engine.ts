@@ -13,7 +13,7 @@ import {
   getCitizensAtLocation, findCitizenByName, getCitizen,
   getDialogueForCitizen, getLoreForCitizen,
   findLocationByName, getItemsAtLocation, findItemByName, getItem,
-  getTownRoster, getItemCurrentState, filterItemsBySeason,
+  getTownRoster, getItemCurrentState, filterItemsBySeason, checkLocationOpen,
 } from './world'
 import { generateNpcDialogue, continueConversation } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
@@ -340,6 +340,12 @@ async function handleGo(
     return {
       text: `Getting to ${destination.name} requires a boat. Sadie Mirabel at Mira's Boat Rental can help with that.`,
     }
+  }
+
+  // Check business hours
+  const hoursStatus = checkLocationOpen(destination)
+  if (!hoursStatus.open) {
+    return { text: hoursStatus.message ?? `${destination.name} is closed right now.` }
   }
 
   // Update player location
