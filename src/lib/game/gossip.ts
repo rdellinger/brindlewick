@@ -10,7 +10,7 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { getAnthropicClient } from '../anthropic/client'
+import { getAnthropicClient, MODEL } from '../anthropic/client'
 import { getEasternTime } from '../realtime'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -52,12 +52,15 @@ export async function detectAndStorePlayerFact(
 ): Promise<void> {
   if (!playerKey) return
   if (!PERSONAL_SIGNALS.test(playerMessage)) return
-  if (playerMessage.length < 10) return
+  // B3: raised from 10 → 25 chars. Short messages that trip the keyword
+  // filter ("I'm good", "I have to go") almost never contain a storable
+  // personal fact — skipping them cuts detection calls roughly in half.
+  if (playerMessage.length < 25) return
 
   try {
     const client = getAnthropicClient()
     const result = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+      model: MODEL,
       max_tokens: 80,
       system: 'Extract any personal fact the speaker reveals about themselves. Reply with exactly one sentence starting with "The visitor" describing the fact. If no personal fact is revealed, reply with exactly: NONE',
       messages: [{ role: 'user', content: playerMessage }],

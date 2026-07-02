@@ -154,13 +154,14 @@ export async function continueConversation(
   location?: LocationContext,
   locationDirectory?: Array<{ id: string; name: string; address?: string | null; business_hours?: Partial<Record<DowKey, [number, number] | null>> | null }>
 ): Promise<string> {
-  const lore = await getLoreForCitizen(supabase, citizen.id, trustLevel)
+  // A1: lore and gossip reads are independent — fetch together
+  const playerKey = makePlayerKey(session.playerId, session.guestToken)
+  const [lore, gossipKnown] = await Promise.all([
+    getLoreForCitizen(supabase, citizen.id, trustLevel),
+    getPlayerGossipForNpc(supabase, citizen.id, playerKey),
+  ])
   const citizenContext = buildCitizenContext(citizen, trustLevel, lore?.lore_text ?? null)
   const motiveContext = buildMotiveContext(citizen, trustLevel)
-
-  // Load gossip this NPC knows about the player
-  const playerKey = makePlayerKey(session.playerId, session.guestToken)
-  const gossipKnown = await getPlayerGossipForNpc(supabase, citizen.id, playerKey)
   const gossipRating = citizen.gossip_rating ?? 5
   const willShareGossip = gossipRating >= 4 && gossipKnown.length > 0 && Math.random() < gossipRating / 10
   const gossipLine = willShareGossip
@@ -236,16 +237,23 @@ ${isFarewell ? `- The player is saying goodbye. Give a warm, brief send-off in c
 
   try {
     const client = getAnthropicClient()
-    const result = await client.messages.create({
-      model: MODEL,
-      max_tokens: 350,
-      system: systemPrompt,
-      messages,
-    })
-    const text = result.content[0].type === 'text' ? result.content[0].text : ''
 
-    // Detect personal facts in player's message and store as gossip
-    await detectAndStorePlayerFact(supabase, playerMessage, playerKey, citizen.id)
+    // B3: gossip detection only needs the player's message, not the NPC's
+    // reply — start it BEFORE the dialogue call and await both together, so
+    // it runs concurrently with the (much slower) dialogue generation instead
+    // of adding a serial Claude round-trip after it. Internally non-fatal.
+    const gossipDetection = detectAndStorePlayerFact(supabase, playerMessage, playerKey, citizen.id)
+
+    const [result] = await Promise.all([
+      client.messages.create({
+        model: MODEL,
+        max_tokens: 350,
+        system: systemPrompt,
+        messages,
+      }),
+      gossipDetection,
+    ])
+    const text = result.content[0].type === 'text' ? result.content[0].text : ''
 
     return formatDialogue(citizen, text.trim())
   } catch {

@@ -19,6 +19,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { GameSession, Item } from '../../types/game'
 import { getTrustLevel } from './player'
+import { getEasternTime } from '../realtime'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -117,13 +118,21 @@ async function evaluateBehaviorCondition(
 
 // ── Behavior log helpers ──────────────────────────────────────────────────────
 
-async function hasAlreadyFired(supabase: SupabaseClient, behaviorId: string): Promise<boolean> {
+/**
+ * A9: batch-fetch which of a rule set's once_only behaviors have already fired.
+ * One `.in()` query replaces a per-behavior round-trip.
+ */
+async function getFiredBehaviorIds(
+  supabase: SupabaseClient,
+  behaviors: CitizenItemBehavior[]
+): Promise<Set<string>> {
+  const onceIds = behaviors.filter(b => b.once_only).map(b => b.id)
+  if (onceIds.length === 0) return new Set()
   const { data } = await supabase
     .from('citizen_item_behavior_log')
-    .select('id')
-    .eq('behavior_id', behaviorId)
-    .maybeSingle()
-  return !!data
+    .select('behavior_id')
+    .in('behavior_id', onceIds)
+  return new Set((data ?? []).map((r: { behavior_id: string }) => r.behavior_id))
 }
 
 async function logBehaviorFired(
@@ -147,28 +156,10 @@ async function getCitizenCurrentLocation(
   supabase: SupabaseClient,
   citizenId: string
 ): Promise<string | null> {
-  const { data: world } = await supabase
-    .from('world_state')
-    .select('game_date')
-    .eq('id', 1)
-    .single()
-
-  if (!world?.game_date) return null
-
-  const hour = new Date().getHours()
-  const timeSlot =
-    hour < 6  ? 'night' :
-    hour < 9  ? 'early_morning' :
-    hour < 12 ? 'morning' :
-    hour < 14 ? 'midday' :
-    hour < 18 ? 'afternoon' :
-    hour < 21 ? 'evening' : 'night'
-
-  const { data } = await supabase.rpc('get_citizens_at_location', {
-    p_location_id: null,          // unsupported — fall back to manual schedule lookup
-    p_game_date: world.game_date,
-    p_time_slot: timeSlot,
-  }).limit(0)  // RPC doesn't support "find all locations for a citizen" — use direct query
+  // A6: time slot comes from the real ET clock (previously this read
+  // world_state and used the server's local timezone), and the dead no-op
+  // RPC call that preceded the schedule query has been removed.
+  const timeSlot = getEasternTime().timeSlot
 
   // Direct schedule query
   const { data: schedule } = await supabase
@@ -390,10 +381,13 @@ export async function processWorldTickBehaviors(supabase: SupabaseClient): Promi
 
   if (!behaviors?.length) return
 
+  // A9: one batched lookup instead of one query per once_only behavior
+  const fired = await getFiredBehaviorIds(supabase, behaviors as CitizenItemBehavior[])
+
   for (const behavior of behaviors as CitizenItemBehavior[]) {
     try {
       // Skip once_only behaviors that have already fired
-      if (behavior.once_only && await hasAlreadyFired(supabase, behavior.id)) continue
+      if (behavior.once_only && fired.has(behavior.id)) continue
 
       const citizenLoc = await getCitizenCurrentLocation(supabase, behavior.citizen_id)
 
@@ -459,9 +453,12 @@ export async function processArrivalBehaviors(
     (citizenRows ?? []).map((r: { citizen_id: string }) => r.citizen_id)
   )
 
+  // A9: one batched lookup instead of one query per once_only behavior
+  const fired = await getFiredBehaviorIds(supabase, behaviors as CitizenItemBehavior[])
+
   for (const behavior of behaviors as CitizenItemBehavior[]) {
     if (!citizenIdsHere.has(behavior.citizen_id)) continue
-    if (behavior.once_only && await hasAlreadyFired(supabase, behavior.id)) continue
+    if (behavior.once_only && fired.has(behavior.id)) continue
 
     const conditionMet = await evaluateBehaviorCondition(
       supabase, behavior.trigger_condition, behavior.citizen_id, locationId, session
@@ -528,10 +525,13 @@ export async function processInteractionBehaviors(
 
   if (!behaviors?.length) return { offers, immediateGifts }
 
+  // A9: one batched lookup instead of one query per once_only behavior
+  const fired = await getFiredBehaviorIds(supabase, behaviors as CitizenItemBehavior[])
+
   for (const behavior of behaviors as CitizenItemBehavior[]) {
     // For on_ask, only process the behavior matching the requested item (if specified)
     if (triggerType === 'on_ask' && requestedItemId && behavior.item_id !== requestedItemId) continue
-    if (behavior.once_only && await hasAlreadyFired(supabase, behavior.id)) continue
+    if (behavior.once_only && fired.has(behavior.id)) continue
 
     const conditionMet = await evaluateBehaviorCondition(
       supabase, behavior.trigger_condition, citizenId, citizenCurrentLocation, session

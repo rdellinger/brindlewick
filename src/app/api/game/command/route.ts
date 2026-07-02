@@ -4,6 +4,8 @@ import { parseCommand } from '../../../../lib/game/parser'
 import { executeCommand, handleConversationMessage } from '../../../../lib/game/engine'
 import { buildGameSession, generateGuestToken } from '../../../../lib/game/player'
 import { addJournalEntry } from '../../../../lib/game/player'
+import { buildSidebarState } from '../../../../lib/game/sidebar_state'
+import type { SidebarStatePayload } from '../../../../lib/game/sidebar_state'
 import type { ConversationMessage } from '../../../../types/game'
 
 export async function POST(request: NextRequest) {
@@ -67,7 +69,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Persist journal entry if one was generated
+    // Persist journal entry if one was generated (must complete before the
+    // sidebar state is built so the new entry appears in it)
     if (response.journal_entry && response.journal_entry.entry_type) {
       await addJournalEntry(
         supabase,
@@ -79,8 +82,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Log the command
-    await supabase.from('command_log').insert({
+    // A3: attach the full sidebar state to the response whenever the client
+    // would previously have re-fetched GET /api/game/state — one round-trip
+    // instead of two. The session is rebuilt first so location/inventory/
+    // time-position changes made by the engine (moves, escorts, gifts,
+    // Chrono-Logbook grants) are reflected.
+    const stateNeeded = !!(
+      response.location ||
+      response.trust_update ||
+      response.journal_entry ||
+      response.mystery_update ||
+      response.inventory_update ||
+      response.task_update ||
+      response.seen_item_id ||
+      /Chrono-Logbook (shimmers|closes)|now carrying the Chrono-Logbook/.test(response.text ?? '')
+    )
+
+    let state: SidebarStatePayload | undefined
+    const commandLogInsert = supabase.from('command_log').insert({
       player_id: playerId ?? null,
       guest_token: effectiveGuestToken ?? null,
       raw_input: input,
@@ -91,10 +110,22 @@ export async function POST(request: NextRequest) {
       response_text: response.text.slice(0, 500),
     })
 
+    if (stateNeeded) {
+      const freshSession = await buildGameSession(supabase, playerId, effectiveGuestToken)
+      const [builtState] = await Promise.all([
+        buildSidebarState(supabase, freshSession, playerId ?? null, effectiveGuestToken ?? null),
+        commandLogInsert,
+      ])
+      state = builtState
+    } else {
+      await commandLogInsert
+    }
+
     return NextResponse.json({
       ...response,
       guestToken: effectiveGuestToken,  // Return for client to persist
       currentLocation: response.location?.id ?? session.currentLocation,
+      state,
     })
   } catch (err) {
     console.error('[game/command] Error:', err)

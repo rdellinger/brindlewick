@@ -10,6 +10,7 @@ import type {
   CitizenLore, MysteryClue, HelpTask, CalendarEvent, GameSession,
 } from '../../types/game'
 import { getEasternTime, checkBusinessHours, getRealWorldState } from '../realtime'
+import { getAllLocationsCached, getLocationCached, getTownRosterCached } from './world_cache'
 
 // ── World State ──────────────────────────────────────────────────────────────
 
@@ -57,12 +58,8 @@ export async function getLocation(
   supabase: SupabaseClient,
   id: string
 ): Promise<Location | null> {
-  const { data } = await supabase
-    .from('locations')
-    .select('*')
-    .eq('id', id)
-    .single()
-  return data as Location | null
+  // A2: served from the in-process locations cache (DB fallback for unknown ids)
+  return getLocationCached(supabase, id)
 }
 
 export async function getLocationWithExits(
@@ -102,6 +99,12 @@ export async function findLocationByName(
   supabase: SupabaseClient,
   query: string
 ): Promise<Location | null> {
+  // A7: fuzzy matching now runs in JS over the cached location list (69 rows)
+  // instead of up to 6 sequential ILIKE queries. Match order preserved:
+  // stripped/raw name match → per-word name match → ID match.
+  const all = await getAllLocationsCached(supabase)
+  const visible = all.filter(l => !l.is_hidden)
+
   // Normalise: strip leading "the " so "the diner" → "diner", "the bakery" → "bakery"
   const stripped = query.replace(/^the\s+/i, '').trim()
 
@@ -110,39 +113,26 @@ export async function findLocationByName(
 
   // 1. Try the stripped query first (catches "the diner" → "diner" in "Millpond Diner")
   for (const q of [stripped, query]) {
-    const { data } = await supabase
-      .from('locations')
-      .select('*')
-      .ilike('name', `%${q}%`)
-      .eq('is_hidden', false)
-      .order('name', { ascending: true })
-      .limit(5)
-    if (data?.length) return shortest(data as Location[])
+    const lq = q.toLowerCase()
+    if (!lq) continue
+    const matches = visible.filter(l => l.name.toLowerCase().includes(lq))
+    if (matches.length) return shortest(matches)
   }
 
   // 2. Try individual significant words (≥4 chars) from the stripped query
   const words = stripped.split(/\s+/).filter(w => w.length >= 4)
   for (const word of words) {
-    const { data } = await supabase
-      .from('locations')
-      .select('*')
-      .ilike('name', `%${word}%`)
-      .eq('is_hidden', false)
-      .order('name', { ascending: true })
-      .limit(5)
-    if (data?.length) return shortest(data as Location[])
+    const lw = word.toLowerCase()
+    const matches = visible.filter(l => l.name.toLowerCase().includes(lw))
+    if (matches.length) return shortest(matches)
   }
 
   // 3. Fall back to matching on ID (e.g. 'bakery' → 'copper_kettle_bakery')
   for (const q of [stripped, query]) {
-    const { data } = await supabase
-      .from('locations')
-      .select('*')
-      .ilike('id', `%${q.toLowerCase().replace(/\s+/g, '_')}%`)
-      .eq('is_hidden', false)
-      .order('id', { ascending: true })
-      .limit(5)
-    if (data?.length) return shortest(data as Location[])
+    const idq = q.toLowerCase().replace(/\s+/g, '_')
+    if (!idq) continue
+    const matches = visible.filter(l => l.id.includes(idq))
+    if (matches.length) return matches.reduce((a, b) => a.id.length <= b.id.length ? a : b)
   }
 
   return null
@@ -221,11 +211,8 @@ export async function getCitizensAtLocation(
 export async function getTownRoster(
   supabase: SupabaseClient
 ): Promise<Array<{ id: string; first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>> {
-  const { data } = await supabase
-    .from('citizens')
-    .select('id, first_name, last_name, occupation, personality, household')
-    .order('last_name')
-  return (data ?? []) as Array<{ id: string; first_name: string; last_name: string; occupation: string | null; personality: string | null; household: string[] }>
+  // A2: served from the in-process roster cache (5-minute TTL)
+  return getTownRosterCached(supabase)
 }
 
 export async function getCitizen(

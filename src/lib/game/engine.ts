@@ -10,11 +10,12 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ParsedCommand, GameSession, GameResponse, Location, Citizen } from '../../types/game'
 import {
   getWorldState, getTimeSlot, getLocationWithExits, getLocationDescription,
-  getCitizensAtLocation, findCitizenByName, getCitizen,
+  getCitizensAtLocation, findCitizenByName, getCitizen, getLocation,
   getDialogueForCitizen, getLoreForCitizen,
   findLocationByName, getItemsAtLocation, findItemByName, getItem,
   getTownRoster, getItemCurrentState, filterItemsBySeason, checkLocationOpen,
 } from './world'
+import { getAllLocationsCached } from './world_cache'
 import { generateNpcDialogue, continueConversation, LocationContext } from './dialogue'
 import type { ConversationMessage } from '../../types/game'
 import { updateTrust, getTrustLevel, getConversationHistory, saveConversationHistory, markItemSeen } from './player'
@@ -225,7 +226,14 @@ async function handleLook(
   }
 
   // Look around — describe current location
-  const result = await getLocationWithExits(supabase, session.currentLocation)
+  // A5: the location fetch, arrival behaviors, and citizens-present query are
+  // independent — run them together. Holdings/items run in a second batch
+  // because arrival behaviors can transfer items.
+  const [result, arrivalNarratives, citizens] = await Promise.all([
+    getLocationWithExits(supabase, session.currentLocation),
+    processArrivalBehaviors(supabase, session, session.currentLocation, world.game_date, timeSlot),
+    getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot),
+  ])
   if (!result) {
     return { text: 'You find yourself in an unfamiliar place.', error: 'Location not found' }
   }
@@ -233,14 +241,11 @@ async function handleLook(
   const { location, exits } = result
   let desc = getLocationDescription(location, world.game_season, timeSlot)
 
-  // Run on_arrival NPC item behaviors (silent world state updates)
-  const arrivalNarratives = await processArrivalBehaviors(
-    supabase, session, location.id, world.game_date, timeSlot
-  )
-
   // Add citizens present, with any items they're visibly carrying
-  const citizens = await getCitizensAtLocation(supabase, location.id, world.game_date, timeSlot)
-  const npcHoldings = await getHoldingsAtLocation(supabase, location.id, world.game_date, timeSlot)
+  const [npcHoldings, allItems] = await Promise.all([
+    getHoldingsAtLocation(supabase, location.id, world.game_date, timeSlot),
+    getItemsAtLocation(supabase, location.id, session),
+  ])
 
   if (citizens.length > 0) {
     const citizenDescs = citizens.map(c => {
@@ -260,7 +265,6 @@ async function handleLook(
   }
 
   // Add visible items (season-filtered, state-aware, pass session for player overrides)
-  const allItems = await getItemsAtLocation(supabase, location.id, session)
   const seasonItems = filterItemsBySeason(allItems, world.game_season)
   const visibleItems = seasonItems.filter(i => !i.requires_condition)
 
@@ -345,27 +349,29 @@ async function handleGo(
     return { text: hoursStatus.message ?? `${destination.name} is closed right now.` }
   }
 
-  // Update player location
+  // Update player location, log the visit, and check for a direct exit — all
+  // independent writes/reads (A5). logLocationVisit now reports whether this
+  // is the player's first visit (A8: previously checked AFTER the row was
+  // inserted, so it was always false and the tutorial hint never fired).
   const playerKey = session.playerId ? 'player_id' : 'session_token'
   const playerVal = session.playerId ?? session.guestToken
   const table = session.playerId ? 'player_saves' : 'guest_saves'
 
-  await supabase
-    .from(table)
-    .update({ current_location: destination.id, updated_at: new Date().toISOString() })
-    .eq(playerKey, playerVal)
-
-  // Log the visit
-  await logLocationVisit(supabase, session, destination.id)
-
-  // Check if it's a direct adjacent exit or a longer walk
-  const { data: directExit } = await supabase
-    .from('location_exits')
-    .select('label')
-    .eq('from_loc', session.currentLocation)
-    .eq('to_loc', destination.id)
-    .eq('blocked', false)
-    .maybeSingle()
+  const [, isFirstVisit, directExitResult] = await Promise.all([
+    supabase
+      .from(table)
+      .update({ current_location: destination.id, updated_at: new Date().toISOString() })
+      .eq(playerKey, playerVal),
+    logLocationVisit(supabase, session, destination.id),
+    supabase
+      .from('location_exits')
+      .select('label')
+      .eq('from_loc', session.currentLocation)
+      .eq('to_loc', destination.id)
+      .eq('blocked', false)
+      .maybeSingle(),
+  ])
+  const directExit = directExitResult.data
 
   const walkLine = directExit
     ? `You head ${directExit.label ?? 'over'} to **${destination.name}**.`
@@ -378,7 +384,12 @@ async function handleGo(
   const { location, exits } = result
   let desc = getLocationDescription(location, world.game_season, timeSlot)
 
-  const citizens = await getCitizensAtLocation(supabase, location.id, world.game_date, timeSlot)
+  // A5: citizens-present and task-completion checks are independent
+  const [citizens, taskCompletion] = await Promise.all([
+    getCitizensAtLocation(supabase, location.id, world.game_date, timeSlot),
+    checkTaskCompletion(supabase, session, 'visited_location', destination.id),
+  ])
+
   if (citizens.length > 0) {
     const names = citizens.map(c => c.nickname ?? c.first_name).join(', ')
     desc += `\n\nPresent: ${names}.`
@@ -388,18 +399,6 @@ async function handleGo(
     const exitNames = exits.map(e => e.name).join(', ')
     desc += `\n\nYou can continue to: ${exitNames}.`
   }
-
-  // Check if arriving here completes any task
-  const taskCompletion = await checkTaskCompletion(supabase, session, 'visited_location', destination.id)
-
-  // First-visit tutorial hint at the bakery
-  const isFirstVisit = !(await supabase
-    .from('player_location_visits')
-    .select('id')
-    .eq(session.playerId ? 'player_id' : 'guest_token', session.playerId ?? session.guestToken)
-    .eq('location_id', destination.id)
-    .maybeSingle()
-    .then(r => r.data))
 
   let tutorialHint = ''
   if (isFirstVisit && destination.id === 'copper_kettle_bakery') {
@@ -476,20 +475,16 @@ async function handleTalk(
     return { text: `There's no one by that name nearby.` }
   }
 
-  const trustLevel = await getTrustLevel(supabase, session, citizen.id)
-  const roster = await getTownRoster(supabase)
-
-  // Load prior conversation history so the NPC can reference past talks
-  const priorHistory = await getConversationHistory(supabase, session, citizen.id)
-
-  // Fetch current location for world context (name + hours)
-  const { data: locRow } = await supabase
-    .from('locations')
-    .select('name, business_hours')
-    .eq('id', session.currentLocation)
-    .single()
-  const talkLocationCtx: LocationContext | undefined = locRow
-    ? { name: locRow.name, business_hours: locRow.business_hours ?? null }
+  // A5: trust, roster (cached), prior history, and location context (cached)
+  // are independent — fetch together instead of four sequential round-trips
+  const [trustLevel, roster, priorHistory, talkLocRow] = await Promise.all([
+    getTrustLevel(supabase, session, citizen.id),
+    getTownRoster(supabase),
+    getConversationHistory(supabase, session, citizen.id),
+    getLocation(supabase, session.currentLocation),
+  ])
+  const talkLocationCtx: LocationContext | undefined = talkLocRow
+    ? { name: talkLocRow.name, business_hours: (talkLocRow.business_hours ?? null) as LocationContext['business_hours'] }
     : undefined
 
   // Check Eleanor's trust-gated quest chain
@@ -587,49 +582,53 @@ export async function handleConversationMessage(
   const world = await getWorldState(supabase)
   const timeSlot = getTimeSlot()
 
-  // Look up the citizen
-  const citizen = await getCitizen(supabase, citizenId)
+  // A1: the citizen row, trust level, save-row overrides, roster (cached),
+  // and location list (cached) are all independent — one parallel batch
+  // replaces five sequential round-trips.
+  const saveTable = session.playerId ? 'player_saves' : 'guest_saves'
+  const saveKey = session.playerId ? 'player_id' : 'session_token'
+  const saveVal = session.playerId ?? session.guestToken
+
+  const [citizen, trustLevel, saveRowResult, roster, allLocationRows] = await Promise.all([
+    getCitizen(supabase, citizenId),
+    getTrustLevel(supabase, session, citizenId),
+    supabase.from(saveTable).select('citizen_overrides').eq(saveKey, saveVal).single(),
+    getTownRoster(supabase),
+    getAllLocationsCached(supabase),
+  ])
+
   if (!citizen) {
     return { text: 'The conversation fades. That person seems to have stepped away.', conversation_end: true }
   }
 
-  const trustLevel = await getTrustLevel(supabase, session, citizenId)
-
-  // Load citizen overrides for this player (summoned citizens)
-  const saveTable = session.playerId ? 'player_saves' : 'guest_saves'
-  const saveKey = session.playerId ? 'player_id' : 'session_token'
-  const saveVal = session.playerId ?? session.guestToken
-  const { data: saveRow } = await supabase
-    .from(saveTable)
-    .select('citizen_overrides')
-    .eq(saveKey, saveVal)
-    .single()
-  const citizenOverrides: Record<string, string> = (saveRow?.citizen_overrides as Record<string, string>) ?? {}
+  const citizenOverrides: Record<string, string> = (saveRowResult.data?.citizen_overrides as Record<string, string>) ?? {}
 
   // Fetch other citizens at the same location so the NPC knows who's nearby
+  // (depends on citizenOverrides, so it runs after the batch above)
   const nearbyCitizens = await getCitizensAtLocation(supabase, session.currentLocation, world.game_date, timeSlot, citizenOverrides)
-  const roster = await getTownRoster(supabase)
 
   // Build locationMap for escort offers — all non-hidden locations so the NPC
   // can generate [ESCORT:id] for any place in town, not just adjacent exits.
-  const { data: allLocations } = await supabase
-    .from('locations')
-    .select('id, name, address, business_hours')
-    .eq('is_hidden', false)
+  // NOTE (bug fix, found during A2): the previous query selected a nonexistent
+  // `address` column on locations, so PostgREST rejected it and allLocations
+  // was always null — the escort map, location directory, and location context
+  // were silently empty on every conversation message. The cache restores the
+  // intended behavior at zero query cost.
+  const allLocations = allLocationRows.filter(l => !l.is_hidden)
   const locationMap: Record<string, string> = {}
-  for (const loc of allLocations ?? []) {
+  for (const loc of allLocations) {
     locationMap[loc.id] = loc.name
   }
-  const currentLocData = (allLocations ?? []).find(l => l.id === session.currentLocation)
+  const currentLocData = allLocations.find(l => l.id === session.currentLocation)
   const locationContext: LocationContext | undefined = currentLocData
-    ? { name: currentLocData.name, business_hours: currentLocData.business_hours ?? null }
+    ? { name: currentLocData.name, business_hours: (currentLocData.business_hours ?? null) as LocationContext['business_hours'] }
     : undefined
 
   // Build locationDirectory for NPC map knowledge (includes hours so NPCs can answer "when does X close?")
-  const locationDirectory = (allLocations ?? []).map((l: { id: string; name: string; address?: string | null; business_hours?: unknown }) => ({
+  const locationDirectory = allLocations.map(l => ({
     id: l.id,
     name: l.name,
-    address: l.address ?? null,
+    address: null as string | null,   // locations have no address column (see note above)
     business_hours: (l.business_hours ?? null) as Partial<Record<string, [number, number] | null>> | null,
   }))
 
@@ -670,22 +669,21 @@ export async function handleConversationMessage(
 
   const response = cleanResponse.replace(/\s*\[ESCORT:[a-z_]+\]/, '')
 
-  // Small trust gain each conversational exchange
-  const newTrust = await updateTrust(supabase, session, citizenId, trustLevel, 0.25)
-
-  // Persist this exchange to DB so the NPC remembers it next session
-  await saveConversationHistory(supabase, session, citizenId, [
-    { role: 'user', content: playerMessage },
-    { role: 'assistant', content: response },
+  // A1: trust update, history persistence, and interaction logging are
+  // independent writes — run as one batch instead of three sequential awaits
+  const [newTrust] = await Promise.all([
+    updateTrust(supabase, session, citizenId, trustLevel, 0.25),
+    saveConversationHistory(supabase, session, citizenId, [
+      { role: 'user', content: playerMessage },
+      { role: 'assistant', content: response },
+    ]),
+    logInteraction(supabase, session, {
+      citizen_id: citizenId,
+      location_id: session.currentLocation,
+      interaction_type: 'talk',
+      topic: playerMessage.slice(0, 100),
+    }),
   ])
-
-  // Log interaction
-  await logInteraction(supabase, session, {
-    citizen_id: citizenId,
-    location_id: session.currentLocation,
-    interaction_type: 'talk',
-    topic: playerMessage.slice(0, 100),
-  })
 
   // ── Detect item requests in conversation ────────────────────────────────────
   // If the player asks to order/buy/receive something, run on_ask behaviors so
@@ -939,14 +937,13 @@ async function handleAsk(
     return { text: `${command.target} isn't here right now.` }
   }
 
-  const trustLevel = await getTrustLevel(supabase, session, citizen.id)
-  const { data: askLocRow } = await supabase
-    .from('locations')
-    .select('name, business_hours')
-    .eq('id', session.currentLocation)
-    .single()
+  // A5: trust and location context (cached) fetched together
+  const [trustLevel, askLocRow] = await Promise.all([
+    getTrustLevel(supabase, session, citizen.id),
+    getLocation(supabase, session.currentLocation),
+  ])
   const askLocationCtx: LocationContext | undefined = askLocRow
-    ? { name: askLocRow.name, business_hours: askLocRow.business_hours ?? null }
+    ? { name: askLocRow.name, business_hours: (askLocRow.business_hours ?? null) as LocationContext['business_hours'] }
     : undefined
   const dialogue = await generateNpcDialogue(supabase, citizen, trustLevel, topic, session, [], [], askLocationCtx)
 
@@ -1061,11 +1058,7 @@ async function handleTake(
     const witnessIds = witnesses.map(c => c.id)
     if (witnessIds.length > 0) {
       const playerKey = makePlayerKey(session.playerId, session.guestToken)
-      const { data: locRow } = await supabase
-        .from('locations')
-        .select('name')
-        .eq('id', session.currentLocation)
-        .single()
+      const locRow = await getLocation(supabase, session.currentLocation)  // A2: cached
       const locationName = locRow?.name ?? session.currentLocation
       await recordWitnessedAction(
         supabase, playerKey,
@@ -1508,11 +1501,7 @@ async function handleWait(
   world: { game_date: string; game_season: string },
   timeSlot: string
 ): Promise<GameResponse> {
-  const { data: location } = await supabase
-    .from('locations')
-    .select('name, short_desc, time_variant_morning, time_variant_afternoon, time_variant_evening, time_variant_night')
-    .eq('id', session.currentLocation)
-    .single()
+  const location = await getLocation(supabase, session.currentLocation)  // A2: cached
 
   // Generic ambient lines used as prefix or fallback
   const ambients = [
@@ -1563,11 +1552,7 @@ async function handleFind(
     })
 
     if (locationId) {
-      const { data: loc } = await supabase
-        .from('locations')
-        .select('name, area')
-        .eq('id', locationId)
-        .single()
+      const loc = await getLocation(supabase, locationId as string)  // A2: cached
 
       const locationName = loc?.name ?? (locationId as string).replace(/_/g, ' ')
       const area = loc?.area ? ` (${loc.area})` : ''
@@ -2039,7 +2024,7 @@ async function handleGive(
   // ── Case 2 & 3: find the item + citizen ──────────────────────────────────
   // Determine which citizen is being addressed
   let targetCitizenId: string | null = null
-  let itemQuery = rawTarget
+  const itemQuery = rawTarget
 
   if (rawQualifier) {
     // "get <item> from <citizen>" → qualifier is the citizen name
@@ -2360,8 +2345,8 @@ async function logInteraction(
   }
 ): Promise<void> {
   try {
-    const { data: world } = await supabase
-      .from('world_state').select('game_date').eq('id', 1).single()
+    // A6: the game date comes from the real ET clock — no world_state read needed
+    const world = await getWorldState(supabase)
 
     await supabase.from('player_interactions').insert({
       player_id: session.playerId,
@@ -2372,7 +2357,7 @@ async function logInteraction(
       interaction_type: data.interaction_type,
       topic: data.topic ?? null,
       summary: data.summary ?? null,
-      game_date: world?.game_date ?? null,
+      game_date: world.game_date ?? null,
       time_position: data.time_position ?? session.timePosition ?? null,
     })
 
@@ -2417,11 +2402,17 @@ async function logInteraction(
   }
 }
 
+/**
+ * Log a location visit. Returns true if this was the player's FIRST visit
+ * (A8: determined from the pre-existing row check it already performs, so
+ * callers no longer need a separate query — which also fixes the bug where
+ * the first-visit check ran after the insert and always came back false).
+ */
 async function logLocationVisit(
   supabase: SupabaseClient,
   session: GameSession,
   locationId: string
-): Promise<void> {
+): Promise<boolean> {
   const key = session.playerId ? 'player_id' : 'guest_token'
   const val = session.playerId ?? session.guestToken
 
@@ -2439,10 +2430,12 @@ async function logLocationVisit(
       .from('player_location_visits')
       .update({ visit_count: existing.visit_count + 1, last_visited: new Date().toISOString() })
       .eq('id', existing.id)
+    return false
   } else {
     await supabase
       .from('player_location_visits')
       .insert({ [key]: val, location_id: locationId, visit_count: 1 })
+    return true
   }
 }
 

@@ -77,6 +77,28 @@ interface GameState {
   }>
 }
 
+/** Shape of the sidebar-state payload returned by GET /api/game/state and,
+ *  since Phase 2 (A3), attached to POST /api/game/command responses. */
+interface StatePayload {
+  session: {
+    currentLocation: string
+    inventory: string[]
+    timePosition: string | null
+    hasChronoLogbook: boolean
+  }
+  world: NonNullable<GameState['world']>
+  location: GameState['location']
+  stats: GameState['stats']
+  upcomingEvents: GameState['upcomingEvents']
+  activeEvents: GameState['activeEvents']
+  journalEntries: JournalEntry[]
+  worldEvents: WorldEvent[]
+  seenItemIds: string[]
+  tasks: GameState['tasks']
+  inventoryItems: Array<{ id: string; name: string }>
+  error?: string
+}
+
 const INTRO_TEXT = `**Welcome to Brindlewick.**
 
 You've arrived in the valley on a clear morning. The lake glitters at the foot of the mountains. Somewhere nearby, a bakery is producing a smell that makes you feel, unreasonably, that everything is going to be fine.
@@ -156,6 +178,38 @@ function GamePageInner() {
   } | null>(null)
   const outputEndRef = useRef<HTMLDivElement>(null)
 
+  // Apply a sidebar-state payload (from GET /state or a command response)
+  const applyStateData = useCallback((data: StatePayload) => {
+    setGameState(prev => ({
+      ...prev,
+      currentLocation: data.session.currentLocation,
+      inventory: data.session.inventory,
+      inventoryItems: data.inventoryItems ?? [],
+      timePosition: data.session.timePosition ?? null,
+      hasChronoLogbook: data.session.hasChronoLogbook ?? false,
+      world: data.world,
+      location: data.location,
+      stats: data.stats,
+      upcomingEvents: data.upcomingEvents,
+      activeEvents: data.activeEvents ?? [],
+      journalEntries: data.journalEntries ?? [],
+      worldEvents: data.worldEvents ?? [],
+      seenItemIds: data.seenItemIds ?? [],
+      tasks: data.tasks ?? [],
+    }))
+  }, [])
+
+  const loadGameState = useCallback(async (token: string | null) => {
+    try {
+      const res = await fetch(`/api/game/state${token ? `?guestToken=${token}` : ''}`)
+      const data: StatePayload = await res.json()
+      if (data.error) return
+      applyStateData(data)
+    } catch {
+      // Silently fail — game still works, sidebar just won't update
+    }
+  }, [applyStateData])
+
   // Initialize: check auth, load guest token, run migration if just logged in
   useEffect(() => {
     const supabase = createClient()
@@ -208,34 +262,6 @@ function GamePageInner() {
     }, 500)
     return () => clearTimeout(timer)
   }, [output.length])
-
-  const loadGameState = useCallback(async (token: string | null) => {
-    try {
-      const res = await fetch(`/api/game/state${token ? `?guestToken=${token}` : ''}`)
-      const data = await res.json()
-      if (data.error) return
-
-      setGameState(prev => ({
-        ...prev,
-        currentLocation: data.session.currentLocation,
-        inventory: data.session.inventory,
-        inventoryItems: data.inventoryItems ?? [],
-        timePosition: data.session.timePosition ?? null,
-        hasChronoLogbook: data.session.hasChronoLogbook ?? false,
-        world: data.world,
-        location: data.location,
-        stats: data.stats,
-        upcomingEvents: data.upcomingEvents,
-        activeEvents: data.activeEvents ?? [],
-        journalEntries: data.journalEntries ?? [],
-        worldEvents: data.worldEvents ?? [],
-        seenItemIds: data.seenItemIds ?? [],
-        tasks: data.tasks ?? [],
-      }))
-    } catch {
-      // Silently fail — game still works, sidebar just won't update
-    }
-  }, [])
 
   const handleCommand = useCallback(async (input: string) => {
     if (!input.trim() || isLoading) return
@@ -297,6 +323,7 @@ function GamePageInner() {
       const data: GameResponse & {
         guestToken?: string
         currentLocation?: string
+        state?: StatePayload
       } = await res.json()
 
       // Save guest token if new
@@ -370,10 +397,16 @@ function GamePageInner() {
           } : prev.location,
         }))
 
-        // Reload full state after a move, then inject escorting NPC into the fresh citizens list
+        // Refresh full state after a move (A3: applied from the command
+        // response when present; network fallback kept for safety), then
+        // inject the escorting NPC into the fresh citizens list
         if (data.location) {
           const escortCitizen = data.escorting_citizen
-          await loadGameState(data.guestToken ?? token)
+          if (data.state) {
+            applyStateData(data.state)
+          } else {
+            await loadGameState(data.guestToken ?? token)
+          }
           if (escortCitizen) {
             setGameState(prev => {
               if (!prev.location) return prev
@@ -398,19 +431,23 @@ function GamePageInner() {
         }
       }
 
-      // Reload sidebar when trust, journal, mystery, inventory, or tasks change
-      if (data.trust_update || data.journal_entry || data.mystery_update || data.inventory_update || data.task_update || data.seen_item_id) {
-        loadGameState(data.guestToken ?? token)
+      // Refresh sidebar when trust, journal, mystery, inventory, or tasks
+      // change (A3: served from the command response; the extra GET /state
+      // round-trip only happens as a fallback when no state was attached)
+      if (!data.location && (data.trust_update || data.journal_entry || data.mystery_update || data.inventory_update || data.task_update || data.seen_item_id)) {
+        if (data.state) applyStateData(data.state)
+        else loadGameState(data.guestToken ?? token)
       }
 
-      // Always reload state after travel/return so time indicator updates
+      // Always refresh state after travel/return so time indicator updates
       const parsedText = data.text ?? ''
       if (
         parsedText.includes('Chrono-Logbook shimmers') ||
         parsedText.includes('Chrono-Logbook closes') ||
         parsedText.includes('now carrying the Chrono-Logbook')
       ) {
-        loadGameState(data.guestToken ?? token)
+        if (data.state) applyStateData(data.state)
+        else loadGameState(data.guestToken ?? token)
       }
 
       // Handle mystery update notification
@@ -443,7 +480,7 @@ function GamePageInner() {
     } finally {
       setIsLoading(false)
     }
-  }, [gameState.guestToken, isLoading, loadGameState, activeConversation, pendingEscortOffer])
+  }, [gameState.guestToken, isLoading, loadGameState, applyStateData, activeConversation, pendingEscortOffer])
 
   return (
     <div

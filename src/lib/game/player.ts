@@ -3,7 +3,8 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { GameSession, PlayerSave, GuestSave, ConversationMessage } from '../../types/game'
+import type { GameSession, PlayerSave, GuestSave, ConversationMessage, WorldState } from '../../types/game'
+import { getRealWorldState } from '../realtime'
 import { v4 as uuidv4 } from 'uuid'
 
 const MAX_STORED_MESSAGES = 30  // 15 back-and-forth exchanges
@@ -126,11 +127,8 @@ export async function buildGameSession(
   playerId?: string,
   guestToken?: string
 ): Promise<GameSession> {
-  const { data: world } = await supabase
-    .from('world_state')
-    .select('*')
-    .eq('id', 1)
-    .single()
+  // A6: world state derives from the real ET clock — no world_state read needed
+  const world = getRealWorldState() as WorldState
 
   if (playerId) {
     const save = await getOrCreatePlayerSave(supabase, playerId)
@@ -239,11 +237,8 @@ export async function addJournalEntry(
   content: string,
   relatedId?: string
 ): Promise<void> {
-  const { data: world } = await supabase
-    .from('world_state')
-    .select('game_date')
-    .eq('id', 1)
-    .single()
+  // A6: game date comes from the real ET clock — no world_state read needed
+  const world = getRealWorldState()
 
   await supabase.from('player_journal').insert({
     player_id: session.playerId,
@@ -252,7 +247,7 @@ export async function addJournalEntry(
     title,
     content,
     related_id: relatedId ?? null,
-    game_date: world?.game_date ?? null,
+    game_date: world.game_date ?? null,
   })
 }
 
