@@ -654,10 +654,9 @@ export async function handleConversationMessage(
     const npcAgreed = /\b(she'?s coming|he'?s coming|i'?ll (get|call|fetch|grab)|let me get|right out|coming now|on (?:her|his) way|calling|give (?:her|him) a second)\b/i.test(rawResponse)
     if (askMatch && npcAgreed) {
       const nameQuery = askMatch[1].trim().replace(/[?.!,].*$/, '').replace(/^(with|to)\s+/i, '').trim()
-      const matched = roster.find(c =>
-        `${c.first_name} ${c.last_name}`.toLowerCase().includes(nameQuery.toLowerCase()) ||
-        c.first_name.toLowerCase() === nameQuery.toLowerCase()
-      )
+      // B1: match against the full citizens table, not the (now principal-only)
+      // prompt roster — so players can still summon any of the 930 residents
+      const matched = await findCitizenByName(supabase, nameQuery)
       if (matched && matched.id) {
         summonMatch = ['', matched.id] as RegExpMatchArray
       }

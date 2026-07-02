@@ -126,8 +126,9 @@ Generate ${citizen.first_name}'s response. Speak in first person as ${citizen.fi
 
     const text = message.content[0].type === 'text' ? message.content[0].text : ''
     return formatDialogue(citizen, text.trim())
-  } catch {
+  } catch (err) {
     // Graceful fallback — use lore or generic response
+    console.error('[dialogue] generateNpcDialogue Claude call failed:', err)
     if (lore?.gossip_text) return formatDialogue(citizen, lore.gossip_text)
     return formatDialogue(citizen, getGenericResponse(citizen, topic, trustLevel))
   }
@@ -256,7 +257,8 @@ ${isFarewell ? `- The player is saying goodbye. Give a warm, brief send-off in c
     const text = result.content[0].type === 'text' ? result.content[0].text : ''
 
     return formatDialogue(citizen, text.trim())
-  } catch {
+  } catch (err) {
+    console.error('[dialogue] continueConversation Claude call failed:', err)
     if (lore?.gossip_text) return formatDialogue(citizen, lore.gossip_text)
     return formatDialogue(citizen, getGenericResponse(citizen, playerMessage, trustLevel))
   }

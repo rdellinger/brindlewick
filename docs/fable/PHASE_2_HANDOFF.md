@@ -41,6 +41,12 @@ Query counts are Supabase round-trips for a typical request (conditional queries
 - **A7 for `findItemByName` / `findCitizenByName`** — items and citizens mutate at runtime (state transitions, Phase 4 dynamic entities) and citizens may be a 930-row table; kept on DB. `findLocationByName` is fully cache-backed.
 - **`citizen_schedules` table question** — `getCitizenCurrentLocation` (npc_items.ts) queries a `citizen_schedules` table that doesn't appear in any migration (001 creates `citizen_routines`). If that table doesn't exist in production, world-tick behavior conditions like `at_location:` have never matched. Out of scope for Phase 2; flagged for Phase 4/5 investigation.
 
+## Post-phase addendum (2026-07-02, same day)
+
+- **Open Question 1 answered: production has 37 principal + 893 supporting citizens.** With Rich's sign-off, **B1 was pulled forward**: `getTownRosterCached` now filters `tier='principal'`, cutting ~30–37K input tokens from every conversation turn (~90%+ of prompt cost). The engine's summon fallback was switched from roster matching to `findCitizenByName` so all 930 residents remain summonable by player request. NPC prompts list only the 37 principals until the grounding phase.
+- **`citizen_schedules` confirmed nonexistent** (only `citizen_routines`). Logged as new item A10 in the master plan: world-tick `at_location:` behaviors have never fired.
+- Error logging added to both dialogue catch blocks (they previously swallowed API failures silently — discovered when a missing local `ANTHROPIC_API_KEY` produced canned fallback dialogue during the smoke test).
+
 ## Cache semantics (for future phases)
 
 `world_cache.ts`: module-scope, 5-minute TTL, caches full `locations` table and the citizens roster projection. **Phase 4 must call `invalidateWorldCache()` after inserting any dynamic entity**, and admin write routes should too. Per-instance only (serverless instances each warm their own cache — first request per instance pays the two fetches).

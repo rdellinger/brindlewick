@@ -68,14 +68,23 @@ export async function getLocationCached(
 
 /**
  * Town roster projection used for dialogue prompts and name matching.
- * NOTE: intentionally NOT filtered by tier in Phase 2 — prompt-content changes
- * (roster slimming, B1/B2) are deferred to Phase 5 per the master plan.
+ *
+ * B1 (pulled forward from the prompt-slimming phase with Rich's sign-off,
+ * 2026-07-02): filtered to tier='principal'. Production has 930 citizens
+ * (37 principal + 893 supporting); the unfiltered roster put ~35–40K tokens
+ * into EVERY conversation turn's system prompt. Supporting citizens remain
+ * fully in the world (present at locations, talkable, findable), and
+ * player-initiated summons still work — the engine's summon fallback matches
+ * names server-side via findCitizenByName, not via this roster. What NPCs
+ * lose until the grounding phase: proactively name-dropping background
+ * residents and NPC-initiated summon tags for them.
  */
 export async function getTownRosterCached(supabase: SupabaseClient): Promise<RosterEntry[]> {
   if (isFresh(rosterCache)) return rosterCache.value
   const { data } = await supabase
     .from('citizens')
     .select('id, first_name, last_name, occupation, personality, household')
+    .eq('tier', 'principal')
     .order('last_name')
   const rows = (data ?? []) as RosterEntry[]
   if (rows.length > 0) {
